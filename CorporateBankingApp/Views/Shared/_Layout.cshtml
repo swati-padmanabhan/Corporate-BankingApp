@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    <!-- CSS Links -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link href="~/Content/styles.css" rel="stylesheet" type="text/css" />
+
+
+    <!-- JS Dependencies -->
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jquery-3.7.1.js"></script>
+    <script src="~/Scripts/i18n/grid.locale-en.js"></script>
+    <script src="~/Scripts/jquery.jqGrid.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <h1 class="navbar-brand">Banking System</h1>
+            }
+
+            <div class="">
+                @if (User.IsInRole("Client"))
+                {
+                    <h2 class="mb-0 ml-2">Client Dashboard</h2>
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    <h2 class="mb-0 ml-2">Admin Dashboard</h2>
+                }
+            </div>
+
+            <div class="mx-3">
+                @if (User.IsInRole("Client") || User.IsInRole("Admin"))
+                {
+                    <i class="bi bi-person-circle text-white h3"></i>
+
+                    <!-- Show logout link only if user is authenticated -->
+                    <a class="ml-3" href="@Url.Action("Logout", "User")" title="Logout">
+                        <i class="bi bi-box-arrow-right text-white h3 m-0"></i>
+                    </a>
+                }
+            </div>
+        </div>
+    </nav>
+    @*success modal*@
+    <div class="modal fade" id="successModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <i class="bi bi-info-circle m-2 h"></i>
+                    <h1 class="modal-title fs-5" id="successModalLabel"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="successModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="successModalBody">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*error modal*@
+    <div class="modal fade" id="errorModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <i class="bi bi-info-circle m-2 h"></i>
+                    <h1 class="modal-title fs-5" id="errorModalLabel"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="errorModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="errorModalBody">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid body-content sans">
+        @RenderBody()
+
+        <!-- Footer -->
+        <div class="container-fluid">
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+                <p class="col-md-4 mb-0 text-body-secondary">
+                    &copy; @DateTime.Now.Year - My ASP.NET Application
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Dependencies -->
+    @*<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

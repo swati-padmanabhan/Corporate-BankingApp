@@ -1,0 +1,138 @@
+﻿:root {
+    --primary-color: #4e4187ff; /* ultra-violet */
+    --primary-light: #3083dcff; /* bleu-de-france */
+    --primary-dark: #5b616aff; /* paynes-gray */
+    --secondary-color: #66ced6ff; /* robin-egg-blue */
+    --secondary-light: #7dde92ff; /* light-green */
+    --secondary-dark: #5d707fff; /* paynes-gray */
+    --accent-color: #f8ffe5ff; /* light-yellow */
+    --accent-dark: #aba9c3ff; /* rose-quartz */
+    --neutral-light: #fcf7f8ff; /* snow */
+    --neutral-gray-light: #ced3dcff; /* french-gray */
+    --neutral-gray-dark: #8797b2ff; /* cool-gray-2 */
+    --neutral-dark: #000000; /* slate-gray */
+}
+
+body {
+    font-family: "Raleway", sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--neutral-dark);
+    background-color: var(--neutral-light);
+}
+
+/* fonts */
+
+.sans {
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.serif {
+    font-family: "Crimson Text", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* containers */
+.container-fluid {
+    padding: 0.3rem 2.5rem;
+}
+
+.navbar {
+    background-color: var(--primary-color);
+    color: var(--accent-color);
+    padding: 0.5rem 0;
+}
+
+.navbar-brand {
+    color: var(--accent-color);
+    font-size: 1.5rem;
+}
+
+/* Admin Dashboard Custom Styles */
+.admin-dashboard h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: bold;
+    color: #333;
+}
+
+.admin-dashboard .btn-block {
+    border-radius: 8px;
+    background-color: #5bc0de;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .admin-dashboard .btn-block:hover {
+        background-color: #31b0d5;
+        color: #fff;
+        transform: translateY(-5px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .admin-dashboard .btn-block h4 {
+        margin: 0;
+        padding: 0;
+    }
+
+.admin-dashboard .row {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .admin-dashboard .btn-block {
+        height: 120px;
+    }
+}
+
+/* cards */
+.card {
+    padding: 0.5rem;
+    height: 100%;
+    border: 1px solid var(--secondary-dark);
+    border-radius: 10px;
+    box-shadow: 0 3px 5px var(--accent-dark);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 12px var(--accent-dark);
+    }
+
+.card-header .bi {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+}
+
+.card-title {
+    font-size: 1.3rem;
+    color: var(--primary-dark);
+}
+
+.card-text {
+    font-size: 1rem;
+    color: var(--neutral-dark);
+}
+
+/* action btn */
+
+.action-btn {
+    color: var(--accent-color);
+    border: none;
+    border-radius: 5px;
+    margin: 0.1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}

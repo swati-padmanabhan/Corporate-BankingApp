@@ -1,0 +1,31 @@
+﻿@model IEnumerable<CorporateBankingApp.DTOs.ClientDTO>
+
+@{
+    ViewBag.Title = "Client Approval";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Client Approval</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Company Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var client in Model)
+        {
+            <tr>
+                <td>@client.UserName</td>
+                <td>@client.Email</td>
+                <td>@client.CompanyName</td>
+                <td>
+                    @Html.ActionLink("View Client", "ViewClientDetails", new { id = client.Id }, new { @class = "btn btn-info" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

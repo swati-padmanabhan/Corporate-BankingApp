@@ -161,10 +161,9 @@ C:\Users\swati.padmanabhan\Desktop\capstone_proj\CorporateBankingApp\CorporateBa
 C:\Users\swati.padmanabhan\Desktop\capstone_proj\CorporateBankingApp\CorporateBankingApp\obj\Debug\Corporat.7A9EF9E2.Up2Date
 C:\Users\swati.padmanabhan\Desktop\capstone_proj\CorporateBankingApp\CorporateBankingApp\obj\Debug\CorporateBankingApp.dll
 C:\Users\swati.padmanabhan\Desktop\capstone_proj\CorporateBankingApp\CorporateBankingApp\obj\Debug\CorporateBankingApp.pdb
-<<<<<<< HEAD
-C:\Users\swati.padmanabhan\Desktop\capstone_proj\CorporateBankingApp\CorporateBankingApp\bin\Newtonsoft.Json.dll
+
 C:\Users\swati.padmanabhan\Desktop\capstone_proj\CorporateBankingApp\CorporateBankingApp\bin\Newtonsoft.Json.xml
-=======
+
 D:\Corporate-BankingApp\CorporateBankingApp\bin\CorporateBankingApp.dll.config
 D:\Corporate-BankingApp\CorporateBankingApp\bin\CorporateBankingApp.dll
 D:\Corporate-BankingApp\CorporateBankingApp\bin\CorporateBankingApp.pdb
@@ -339,4 +338,4 @@ D:\Corporate-BankingApp\CorporateBankingApp\bin\System.IO.Pipelines.dll
 D:\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.AspNetCore.Http.Features.xml
 D:\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Primitives.xml
 D:\Corporate-BankingApp\CorporateBankingApp\bin\System.IO.Pipelines.xml
->>>>>>> origin/sampada
+

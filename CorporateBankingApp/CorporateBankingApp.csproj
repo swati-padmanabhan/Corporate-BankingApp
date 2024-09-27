@@ -441,10 +441,9 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Data\NHibernateHelper.cs" />
     <Compile Include="DTOs\ClientDTO.cs" />
-<<<<<<< HEAD
+
     <Compile Include="DTOs\EmployeeDTO.cs" />
-=======
->>>>>>> origin/sampada
+
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="Enums\BeneficiaryType.cs" />
     <Compile Include="Enums\Status.cs" />
@@ -472,18 +471,7 @@
     <Compile Include="Models\SalaryDisbursement.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<<<<<<< HEAD
-    <Compile Include="Repositories\AdminRepository.cs" />
-    <Compile Include="Repositories\ClientRepository.cs" />
-    <Compile Include="Repositories\IAdminRepository.cs" />
-    <Compile Include="Repositories\IClientRepository.cs" />
-    <Compile Include="Repositories\IUserRepository.cs" />
-    <Compile Include="Repositories\UserRepository.cs" />
-    <Compile Include="Services\AdminService.cs" />
-    <Compile Include="Services\ClientService.cs" />
-    <Compile Include="Services\IAdminService.cs" />
-    <Compile Include="Services\IClientService.cs" />
-=======
+
     <Compile Include="Repositories\EmployeeRepository.cs" />
     <Compile Include="Repositories\IEmployeeRepository.cs" />
     <Compile Include="Repositories\AdminRepository.cs" />
@@ -496,7 +484,8 @@
     <Compile Include="Services\IEmployeeService.cs" />
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\IAdminService.cs" />
->>>>>>> origin/sampada
+
+
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\PasswordHashing.cs" />
@@ -535,17 +524,14 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Client\Index.cshtml" />
     <Content Include="Views\Client\ManageEmployees.cshtml" />
-<<<<<<< HEAD
+
     <Content Include="Views\Client\_AddRecordPartial.cshtml" />
     <Content Include="Views\Client\_EditRecordPartial.cshtml" />
     <Content Include="Views\Admin\ClientManagement.cshtml" />
     <Content Include="Views\Admin\ClientApproval.cshtml" />
     <Content Include="Views\Admin\ViewClientDetails.cshtml" />
-=======
-    <Content Include="Views\Client\EditEmployee.cshtml" />
-    <Content Include="Views\Admin\EditClient.cshtml" />
-    <Content Include="Views\Admin\DeleteClient.cshtml" />
->>>>>>> origin/sampada
+
+
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

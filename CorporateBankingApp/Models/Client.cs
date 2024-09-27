@@ -14,9 +14,10 @@ namespace CorporateBankingApp.Models
         public virtual double Balance { get; set; }
 
         public virtual Status OnBoardingStatus { get; set; }
-        public virtual bool IsActive { get; set; }
 
         public virtual bool IsActive { get; set; }
+
+
 
         public virtual IList<Beneficiary> Beneficiaries { get; set; } = new List<Beneficiary>();
 

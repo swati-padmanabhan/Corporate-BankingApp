@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 
@@ -5,6 +6,7 @@ namespace CorporateBankingApp.DTOs
 {
     public class ClientDTO
     {
+        public Guid Id { get; set; }
         [Required]
         public string UserName { get; set; }
         [Required]

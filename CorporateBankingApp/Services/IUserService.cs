@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web;
 using CorporateBankingApp.DTOs;
+using CorporateBankingApp.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace CorporateBankingApp.Services

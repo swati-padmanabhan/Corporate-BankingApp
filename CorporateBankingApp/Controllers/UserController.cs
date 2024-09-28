@@ -86,7 +86,12 @@ namespace CorporateBankingApp.Controllers
                 files.Add(addressProof);
             }
             _userService.CreateNewClient(clientDTO, files);
-            return RedirectToAction("Login");
+            return RedirectToAction("RegistrationSuccess");
+        }
+
+        public ActionResult RegistrationSuccess()
+        {
+            return View();
         }
 
     }

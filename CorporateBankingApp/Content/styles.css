@@ -136,3 +136,7 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
+.jumbotron {
+    background: var(--accent-color);
+}

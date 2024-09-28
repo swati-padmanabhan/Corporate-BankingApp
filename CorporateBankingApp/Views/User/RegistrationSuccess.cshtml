@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "RegistrationSuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-5">
+    <div class="position-relative jumbotron p-5 text-center text-muted border border-dashed rounded-5">
+        <i class="bi bi-check2-circle display-1 text-success"></i>
+        <h1 class="text-body-emphasis my-4">
+            Registration Completed Successfully!
+        </h1>
+        <p class="col-lg-6 mx-auto mb-4">
+            Your account has been created and is currently awaiting admin
+            approval. You will receive an email once your account is approved.
+        </p>
+
+        <a href="@Url.Action("Login")" class="btn btn-primary mb-5" type="button">
+            <i class="bi bi-arrow-left mx-2"></i>
+            Back to login
+        </a>
+    </div>
+</div>
+
+

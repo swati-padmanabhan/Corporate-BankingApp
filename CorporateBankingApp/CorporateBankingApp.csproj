@@ -721,6 +721,7 @@
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\Admin\AdminRegistration.cshtml" />
     <Content Include="Views\Admin\ViewClientDetails.cshtml" />
+    <Content Include="Views\User\RegistrationSuccess.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,4 +1,6 @@
+using NHibernate.Mapping;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 
@@ -40,6 +42,9 @@ namespace CorporateBankingApp.DTOs
 
         [Required]
         public HttpPostedFileBase Document2 { get; set; }
+
+        [Required]
+        public List<String> DocumentLocation { get; set; } = new List<String>();    
 
     }
 

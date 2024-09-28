@@ -32,9 +32,9 @@ namespace CorporateBankingApp.Repositories
                 transaction.Commit();
             }
         }
-    
 
-    public Client GetClientById(Guid id)
+
+        public Client GetClientById(Guid id)
         {
             return _session.Get<Client>(id);
         }

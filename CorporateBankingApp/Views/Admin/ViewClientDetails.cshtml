@@ -1,19 +1,121 @@
-﻿
+﻿@model CorporateBankingApp.DTOs.ClientDTO
+
 @{
     ViewBag.Title = "ViewClientDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Client Details: @Model.UserName</h2>
-<p>Email: @Model.Email</p>
-<p>Company: @Model.CompanyName</p>
-<p>Location: @Model.Location</p>
-<p>Contact Info: @Model.ContactInformation</p>
+<h2>ViewClientDetails</h2>
 
-<form method="post" action="@Url.Action("ApproveClient", "Admin", new { id = Model.Id })">
-    <button type="submit" class="btn btn-success">Approve</button>
-</form>
-<form method="post" action="@Url.Action("RejectClient", "Admin", new { id = Model.Id })">
-    <button type="submit" class="btn btn-danger">Reject</button>
-</form>
+<div>
+    <h4>ClientDTO</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactInformation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactInformation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AccountNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClientIFSC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClientIFSC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Balance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentLocation)
+        </dt>
+
+        <div class="modal"
+             tabindex="-1"
+             id="documentModal"
+             data-bs-backdrop="static"
+             data-bs-keyboard="false"
+             aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="documentModalLabel"></h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img src=""
+                             id="modalImage"
+                             alt="Document Image"
+                             class="w-100 p-2" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <dd>
+            @foreach (var document in Model.DocumentLocation.Select((doc, index) => new { doc, index }))
+            {
+                <button type="button"
+                        class="btn btn-primary"
+                        onclick="openModal('Document @(document.index + 1)', '@Url.Content(document.doc)')">
+                    View Document @(document.index + 1)
+                </button>
+            }
+        </dd>
+
+
+    </dl>
+</div>

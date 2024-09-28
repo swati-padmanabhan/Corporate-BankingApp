@@ -4,7 +4,8 @@ using CorporateBankingApp.Models;
 using CorporateBankingApp.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;  
+using System.Linq;
+using System.Web.Mvc;
 
 namespace CorporateBankingApp.Services
 {
@@ -55,9 +56,38 @@ namespace CorporateBankingApp.Services
                 Email = client.Email,
                 CompanyName = client.CompanyName,
                 Location = client.Location,
-                ContactInformation = client.ContactInformation
+                ContactInformation = client.ContactInformation,
+                AccountNumber = client.AccountNumber,
+                ClientIFSC = client.ClientIFSC,
+                Balance = client.Balance,
+                DocumentLocation = client.Documents.Select(doc => doc.FilePath).ToList()
             };
         }
+
+        //public ClientDTO GetClientById(Guid id)
+        //{
+        //    var client = _adminRepository.GetClientById(id);
+        //    if (client == null)
+        //    {
+        //        // Handle the case where the client is not found
+        //        return null; // or throw an exception or return an appropriate response
+        //    }
+
+        //    return new ClientDTO
+        //    {
+        //        Id = client.Id,
+        //        UserName = client.UserName,
+        //        Email = client.Email,
+        //        CompanyName = client.CompanyName,
+        //        Location = client.Location,
+        //        ContactInformation = client.ContactInformation,
+        //        AccountNumber = client.AccountNumber,
+        //        ClientIFSC = client.ClientIFSC,
+        //        Balance = client.Balance,
+        //        DocumentLocation = client.Documents != null
+        //            ? client.Documents.Select(doc => (doc.FilePath)).ToList()
+        //    };
+        //}
 
         public void ApproveClient(Guid id)
         {

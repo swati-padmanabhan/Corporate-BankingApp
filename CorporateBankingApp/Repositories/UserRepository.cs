@@ -3,6 +3,7 @@ using System.Linq;
 using CorporateBankingApp.Data;
 using CorporateBankingApp.DTOs;
 using CorporateBankingApp.Models;
+using CorporateBankingApp.Utils;
 using NHibernate;
 
 namespace CorporateBankingApp.Repositories
@@ -18,19 +19,36 @@ namespace CorporateBankingApp.Repositories
 
         public User LoginActivity(User user)
         {
-            var currentUser = _session.Query<User>().FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
-            //if (currentUser != null && PasswordHashing.VerifyPassword(user.Password, currentUser.Password))
-            //{
-            //    return currentUser;
-            //}
-            //return null;
-            return currentUser;
+            //var currentUser = _session.Query<User>().FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
+            var currentUser = _session.Query<User>().FirstOrDefault(u => u.UserName == user.UserName);
+            if (currentUser != null && PasswordHashing.VerifyPassword(user.Password, currentUser.Password))
+            {
+                return currentUser;
+            }
+            return null;
         }
 
         public User GetUserByUsername(string username)
         {
             return _session.Query<User>().FirstOrDefault(u =>u.UserName == username);
         }
+
+        public void CreateNewClient(Client client)
+        {
+            using (var transaction = _session.BeginTransaction())
+            {
+                client.Password = PasswordHashing.HashPassword(client.Password);
+                var role = new Role()
+                {
+                    RoleName = "Client",
+                    User = client
+                };
+                _session.Save(client);
+                _session.Save(role);
+                transaction.Commit();
+            }
+        }
+
     }
 
 }

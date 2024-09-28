@@ -11,13 +11,15 @@ namespace CorporateBankingApp.Models
 
         public virtual string ContactInformation { get; set; }
 
-        public virtual double Balance { get; set; }
-
         public virtual Status OnBoardingStatus { get; set; }
 
         public virtual bool IsActive { get; set; }
 
+        public virtual string AccountNumber { get; set; }
 
+        public virtual string ClientIFSC {  get; set; }
+
+        public virtual double Balance { get; set; }
 
         public virtual IList<Beneficiary> Beneficiaries { get; set; } = new List<Beneficiary>();
 
@@ -26,8 +28,6 @@ namespace CorporateBankingApp.Models
         public virtual IList<Employee> Employees { get; set; } = new List<Employee>();
 
         public virtual IList<Report> Reports { get; set; }
-
-        public virtual User User { get; set; }
 
 
     }

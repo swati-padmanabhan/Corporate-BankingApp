@@ -7,7 +7,12 @@ namespace CorporateBankingApp.Repositories
     public interface IUserRepository
     {
         User LoginActivity(User user);
+
         User GetUserByUsername(string username);
+
+        void CreateNewClient(Client client);
+
+        //void AdminRegistration(Admin admin, Role role);
     }
 
 }

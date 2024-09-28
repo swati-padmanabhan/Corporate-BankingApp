@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using CorporateBankingApp.Data;
 using CorporateBankingApp.DTOs;
 using CorporateBankingApp.Models;
 using CorporateBankingApp.Services;
+using CorporateBankingApp.Utils;
 using Microsoft.AspNetCore.Http;
 
 
@@ -14,13 +16,10 @@ namespace CorporateBankingApp.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-        private readonly ICloudinaryService _cloudinaryService;
 
-
-        public UserController(IUserService userService, ICloudinaryService cloudinaryService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _cloudinaryService = cloudinaryService;
         }
 
         [AllowAnonymous]
@@ -31,23 +30,6 @@ namespace CorporateBankingApp.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        //public ActionResult Login(UserDTO userDTO)
-        //{
-        //    var loginResult = _userService.LoginActivity(userDTO);
-        //    if(loginResult != null)
-        //    {
-        //        if(loginResult == "Admin")
-        //        {
-        //            return RedirectToAction("Index", "Admin");
-        //        }
-        //        else
-        //        {
-        //            return RedirectToAction("Index", "Client");
-        //        }
-        //    }
-        //    return View(userDTO);
-        //}
-
         public ActionResult Login(UserDTO userDTO)
         {
             var loginResult = _userService.LoginActivity(userDTO);
@@ -61,10 +43,7 @@ namespace CorporateBankingApp.Controllers
                 {
                     return RedirectToAction("Index", "Admin");
                 }
-                else
-                {
-                    return RedirectToAction("Index", "Client");
-                }
+                return RedirectToAction("Index", "Client");
             }
             return View(userDTO);
         }
@@ -88,60 +67,27 @@ namespace CorporateBankingApp.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public ActionResult Register(ClientDTO clientDTO)
-        //{
-        //    var uploadedFiles = new List<HttpPostedFileBase>();
-
-        //    var companyIdProof = Request.Files["uploadedFiles1"];
-        //    var addressProof = Request.Files["uploadedFiles2"];
-
-        //    if (companyIdProof != null && companyIdProof.ContentLength > 0)
-        //    {
-        //        uploadedFiles.Add(companyIdProof);
-        //    }
-
-        //    if (addressProof != null && addressProof.ContentLength > 0)
-        //    {
-        //        uploadedFiles.Add(addressProof);
-        //    }
-        //    _userService.CreateNewClient(clientDTO, uploadedFiles);
-        //    return RedirectToAction("Login");
-
-
-
-        //}
-
         [HttpPost]
-        public ActionResult UploadDocument(HttpPostedFileBase file)
+        [AllowAnonymous]
+        public ActionResult Register(ClientDTO clientDTO)
         {
-            if (file != null && file.ContentLength > 0)
+            var files = new List<HttpPostedFileBase>();
+
+            var companyIdProof = Request.Files["uploadedFiles1"];
+            var addressProof = Request.Files["uploadedFiles2"];
+
+            if (companyIdProof != null && companyIdProof.ContentLength > 0)
             {
-                var documentUrl = _cloudinaryService.UploadDocument(file);
-
-                var document = new Document
-                {
-                    DocumentName = file.FileName,
-                    DocumentLink = documentUrl,
-                    // Assign Client later during registration
-                };
-
-                return Json(new
-                {
-                    success = true,
-                    documentName = file.FileName,
-                    documentLink = documentUrl
-                });
+                files.Add(companyIdProof);
             }
 
-            return Json(new { success = false });
+            if (addressProof != null && addressProof.ContentLength > 0)
+            {
+                files.Add(addressProof);
+            }
+            _userService.CreateNewClient(clientDTO, files);
+            return RedirectToAction("Login");
         }
-
-
-
-
-
 
     }
 }

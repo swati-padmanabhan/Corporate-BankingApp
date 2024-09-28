@@ -25,6 +25,24 @@ namespace CorporateBankingApp.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult AdminRegistration()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AdminRegistration(AdminDTO adminDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                _adminService.RegisterAdmin(adminDTO);
+                return RedirectToAction("Login", "User");
+            }
+            return View(adminDTO);
+        }
+
         public ActionResult ClientApproval()
         {
             var clients = _adminService.GetRegisteredClientsPendingApproval();

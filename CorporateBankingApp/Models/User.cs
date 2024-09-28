@@ -12,8 +12,6 @@ namespace CorporateBankingApp.Models
 
         public virtual string Email { get; set; }
 
-        public virtual Client Client { get; set; }=new Client();
-
         public virtual Role Role { get; set; } = new Role();
     }
 }

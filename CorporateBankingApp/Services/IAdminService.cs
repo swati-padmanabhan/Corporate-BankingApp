@@ -10,6 +10,8 @@ namespace CorporateBankingApp.Services
 {
     public interface IAdminService
     {
+        void RegisterAdmin(AdminDTO adminDTO);
+
         List<ClientDTO> GetRegisteredClientsPendingApproval();
         ClientDTO GetClientById(Guid id);
         void ApproveClient(Guid id);

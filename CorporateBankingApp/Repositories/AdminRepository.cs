@@ -1,4 +1,5 @@
 using CorporateBankingApp.Models;
+using CorporateBankingApp.Utils;
 using NHibernate;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,24 @@ namespace CorporateBankingApp.Repositories
             _session = session;
         }
 
-        public Client GetClientById(Guid id)
+        public void CreateAdmin(Admin admin)
+        {
+            using (var transaction = _session.BeginTransaction())
+            {
+                admin.Password = PasswordHashing.HashPassword(admin.Password);
+                var role = new Role
+                {
+                    RoleName = "Admin",
+                    User = admin
+                };
+                _session.Save(admin);
+                _session.Save(role);
+                transaction.Commit();
+            }
+        }
+    
+
+    public Client GetClientById(Guid id)
         {
             return _session.Get<Client>(id);
         }

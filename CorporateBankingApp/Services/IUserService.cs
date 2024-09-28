@@ -11,6 +11,10 @@ namespace CorporateBankingApp.Services
     {
        string LoginActivity(UserDTO userDTO);
        User GetUserByUsername(string username);
+
+        void CreateNewClient(ClientDTO clientDTO, IList<HttpPostedFileBase> files);
+
+        //void AdminRegistration(AdminDTO adminDTO);
     }
 
 }

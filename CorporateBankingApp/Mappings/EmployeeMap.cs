@@ -8,15 +8,15 @@ namespace CorporateBankingApp.Mappings
         public EmployeeMap()
         {
             Table("Employees");
-            Id(x => x.Id).GeneratedBy.GuidComb();
-            Map(x => x.FirstName).Not.Nullable();
-            Map(x => x.LastName).Not.Nullable();
-            Map(x => x.Email).Not.Nullable();
-            Map(x => x.Designation).Not.Nullable();
-            Map(x => x.Phone).Not.Nullable();
-            Map(x => x.IsActive).Not.Nullable();
-            HasMany(x => x.SalaryDisbursements).Cascade.All().Inverse();
-            References(x => x.Client).Column("ClientId").Cascade.None().Not.Nullable();
+            Id(e => e.Id).GeneratedBy.GuidComb();
+            Map(e => e.FirstName).Not.Nullable();
+            Map(e => e.LastName).Not.Nullable();
+            Map(e => e.Email).Not.Nullable();
+            Map(e => e.Phone).Not.Nullable();
+            Map(e => e.Designation).Not.Nullable();
+            Map(e => e.IsActive).Not.Nullable();
+            HasMany(e => e.SalaryDisbursements).Cascade.All().Inverse();
+            References(e => e.Client).Column("ClientId").Cascade.None().Not.Nullable();
 
         }
     }

@@ -6,13 +6,9 @@ namespace CorporateBankingApp.Models
     {
         public virtual Guid Id { get; set; }
 
-        public virtual string DocumentName { get; set; }
+        public virtual string DocumentType { get; set; } //beneficiary, payment, transaction
 
-        //public virtual string DocumentType { get; set; } //beneficiary, payment, transaction
-
-        //public virtual string FilePath { get; set; }
-
-        public virtual string DocumentLink { get; set; }
+        public virtual string FilePath { get; set; }
 
         public virtual DateTime UploadDate { get; set; }
 

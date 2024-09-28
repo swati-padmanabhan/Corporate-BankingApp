@@ -9,13 +9,10 @@ namespace CorporateBankingApp.Mappings
         public DocumentMap()
         {
             Table("Documents");
-            Id(x => x.Id).GeneratedBy.GuidComb();
-            //Map(x => x.DocumentType).Not.Nullable();
-            //Map(x => x.FilePath).Not.Nullable();
-
-            Map(x=>x.DocumentName).Not.Nullable();
-            Map(x=>x.DocumentLink).Not.Nullable();
-            Map(x => x.UploadDate).Not.Nullable();
+            Id(d => d.Id).GeneratedBy.GuidComb();
+            Map(d => d.DocumentType).Not.Nullable();
+            Map(d => d.FilePath).Not.Nullable();
+            Map(d => d.UploadDate).Not.Nullable();
             References(x => x.Client).Column("ClientId").Cascade.None().Not.Nullable();
         }
     }

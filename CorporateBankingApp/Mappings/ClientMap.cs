@@ -10,16 +10,18 @@ namespace CorporateBankingApp.Mappings
         {
             Table("Clients");
             KeyColumn("UserId");
-            Map(x => x.CompanyName).Not.Nullable();
-            Map(x => x.ContactInformation).Nullable();
-            Map(x => x.Location).Nullable();
-            Map(x => x.Balance).Not.Nullable();
-            Map(x => x.IsActive).Not.Nullable();
-            Map(x => x.OnBoardingStatus).CustomType<Status>().Not.Nullable();
-            HasMany(x => x.Beneficiaries).Cascade.All().Inverse();
-            HasMany(x => x.Documents).Cascade.All().Inverse().Fetch.Join();
-            HasMany(x => x.Reports).Cascade.All().Inverse();
-            HasMany(x => x.Employees).Cascade.All().Inverse();
+            Map(c => c.CompanyName).Not.Nullable();
+            Map(c => c.Location).Nullable();
+            Map(c => c.ContactInformation).Nullable();
+            Map(c => c.OnBoardingStatus).CustomType<Status>().Not.Nullable();
+            Map(c => c.IsActive).Not.Nullable();
+            Map(c => c.AccountNumber).Not.Nullable();
+            Map(c => c.ClientIFSC).Not.Nullable();
+            Map(c => c.Balance).Not.Nullable();
+            HasMany(c => c.Beneficiaries).Cascade.All().Inverse();
+            HasMany(x => x.Documents).Cascade.All().Inverse();
+            HasMany(c => c.Reports).Cascade.All().Inverse();
+            HasMany(c => c.Employees).Cascade.All().Inverse();
         }
     }
 }

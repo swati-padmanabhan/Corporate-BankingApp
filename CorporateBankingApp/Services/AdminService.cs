@@ -17,6 +17,19 @@ namespace CorporateBankingApp.Services
             _adminRepository = adminRepository;
         }
 
+        public void RegisterAdmin(AdminDTO adminDTO)
+        {
+            var admin = new Admin
+            {
+                UserName = adminDTO.UserName,
+                Password = adminDTO.Password,
+                Email = adminDTO.Email,
+                BankName = adminDTO.BankName
+            };
+
+            _adminRepository.CreateAdmin(admin);
+        }
+
         public List<ClientDTO> GetRegisteredClientsPendingApproval()
         {
             var clients = _adminRepository.GetAllClients()

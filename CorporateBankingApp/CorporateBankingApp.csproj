@@ -631,6 +631,7 @@
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Data\NHibernateHelper.cs" />
+    <Compile Include="DTOs\AdminDTO.cs" />
     <Compile Include="DTOs\ClientDTO.cs" />
     <Compile Include="DTOs\EmployeeDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
@@ -668,9 +669,7 @@
     <Compile Include="Repositories\IUserRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Services\ClientService.cs" />
-    <Compile Include="Services\CloudinaryService.cs" />
     <Compile Include="Services\IClientService.cs" />
-    <Compile Include="Services\ICloudinaryService.cs" />
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\IAdminService.cs" />
     <Compile Include="Services\IUserService.cs" />
@@ -716,6 +715,8 @@
     <Content Include="Views\Admin\ClientManagement.cshtml" />
     <Content Include="Views\Admin\ClientApproval.cshtml" />
     <Content Include="Views\Admin\ViewClientDetails.cshtml" />
+    <Content Include="Views\User\Register.cshtml" />
+    <Content Include="Views\Admin\AdminRegistration.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -725,6 +726,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Documents\" />
     <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <PropertyGroup>

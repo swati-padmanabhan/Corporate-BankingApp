@@ -22,9 +22,9 @@ namespace CorporateBankingApp
 
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserRepository, UserRepository>();
+
             container.RegisterType<IAdminService, AdminService>();
             container.RegisterType<IAdminRepository, AdminRepository>();
-            
 
             container.RegisterType<IClientService, ClientService>();
             container.RegisterType<IClientRepository, ClientRepository>();
@@ -32,7 +32,6 @@ namespace CorporateBankingApp
             container.RegisterType<IAdminService, AdminService>();
             container.RegisterType<IAdminRepository, AdminRepository>();
 
-            container.RegisterType<ICloudinaryService, CloudinaryService>();
 
 
             // e.g. container.RegisterType<ITestService, TestService>();

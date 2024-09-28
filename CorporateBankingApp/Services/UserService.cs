@@ -10,6 +10,7 @@ using CorporateBankingApp.Models;
 using CorporateBankingApp.Repositories;
 using Microsoft.AspNetCore.Http;
 using CorporateBankingApp.Enums;
+using CorporateBankingApp.Utils;
 
 namespace CorporateBankingApp.Services
 {
@@ -49,103 +50,54 @@ namespace CorporateBankingApp.Services
         }
 
 
-        //public void CreateNewClient(ClientDTO clientDto, IList<HttpPostedFileBase> uploadedFiles)
-        //{
-        //    var client = new Client()
-        //    {
-        //        UserName = clientDto.UserName,
-        //        Password = clientDto.Password,
-        //        Email = clientDto.Email,
-        //        CompanyName = clientDto.CompanyName,
-        //        ContactInformation = clientDto.ContactInformation,
-        //        Location = clientDto.Location,
-        //        OnBoardingStatus = Status.PENDING,
-        //        IsActive = true,
-        //        Documents = new List<Document>()
+        public void CreateNewClient(ClientDTO clientDTO, IList<HttpPostedFileBase> files)
+        {
+            var client = new Client()
+            {
+                UserName = clientDTO.UserName,
+                Password = clientDTO.Password,
+                Email = clientDTO.Email,
+                CompanyName = clientDTO.CompanyName,
+                ContactInformation = clientDTO.ContactInformation,
+                Location = clientDTO.Location,
+                AccountNumber = clientDTO.AccountNumber,
+                ClientIFSC = clientDTO.ClientIFSC,
+                Balance = clientDTO.Balance,
+                OnBoardingStatus = Status.PENDING,
+                IsActive = true
+            };
 
-        //    };
+            string[] documentTypes = { "Company Id Proof", "Address Proof" };
+            string folderPath = HttpContext.Current.Server.MapPath("~/Content/Documents/ClientRegistration/") + client.UserName;
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+            for (int i = 0; i < files.Count; i++)
+            {
 
-        //    string[] documentTypes = { "Company Id Proof", "Address Proof" };
+                var file = files[i];
+                if (file != null && file.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(file.FileName);
+                    string filePath = Path.Combine(folderPath, fileName);
+                    file.SaveAs(filePath);
+                    // Save relative file path (relative to the Content folder)
+                    string relativeFilePath = $"~/Content/Documents/ClientRegistration/{client.UserName}/{fileName}";
+                    var document = new Document
+                    {
+                        DocumentType = documentTypes[i], // Get document type based on index
+                        FilePath = relativeFilePath,
+                        UploadDate = DateTime.Now,
+                        Client = client
+                    };
 
-        //    for (int i = 0; i < uploadedFiles.Count; i++)
-        //    {
+                    client.Documents.Add(document);
+                }
+            }
 
-        //        var file = uploadedFiles[i];
-        //        if (file != null && file.ContentLength > 0)
-        //        {
-        //            string folderPath = HttpContext.Current.Server.MapPath("~/Documents/ClientRegistration/") + client.UserName;
-        //            if (!Directory.Exists(folderPath))
-        //            {
-        //                Directory.CreateDirectory(folderPath);
-        //            }
-        //            string filePath = Path.Combine(folderPath, file.FileName);
-        //            file.SaveAs(filePath);
-
-        //            var document = new Document
-        //            {
-        //                DocumentType = documentTypes[i], // Get document type based on index
-        //                FilePath = filePath,
-        //                UploadDate = DateTime.Now,
-        //                Client = client
-        //            };
-
-        //            client.Documents.Add(document);
-        //        }
-        //    }
-
-        //    _userRepository.AddingNewClient(client);
-        //}
-
-
-        //public void CreateNewClient(ClientDTO clientDto, IList<HttpPostedFileBase> uploadedFiles)
-        //{
-        //    var client = new Client()
-        //    {
-        //        UserName = clientDto.UserName,
-        //        Password = clientDto.Password,
-        //        Email = clientDto.Email,
-        //        CompanyName = clientDto.CompanyName,
-        //        ContactInformation = clientDto.ContactInformation,
-        //        Location = clientDto.Location,
-        //        OnBoardingStatus = Status.PENDING,
-        //        IsActive = true,
-        //        Documents = new List<Document>() // Ensure initialization
-        //    };
-
-        //    string[] documentTypes = { "Company Id Proof", "Address Proof" };
-
-        //    for (int i = 0; i < uploadedFiles.Count; i++)
-        //    {
-        //        var file = uploadedFiles[i];
-        //        if (file != null && file.ContentLength > 0)
-        //        {
-        //            string folderPath = HttpContext.Current.Server.MapPath("~/Documents/ClientRegistration/") + client.UserName;
-        //            if (!Directory.Exists(folderPath))
-        //            {
-        //                Directory.CreateDirectory(folderPath);
-        //            }
-        //            string filePath = Path.Combine(folderPath, file.FileName);
-        //            file.SaveAs(filePath);
-
-        //            var document = new Document
-        //            {
-        //                DocumentType = documentTypes[i],
-        //                FilePath = filePath,
-        //                UploadDate = DateTime.Now,
-        //                Client = client
-        //            };
-
-        //            // Add the document to the client's documents collection
-        //            client.Documents.Add(document);
-        //        }
-        //    }
-
-        //    _userRepository.AddingNewClient(client);
-        //}
-
-
-
-
+            _userRepository.CreateNewClient(client);
+        }
 
 
 

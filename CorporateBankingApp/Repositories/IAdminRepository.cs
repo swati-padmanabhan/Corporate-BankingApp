@@ -9,6 +9,8 @@ namespace CorporateBankingApp.Repositories
 {
     public interface IAdminRepository
     {
+        void CreateAdmin(Admin admin);
+
         Client GetClientById(Guid id);
         List<Client> GetAllClients();
         void UpdateClientDetails(Client client);

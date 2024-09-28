@@ -10,13 +10,13 @@ namespace CorporateBankingApp.Mappings
         {
             Table("Beneficiaries");
             Id(b => b.Id).GeneratedBy.GuidComb();
-            Map(x => x.BeneficiaryName).Not.Nullable();
-            Map(x => x.AccountNumber).Not.Nullable();
-            Map(x => x.BankIFSC).Not.Nullable();
-            Map(x => x.BeneficiaryType).CustomType<BeneficiaryType>().Not.Nullable();
+            Map(b => b.BeneficiaryName).Not.Nullable();
+            Map(b => b.AccountNumber).Not.Nullable();
+            Map(b => b.BankIFSC).Not.Nullable();
+            Map(b => b.BeneficiaryType).CustomType<BeneficiaryType>().Not.Nullable();
 
-            References(x => x.Client).Column("ClientId").Cascade.None().Nullable();
-            HasMany(x => x.Payments).Cascade.All().Inverse();
+            References(b => b.Client).Column("ClientId").Cascade.None().Nullable();
+            HasMany(b => b.Payments).Cascade.All().Inverse();
         }
     }
 

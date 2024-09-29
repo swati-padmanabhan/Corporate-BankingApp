@@ -10,8 +10,11 @@
     <h3 class="my-4">Manage Employees</h3>
 
     <div class="mb-3">
-        <button type="button" , class="btn btn-primary" id="btnAdd" data-bs-toggle="modal" data-bs-target="#createEmployeeModal">
+        <button type="button" class="btn btn-primary" id="btnAdd" data-bs-toggle="modal" data-bs-target="#createEmployeeModal">
             <i class="bi bi-plus-circle"></i> Add New Employee
+        </button>
+        <button type="button" class="btn btn-success" id="btnUploadCSV" data-bs-toggle="modal" data-bs-target="#uploadCSVModal">
+            <i class="bi bi-upload"></i> Upload CSV
         </button>
     </div>
 
@@ -55,10 +58,57 @@
     @Html.Partial("_EditRecordPartial")
 </div>
 
+<!-- Upload CSV Modal -->
+<!--<div class="modal fade" id="uploadCSVModal" tabindex="-1" aria-labelledby="uploadCSVModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadCSVModalLabel">Upload CSV File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadCSVForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="csvFile" class="form-label">Select CSV File</label>
+                        <input class="form-control" type="file" id="csvFile" name="csvFile" accept=".csv" required>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>-->
+<!-- CSV Upload Modal -->
+<div class="modal fade" id="uploadCSVModal" tabindex="-1" aria-labelledby="uploadCSVModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadCSVModalLabel">Upload CSV File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Use Html.BeginForm for the form -->
+                @using (Html.BeginForm("UploadCsv", "Client", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="mb-3">
+                        <label for="csvFile" class="form-label">Select CSV File</label>
+                        <input class="form-control" type="file" id="csvFile" name="csvFile" accept=".csv" required>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="~/Scripts/crudOnEmployee.js"></script>
 <script>
     $(document).ready(() => {
         loadEmployees();
-    })
+    });
 </script>
-

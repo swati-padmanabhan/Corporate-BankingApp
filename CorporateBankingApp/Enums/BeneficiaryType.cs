@@ -3,6 +3,6 @@
     public enum BeneficiaryType
     {
         INBOUND,
-        OUTBOND
+        OUTBOUND
     }
 }

@@ -21,4 +21,17 @@ namespace CorporateBankingApp.DTOs
 
         public bool IsActive { get; set; }
     }
+
+    public class CSVDTO
+    {
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Email { get; set; }
+
+        public long Phone { get; set; }
+
+        public string Designation { get; set; }
+    }
 }

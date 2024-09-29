@@ -140,3 +140,10 @@ body {
 .jumbotron {
     background: var(--accent-color);
 }
+
+.badge {
+    width: 140px; /* Set the desired width */
+    display: flex; /* Ensure content is centered */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+}

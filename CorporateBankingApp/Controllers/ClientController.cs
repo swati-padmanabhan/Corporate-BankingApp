@@ -2,8 +2,12 @@
 using CorporateBankingApp.DTOs;
 using CorporateBankingApp.Models;
 using CorporateBankingApp.Services;
+using CsvHelper;
+using dotenv.net.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -30,8 +34,33 @@ namespace CorporateBankingApp.Controllers
         // GET: ManageBeneficiaries
         public ActionResult ManageBeneficiaries()
         {
-            return View();
+            Guid clientId = (Guid)Session["UserId"];
+            var beneficiaries = _clientService.GetAllBeneficiaries(clientId);
+            return View(beneficiaries);
         }
+
+        public ActionResult GetAllBeneficiaries()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            Guid clientId = (Guid)Session["UserId"];
+            var beneficiaries = _clientService.GetAllBeneficiaries(clientId);
+
+            var beneficiary = beneficiaries.Select(b => new Beneficiary
+            {
+                Id = b.Id,
+                BeneficiaryName = b.BeneficiaryName,
+                AccountNumber = b.AccountNumber,
+                BankIFSC = b.BankIFSC,
+                BeneficiaryType = b.BeneficiaryType,
+            }).ToList();
+
+            return View(beneficiary);
+        }
+
+        //******************************************Employee Management******************************************
 
         // GET: ManageEmployees
         public ActionResult ManageEmployees()
@@ -142,6 +171,7 @@ namespace CorporateBankingApp.Controllers
             return Json(new { success = true, message = "Employee updated successfully" });
         }
 
+
         [HttpPost]
         public ActionResult UpdateEmployeeStatus(Guid id, bool isActive)
         {
@@ -151,6 +181,43 @@ namespace CorporateBankingApp.Controllers
             return Json(new { success = true });
         }
 
+
+
+        [HttpPost]
+        public ActionResult UploadCsv()
+        {
+            var file = new List<HttpPostedFileBase>();
+
+            var csvFile = Request.Files["csvFile"];
+
+            if (Session["UserId"] == null)
+            {
+                return new HttpStatusCodeResult(401, "Unauthorized");
+            }
+            Guid clientId = (Guid)Session["UserId"];
+            var client = _clientService.GetClientById(clientId);
+
+            if (client == null)
+            {
+                return new HttpStatusCodeResult(400, "Client not found");
+            }
+
+            if (csvFile != null && csvFile.ContentLength > 0)
+            {
+                file.Add(csvFile);
+            }
+
+            try
+            {
+                _clientService.UploadEmployeeCsv(csvFile, client);
+                //return Json(new { success = true, message = "CSV uploaded and employees added successfully." });
+                return RedirectToAction("ManageEmployees");
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
 
 
 

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<CorporateBankingApp.Models.Beneficiary>
+@using CorporateBankingApp.Enums
+
+@{
+    ViewBag.Title = "ManageBeneficiaries";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="table-responsive">
+        <div class="my-4 float-start w-75">
+            <input type="text"
+                   id="searchInput"
+                   placeholder="Search beneficiaries..."
+                   class="form-control"
+                   onkeyup="searchUsers()" />
+        </div>
+        <div class="dropdown my-4 float-end">
+            <button class="btn rounded-3 wrapper"
+                    type="button"
+                    id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                <i class="bi bi-filter me-1"></i>
+                <span>Filter</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" onclick="filterAll()">All</a></li>
+                <li><a class="dropdown-item" onclick="filterInbound()">INBOUND</a></li>
+                <li><a class="dropdown-item" onclick="filterOutbound()">OUTBOUND</a></li>
+            </ul>
+        </div>
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Beneficiary Name</th>
+                    <th>Account No.</th>
+                    <th>Bank IFSC</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="https://ui-avatars.com/api/?name=@item.BeneficiaryName.Replace(" ", "+")"
+                                         alt=""
+                                         style="width: 45px; height: 45px"
+                                         class="rounded-circle" />
+                                    <div class="ms-3">
+                                        <p class="fw-bold mb-1">@Html.DisplayFor(modelItem => item.BeneficiaryName)</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="fw-normal mb-1">@Html.DisplayFor(modelItem => item.AccountNumber)</p>
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.BankIFSC)</td>
+                            <td>
+                                @if (item.BeneficiaryType == BeneficiaryType.INBOUND)
+                                {
+                                    <span class="badge rounded-pill text-bg-primary p-2">
+                                        <i class="bi bi-arrow-down-left-circle m-2"></i>
+                                        INBOUND
+                                    </span>
+                                }
+                                else if (item.BeneficiaryType == BeneficiaryType.OUTBOUND)
+                                {
+                                    <span class="badge rounded-pill text-bg-info p-2">
+                                        <i class="bi bi-arrow-up-right-circle m-2"></i>
+                                        OUTBOUND
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">No beneficiaries found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

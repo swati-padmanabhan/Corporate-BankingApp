@@ -41,7 +41,7 @@ function loadEmployees() {
                 });
             }
             else {
-                $("#employeeTable").append("<tr><td colspan='5'>No employees found.</td></tr>");
+                $("#employeeTable").append("<tr><td colspan='7' class='text-center'>No employees found.</td></tr>");
             }
         },
         error: function (err) {
@@ -175,4 +175,33 @@ $("#btnEdit").click(() => {
         Designation: $("#newDesignation").val()
     };
     modifyRecord(data);
+});
+
+//csv file 
+$("#uploadCSVForm").on("submit", function (event) {
+    event.preventDefault(); // Prevent the form from submitting the default way
+    var formData = new FormData(this); // Create FormData object with form data
+
+    // Make an AJAX call to upload the CSV
+    $.ajax({
+        url: "/Client/UploadCsv", 
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            $('#uploadCSVModal').modal('hide'); // Hide the modal on success
+            loadEmployees(); // Reload the employee list
+            alert('CSV uploaded successfully!');
+        },
+        error: function (error) {
+            alert('Error uploading CSV. Please try again.');
+            console.log("Error uploading CSV: ", error);
+        }
+    });
+});
+
+// Optional: To reset the form when the modal is closed
+$('#uploadCSVModal').on('hidden.bs.modal', function () {
+    $(this).find('form')[0].reset(); // Reset the form
 });

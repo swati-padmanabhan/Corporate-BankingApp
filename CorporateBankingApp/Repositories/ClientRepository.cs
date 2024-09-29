@@ -15,6 +15,8 @@ namespace CorporateBankingApp.Repositories
         {
             _session = session;
         }
+
+
         public void AddEmployeeDetails(Employee employee)
         {
             using (var transaction = _session.BeginTransaction())
@@ -63,7 +65,12 @@ namespace CorporateBankingApp.Repositories
                     transaction.Commit();
                 }
             }
+        }
 
+        public List<Beneficiary> GetAllBeneficiaries(Guid clientId)
+        {
+            var client = _session.Query<Client>().FetchMany(c => c.Beneficiaries).SingleOrDefault(c => c.Id == clientId);
+            return client?.Beneficiaries.ToList() ?? new List<Beneficiary>();
         }
     }
 }

@@ -1,0 +1,11 @@
+FirstName,LastName,Email,Phone,Designation
+John,Doe,john.doe@example.com,1234567890,Software Engineer
+Jane,Smith,jane.smith@example.com,9876543210,Project Manager
+Alice,Johnson,alice.johnson@example.com,5551234567,Data Analyst
+Bob,Brown,bob.brown@example.com,4449876543,UX Designer
+Charlie,Wilson,charlie.wilson@example.com,3332221111,QA Tester
+David,Taylor,david.taylor@example.com,2223334444,System Administrator
+Eva,Green,eva.green@example.com,1115556666,Product Owner
+Frank,Moore,frank.moore@example.com,8889990000,DevOps Engineer
+Grace,Lee,grace.lee@example.com,7778889999,Marketing Specialist
+Henry,Harris,henry.harris@example.com,6664443333,HR Manager

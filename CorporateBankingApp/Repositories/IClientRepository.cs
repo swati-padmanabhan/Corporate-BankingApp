@@ -20,5 +20,7 @@ namespace CorporateBankingApp.Repositories
         void UpdateEmployeeDetails(Employee employee);
 
         void UpdateEmployeeStatus(Guid id, bool isActive);
+
+        List<Beneficiary> GetAllBeneficiaries(Guid clientId);
     }
 }

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<CorporateBankingApp.DTOs.SalaryDisbursementDTO>
+
+@{
+    ViewBag.Title = "Salary Disbursement Approvals";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Include Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Salary Disbursement Approvals</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table id="salaryDisbursementsTable" class="table table-striped table-bordered">
+                <thead class="table-header">
+                    <tr>
+                        <th>Salary Disbursement ID</th>
+                        <th>Company Name</th>
+                        <th>Employee First Name</th>
+                        <th>Employee Last Name</th>
+                        <th>Salary</th>
+                        <th>Disbursement Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.SalaryDisbursementId)</td>
+                                <td>@Html.DisplayFor(modelItem => item.CompanyName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.EmployeeFirstName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.EmployeeLastName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Salary)</td>
+                                <td>@Html.DisplayFor(modelItem => item.DisbursementDate)</td>
+                                <td>@item.SalaryStatus.ToString()</td>
+                                <td class="action-buttons">
+                                    <button class="action-button btn-approve" onclick="approveDisbursement('@item.SalaryDisbursementId')">
+                                        <i class="fas fa-check icon"></i> Accept
+                                    </button>
+                                    <button class="action-button btn-reject" onclick="rejectDisbursement('@item.SalaryDisbursementId')">
+                                        <i class="fas fa-times icon"></i> Reject
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center">No pending salary disbursements available.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script src="~/Scripts/salaryDisbursement.js"></script>

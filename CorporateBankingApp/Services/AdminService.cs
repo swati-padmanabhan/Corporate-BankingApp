@@ -34,7 +34,7 @@ namespace CorporateBankingApp.Services
         public List<ClientDTO> GetRegisteredClientsPendingApproval()
         {
             var clients = _adminRepository.GetAllClients()
-                .Where(c => c.OnBoardingStatus == Status.PENDING && c.IsActive).ToList();
+                .Where(c => c.OnBoardingStatus == CompanyStatus.PENDING && c.IsActive).ToList();
             return clients.Select(c => new ClientDTO
             {
                 Id = c.Id,
@@ -92,7 +92,7 @@ namespace CorporateBankingApp.Services
         public void ApproveClient(Guid id)
         {
             var client = _adminRepository.GetClientById(id);
-            client.OnBoardingStatus = Status.APPROVED;
+            client.OnBoardingStatus = CompanyStatus.APPROVED;
             _adminRepository.UpdateClientDetails(client);
         }
 
@@ -126,6 +126,22 @@ namespace CorporateBankingApp.Services
                 ContactInformation = clientDTO.ContactInformation,
             };
             _adminRepository.UpdateClientDetails(client);
+        }
+
+        //salary
+        public IEnumerable<SalaryDisbursementDTO> ListPendingSalaryDisbursements()
+        {
+            return _adminRepository.GetSalaryDisbursementsByStatus(CompanyStatus.PENDING);
+        }
+
+        public bool ApproveSalaryDisbursement(Guid salaryDisbursementId)
+        {
+            return _adminRepository.ApproveSalaryDisbursement(salaryDisbursementId);
+        }
+
+        public bool RejectSalaryDisbursement(Guid salaryDisbursementId)
+        {
+            return _adminRepository.RejectSalaryDisbursement(salaryDisbursementId);
         }
     }
 }

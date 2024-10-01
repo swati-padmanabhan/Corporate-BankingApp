@@ -1,3 +1,5 @@
+using CorporateBankingApp.DTOs;
+using CorporateBankingApp.Enums;
 using CorporateBankingApp.Models;
 using CorporateBankingApp.Utils;
 using NHibernate;
@@ -78,5 +80,87 @@ namespace CorporateBankingApp.Repositories
                 transaction.Commit();
             }
         }
+
+        //salary disbursement 
+        public IEnumerable<SalaryDisbursementDTO> GetSalaryDisbursementsByStatus(CompanyStatus status)
+        {
+            return _session.Query<SalaryDisbursement>()
+                           .Where(x => x.SalaryStatus == status)
+                           .Select(x => new SalaryDisbursementDTO
+                           {
+                               SalaryDisbursementId = x.Id,
+                               CompanyName = x.Employee.Client.CompanyName,
+                               EmployeeFirstName = x.Employee.FirstName,
+                               EmployeeLastName = x.Employee.LastName,
+                               Salary = x.Employee.Salary,
+                               DisbursementDate = x.DisbursementDate,
+                               SalaryStatus = x.SalaryStatus
+                           })
+                           .ToList();
+        }
+
+        public bool ApproveSalaryDisbursement(Guid salaryDisbursementId)
+        {
+            using (var transaction = _session.BeginTransaction())
+            {
+                try
+                {
+                    var salaryDisbursement = _session.Get<SalaryDisbursement>(salaryDisbursementId);
+                    if (salaryDisbursement == null || salaryDisbursement.SalaryStatus != CompanyStatus.PENDING)
+                        return false;
+
+                    var employee = salaryDisbursement.Employee;
+                    var client = employee.Client;
+
+                    double totalSalary = employee.Salary;
+
+                    if (client.Balance < totalSalary)
+                    {
+                        return false;
+                    }
+
+                    client.Balance -= totalSalary;
+                    salaryDisbursement.SalaryStatus = CompanyStatus.APPROVED;
+
+                    _session.Update(client);
+                    _session.Update(salaryDisbursement);
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+
+        }
+
+        public bool RejectSalaryDisbursement(Guid salaryDisbursementId)
+        {
+            using (var transaction = _session.BeginTransaction())
+            {
+                try
+                {
+                    var salaryDisbursement = _session.Get<SalaryDisbursement>(salaryDisbursementId);
+                    if (salaryDisbursement == null || salaryDisbursement.SalaryStatus != CompanyStatus.PENDING)
+                        return false;
+
+                    // Set the status to REJECTED
+                    salaryDisbursement.SalaryStatus = CompanyStatus.REJECTED;
+
+                    _session.Update(salaryDisbursement);
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
     }
 }

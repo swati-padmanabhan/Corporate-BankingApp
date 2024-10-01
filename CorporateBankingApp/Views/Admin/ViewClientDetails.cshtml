@@ -1,121 +1,119 @@
 ﻿@model CorporateBankingApp.DTOs.ClientDTO
 
 @{
-    ViewBag.Title = "ViewClientDetails";
+    ViewBag.Title = "View Client Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ViewClientDetails</h2>
+<div class="container my-5">
+    <h2 class="text-center mb-4">Client Details: @Model.UserName</h2>
 
-<div>
-    <h4>ClientDTO</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title"><i class="bi bi-person-circle"></i> Profile</h5>
+            <dl class="row">
+                <dt class="col-sm-4">Username</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.UserName)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
+                <dt class="col-sm-4">Email</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+                <dt class="col-sm-4">Company Name</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.CompanyName)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+                <dt class="col-sm-4">Location</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Location)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CompanyName)
-        </dt>
+                <dt class="col-sm-4">Contact Information</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.ContactInformation)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.CompanyName)
-        </dd>
+                <dt class="col-sm-4">Account Number</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.AccountNumber)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
+                <dt class="col-sm-4">Client IFSC</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.ClientIFSC)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Location)
-        </dd>
+                <dt class="col-sm-4">Balance</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Balance)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ContactInformation)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ContactInformation)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AccountNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AccountNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ClientIFSC)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ClientIFSC)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Balance)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Balance)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DocumentLocation)
-        </dt>
-
-        <div class="modal"
-             tabindex="-1"
-             id="documentModal"
-             data-bs-backdrop="static"
-             data-bs-keyboard="false"
-             aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="documentModalLabel"></h5>
+                <dt class="col-sm-4">Documents</dt>
+                <dd class="col-sm-8">
+                    @foreach (var document in Model.DocumentLocation.Select((doc, index) => new { doc, index }))
+                    {
                         <button type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                                class="btn btn-outline-primary m-1"
+                                onclick="openModal('Document @(document.index + 1)', '@Url.Content(document.doc)')">
+                            View Document @(document.index + 1)
+                        </button>
+                    }
+                </dd>
+            </dl>
+
+            <hr />
+            <div class="text-center mb-3">
+                <h5 class="card-title"><i class="bi bi-flag-fill"></i> Approval Actions</h5>
+            </div>
+
+            <div class="d-flex justify-content-around mb-4">
+                <!-- Approve Client Form -->
+                <form method="post" action="@Url.Action("ApproveClient", "Admin")">
+                    <input type="hidden" name="clientId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-check-circle"></i> Approve
+                    </button>
+                </form>
+
+                <!-- Reject Client Form -->
+                <form id="rejectForm" method="post" action="@Url.Action("RejectClient", "Admin")">
+                    <input type="hidden" name="clientId" value="@Model.Id" />
+                    <button type="button" class="btn btn-danger btn-lg" id="rejectButton">
+                        <i class="bi bi-x-circle"></i> Reject
+                    </button>
+
+                    <div id="reasonContainer" style="display: none;" class="mt-3">
+                        <label for="rejectionReason">Reason for Rejection:</label>
+                        <textarea name="rejectionReason" id="rejectionReason" class="form-control" rows="3" required></textarea>
+                        <button type="submit" class="btn btn-danger mt-2">Submit Rejection</button>
                     </div>
-                    <div class="modal-body">
-                        <img src=""
-                             id="modalImage"
-                             alt="Document Image"
-                             class="w-100 p-2" />
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
-
-        <dd>
-            @foreach (var document in Model.DocumentLocation.Select((doc, index) => new { doc, index }))
-            {
-                <button type="button"
-                        class="btn btn-primary"
-                        onclick="openModal('Document @(document.index + 1)', '@Url.Content(document.doc)')">
-                    View Document @(document.index + 1)
-                </button>
-            }
-        </dd>
-
-
-    </dl>
+    </div>
 </div>
+
+<!-- Modal for Document Preview -->
+<div class="modal"
+     tabindex="-1"
+     id="documentModal"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     aria-labelledby="documentModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="documentModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="" id="modalImage" alt="Document Image" class="w-100" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Show rejection reason textarea when Reject button is clicked
+    document.getElementById("rejectButton").addEventListener("click", function () {
+        var reasonContainer = document.getElementById("reasonContainer");
+        reasonContainer.style.display = reasonContainer.style.display === "none" ? "block" : "none"; // Toggle visibility
+    });
+
+    function openModal(title, src) {
+        document.getElementById("documentModalLabel").innerText = title;
+        document.getElementById("modalImage").src = src;
+        var modal = new bootstrap.Modal(document.getElementById('documentModal'));
+        modal.show();
+    }
+</script>
+

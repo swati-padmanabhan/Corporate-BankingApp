@@ -22,5 +22,13 @@ namespace CorporateBankingApp.Repositories
         void UpdateEmployeeStatus(Guid id, bool isActive);
 
         List<Beneficiary> GetAllBeneficiaries(Guid clientId);
+
+        //salary  disbursement
+        List<Employee> RetrieveEmployeesByIds(List<Guid> employeeIds);
+
+        void AddSalaryDisbursement(SalaryDisbursement salaryDisbursement);
+
+        SalaryDisbursement GetEmployeeSalaryDisbursement(Guid employeeId, DateTime currentDate);
+
     }
 }

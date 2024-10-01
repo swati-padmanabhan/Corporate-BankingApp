@@ -1,4 +1,5 @@
 ﻿using CorporateBankingApp.DTOs;
+using CorporateBankingApp.Enums;
 using CorporateBankingApp.Models;
 using CorporateBankingApp.Repositories;
 using CsvHelper;
@@ -21,20 +22,21 @@ namespace CorporateBankingApp.Services
             _clientRepository = clientRepository;
         }
 
-        public Employee MapToEmployee(EmployeeDTO employeeDTO, Client client)
-        {
-            return new Employee
-            {
-                Id = employeeDTO.Id == Guid.Empty ? Guid.NewGuid() : employeeDTO.Id,
-                FirstName = employeeDTO.FirstName,
-                LastName = employeeDTO.LastName,
-                Email = employeeDTO.Email,
-                Phone = employeeDTO.Phone,
-                Designation = employeeDTO.Designation,
-                IsActive = employeeDTO.IsActive,
-                Client = client
-            };
-        }
+        //public Employee MapToEmployee(EmployeeDTO employeeDTO, Client client)
+        //{
+        //    return new Employee
+        //    {
+        //        Id = employeeDTO.Id == Guid.Empty ? Guid.NewGuid() : employeeDTO.Id,
+        //        FirstName = employeeDTO.FirstName,
+        //        LastName = employeeDTO.LastName,
+        //        Email = employeeDTO.Email,
+        //        Phone = employeeDTO.Phone,
+        //        Designation = employeeDTO.Designation,
+        //        Salary = employeeDTO.Salary,
+        //        IsActive = employeeDTO.IsActive,
+        //        Client = client
+        //    };
+        //}
 
         public void UploadEmployeeCsv(HttpPostedFileBase csvFile, Client client)
         {
@@ -72,6 +74,7 @@ namespace CorporateBankingApp.Services
                         Email = employeeDTO.Email,
                         Phone = employeeDTO.Phone,
                         Designation = employeeDTO.Designation,
+                        Salary = employeeDTO.Salary,
                         IsActive = true, // Assuming default status is active
                         Client = client  // Associate employee with the provided client
                     };
@@ -94,6 +97,7 @@ namespace CorporateBankingApp.Services
                 Email = employeeDTO.Email,
                 Phone = employeeDTO.Phone,
                 Designation = employeeDTO.Designation,
+                Salary = employeeDTO.Salary,
                 IsActive = true,
                 Client = client
             };
@@ -129,6 +133,7 @@ namespace CorporateBankingApp.Services
                 existingEmployee.Email = employeeDTO.Email;
                 existingEmployee.Phone = employeeDTO.Phone;
                 existingEmployee.Designation = employeeDTO.Designation;
+                existingEmployee.Salary = employeeDTO.Salary;
                 existingEmployee.Client = client;
                 _clientRepository.UpdateEmployeeDetails(existingEmployee);
             }
@@ -143,5 +148,54 @@ namespace CorporateBankingApp.Services
         {
             return _clientRepository.GetAllBeneficiaries(clientId);
         }
+
+
+        //salary disbursement code 
+        public bool ProcessSalaryDisbursements(List<Guid> employeeIds, bool isBatch, out List<Guid> excludedEmployees)
+        {
+            excludedEmployees = new List<Guid>();
+
+            var employees = _clientRepository.RetrieveEmployeesByIds(employeeIds);
+
+            if (employees == null || !employees.Any())
+            {
+                return false;
+            }
+
+            foreach (var employee in employees)
+            {
+                // Check if a salary has already been disbursed to this employee on this date
+                if (HasSalaryBeenDisbursed(employee.Id))
+                {
+                    excludedEmployees.Add(employee.Id);
+                    continue;
+                }
+
+                var salaryDisbursement = CreateSalaryDisbursement(employee, isBatch);
+                _clientRepository.AddSalaryDisbursement(salaryDisbursement);
+            }
+
+            return true;
+        }
+
+        // Helper method to check for existing salary disbursement
+        private bool HasSalaryBeenDisbursed(Guid employeeId)
+        {
+            var existingDisbursement = _clientRepository.GetEmployeeSalaryDisbursement(employeeId, DateTime.Now);
+            return existingDisbursement != null;
+        }
+
+        // Helper method to create a new SalaryDisbursement
+        private SalaryDisbursement CreateSalaryDisbursement(Employee employee, bool isBatch)
+        {
+            return new SalaryDisbursement
+            {
+                Employee = employee,
+                DisbursementDate = DateTime.Now,
+                IsBatch = isBatch,
+                SalaryStatus = CompanyStatus.PENDING
+            };
+        }
+
     }
 }

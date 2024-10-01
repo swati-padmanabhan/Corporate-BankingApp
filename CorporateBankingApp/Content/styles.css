@@ -13,6 +13,73 @@
     --neutral-dark: #000000; /* slate-gray */
 }
 
+/* Classes to apply colors */
+.primary-bg {
+    background-color: var(--primary-color);
+}
+
+.primary-light-bg {
+    background-color: var(--primary-light);
+}
+
+.primary-dark-bg {
+    background-color: var(--primary-dark);
+}
+
+.secondary-bg {
+    background-color: var(--secondary-color) !important;
+    
+}
+
+.secondary-light-bg {
+    background-color: var(--secondary-light);
+}
+
+.secondary-dark-bg {
+    background-color: var(--secondary-dark);
+}
+
+.accent-bg {
+    background-color: var(--accent-color);
+}
+
+.accent-dark-bg {
+    background-color: var(--accent-dark);
+}
+
+.neutral-light-bg {
+    background-color: var(--neutral-light);
+}
+
+.neutral-gray-light-bg {
+    background-color: var(--neutral-gray-light);
+}
+
+.neutral-gray-dark-bg {
+    background-color: var(--neutral-gray-dark);
+}
+
+.neutral-dark-bg {
+    background-color: var(--neutral-dark);
+}
+
+/* Text color classes */
+.primary-text {
+    color: var(--primary-color);
+}
+
+.secondary-text {
+    color: var(--secondary-color);
+}
+
+.accent-text {
+    color: var(--accent-color);
+}
+
+.neutral-dark-text {
+    color: var(--neutral-dark);
+}
+
 body {
     font-family: "Raleway", sans-serif;
     font-size: 1rem;
@@ -146,4 +213,50 @@ body {
     display: flex; /* Ensure content is centered */
     align-items: center; /* Center vertically */
     justify-content: center; /* Center horizontally */
+}
+
+/*salary disbursement*/
+
+/* Action Button Styles */
+.action-button {
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center; /* Align icons vertically */
+}
+
+/* Approve Button */
+.btn-approve {
+    background-color: var(--secondary-light); /* Light green */
+}
+
+    .btn-approve:hover {
+        background-color: var(--secondary-color); /* Darker green */
+        transform: scale(1.05);
+    }
+
+/* Reject Button */
+.btn-reject {
+    background-color: var(--primary-dark); /* Dark gray */
+}
+
+    .btn-reject:hover {
+        background-color: var(--primary-color); /* Lighter gray */
+        transform: scale(1.05);
+    }
+
+/* Icon spacing */
+.icon {
+    margin-right: 5px; /* Space between icon and text */
+}
+
+/* Flex container for action buttons */
+.action-buttons {
+    display: flex;
+    gap: 10px; /* Space between buttons */
 }

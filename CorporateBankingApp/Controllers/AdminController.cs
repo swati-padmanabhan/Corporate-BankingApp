@@ -12,10 +12,12 @@ namespace CorporateBankingApp.Controllers
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
+        private readonly IEmailService _emailService;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IAdminService adminService, IEmailService emailService)
         {
             _adminService = adminService;
+            _emailService = emailService;
         }
         // GET: Admin
         public ActionResult Index()
@@ -56,21 +58,34 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult ApproveClient(Guid id)
+        // Action for accepting client
+        public ActionResult ApproveClient(Guid clientId)
         {
-            _adminService.ApproveClient(id);
-            return RedirectToAction("ClientApproval");
+            _adminService.ApproveClient(clientId);
+            var client = _adminService.GetClientById(clientId);
+            _emailService.SendOnboardingAcceptanceEmail(client.Email);
+
+            return RedirectToAction("ClientApproval"); 
         }
 
+        // Action for rejecting client
         [HttpPost]
-        public ActionResult RejectClient(Guid id)
+        public ActionResult RejectClient(Guid clientId, string rejectionReason)
         {
-            _adminService.RejectClient(id);
-            return RedirectToAction("ClientApproval");
-        }
+            // Logic to reject client
+            _adminService.RejectClient(clientId);
+            var client = _adminService.GetClientById(clientId);
 
-        // GET: ClientManagement
-        public ActionResult ClientManagement()
+            _emailService.SendOnboardingRejectionEmail(client.Email, rejectionReason);
+
+            return RedirectToAction("ClientApproval"); 
+        }
+    
+
+
+
+    // GET: ClientManagement
+    public ActionResult ClientManagement()
         {
             return View();
         }
@@ -170,6 +185,8 @@ namespace CorporateBankingApp.Controllers
             return View();
         }
 
+
+
         // GET: BeneficiaryManagement
         public ActionResult BeneficiaryManagement()
         {
@@ -179,8 +196,57 @@ namespace CorporateBankingApp.Controllers
         // GET: SalaryDisbursementApprovals
         public ActionResult SalaryDisbursementApprovals()
         {
-            return View();
+            var pendingDisbursements = _adminService.ListPendingSalaryDisbursements();
+            return View(pendingDisbursements);
         }
+        [HttpPost]
+        public ActionResult ApproveDisbursement(Guid salaryDisbursementId)
+        {
+            bool success = _adminService.ApproveSalaryDisbursement(salaryDisbursementId);
+
+            if (success)
+            {
+                return Json(new
+                {
+                    success = true,
+                    message = "Salary disbursement approved successfully."
+                });
+            }
+            else
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Failed to approve salary disbursement. Insufficient balance or invalid request."
+                });
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult RejectDisbursement(Guid salaryDisbursementId)
+        {
+
+            bool success = _adminService.RejectSalaryDisbursement(salaryDisbursementId);
+
+            if (success)
+            {
+                return Json(new
+                {
+                    success = true,
+                    message = "Salary disbursement rejected successfully."
+                });
+            }
+            else
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Failed to reject salary disbursement."
+                });
+            }
+        }
+
 
         // GET: ReportGeneration
         public ActionResult ReportGeneration()

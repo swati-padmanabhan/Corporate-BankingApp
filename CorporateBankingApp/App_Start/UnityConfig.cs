@@ -23,6 +23,9 @@ namespace CorporateBankingApp
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserRepository, UserRepository>();
 
+            container.RegisterType<IEmailService, EmailService>();
+            container.RegisterType<IEmailRepository, EmailRepository>();
+
             container.RegisterType<IAdminService, AdminService>();
             container.RegisterType<IAdminRepository, AdminRepository>();
 

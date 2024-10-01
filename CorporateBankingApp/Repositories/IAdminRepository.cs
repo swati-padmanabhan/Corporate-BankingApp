@@ -1,4 +1,6 @@
-﻿using CorporateBankingApp.Models;
+﻿using CorporateBankingApp.DTOs;
+using CorporateBankingApp.Enums;
+using CorporateBankingApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +17,12 @@ namespace CorporateBankingApp.Repositories
         List<Client> GetAllClients();
         void UpdateClientDetails(Client client);
         void DeleteClientDetails(Guid id);
+
+        //salary
+        IEnumerable<SalaryDisbursementDTO> GetSalaryDisbursementsByStatus(CompanyStatus status);
+
+        bool ApproveSalaryDisbursement(Guid salaryDisbursementId);
+
+        bool RejectSalaryDisbursement(Guid salaryDisbursementId);
     }
 }

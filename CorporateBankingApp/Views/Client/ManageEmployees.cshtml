@@ -6,11 +6,21 @@
 }
 
 <div class="container-fluid mt-4" id="employeeList">
+    <h3 class="my-4 text-center">Manage Employees</h3>
 
-    <h3 class="my-4">Manage Employees</h3>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <label for="salaryAmountInput"><strong>Total Salary Amount:</strong></label>
+            <input type="number" id="salaryAmountInput" name="salaryAmountInput" class="form-control d-inline-block w-auto" readonly required />
+        </div>
 
-    <div class="mb-3">
-        <button type="button" class="btn btn-primary" id="btnAdd" data-bs-toggle="modal" data-bs-target="#createEmployeeModal">
+        <button id="disburseSalary" class="btn btn-warning">
+            <i class="bi bi-cash"></i> Disburse Salary
+        </button>
+    </div>
+
+    <div class="mb-3 d-flex justify-content-start">
+        <button type="button" class="btn btn-primary me-2" id="btnAdd" data-bs-toggle="modal" data-bs-target="#createEmployeeModal">
             <i class="bi bi-plus-circle"></i> Add New Employee
         </button>
         <button type="button" class="btn btn-success" id="btnUploadCSV" data-bs-toggle="modal" data-bs-target="#uploadCSVModal">
@@ -19,67 +29,38 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-hover">
+        <table class="table table-hover table-bordered align-middle">
             <thead>
                 <tr>
+                    <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+                    <th>@Html.DisplayNameFor(model => model.LastName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Email)</th>
+                    <th>@Html.DisplayNameFor(model => model.Phone)</th>
+                    <th>@Html.DisplayNameFor(model => model.Designation)</th>
+                    <th>@Html.DisplayNameFor(model => model.Salary)</th>
+                    <th>@Html.DisplayNameFor(model => model.IsActive)</th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FirstName)
+                        <span>Salary Disbursement</span>
+                        <input type="checkbox" id="selectAllSalaryDisbursement" class="ms-2" />
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.LastName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Phone)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Designation)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.IsActive)
-                    </th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider" id="employeeTable">
-                @*data will be coming from ajax*@
+                @* Data populated via Ajax *@
             </tbody>
         </table>
     </div>
 </div>
 
+<!-- Add and Edit Record Partials -->
 <div id="newRecord" style="display:none" class="container">
     @Html.Partial("_AddRecordPartial")
 </div>
-
 <div id="editRecord" style="display:none" class="container">
     @Html.Partial("_EditRecordPartial")
 </div>
 
-<!-- Upload CSV Modal -->
-<!--<div class="modal fade" id="uploadCSVModal" tabindex="-1" aria-labelledby="uploadCSVModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="uploadCSVModalLabel">Upload CSV File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="uploadCSVForm" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="csvFile" class="form-label">Select CSV File</label>
-                        <input class="form-control" type="file" id="csvFile" name="csvFile" accept=".csv" required>
-                    </div>
-                    <div class="mb-3">
-                        <button type="submit" class="btn btn-primary">Upload</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>-->
 <!-- CSV Upload Modal -->
 <div class="modal fade" id="uploadCSVModal" tabindex="-1" aria-labelledby="uploadCSVModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -89,14 +70,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Use Html.BeginForm for the form -->
                 @using (Html.BeginForm("UploadCsv", "Client", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     <div class="mb-3">
                         <label for="csvFile" class="form-label">Select CSV File</label>
-                        <input class="form-control" type="file" id="csvFile" name="csvFile" accept=".csv" required>
+                        <input class="form-control" type="file" id="csvFile" name="csvFile" accept=".csv" required />
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 text-end">
                         <button type="submit" class="btn btn-primary">Upload</button>
                     </div>
                 }
@@ -104,7 +84,6 @@
         </div>
     </div>
 </div>
-
 
 <script src="~/Scripts/crudOnEmployee.js"></script>
 <script>

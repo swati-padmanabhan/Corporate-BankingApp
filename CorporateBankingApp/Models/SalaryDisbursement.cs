@@ -1,5 +1,5 @@
-﻿using System;
-using System.IdentityModel.Protocols.WSTrust;
+﻿using CorporateBankingApp.Enums;
+using System;
 
 namespace CorporateBankingApp.Models
 {
@@ -9,13 +9,13 @@ namespace CorporateBankingApp.Models
 
         //public virtual Client Client { get; set; }
 
-        public virtual double Salary { get; set; }
+        //public virtual double Salary { get; set; }
 
         public virtual DateTime DisbursementDate { get; set; }
 
         public virtual bool IsBatch { get; set; }
 
-        public virtual Status SalaryStatus { get; set; }
+        public virtual CompanyStatus SalaryStatus { get; set; }
 
         public virtual Employee Employee { get; set; }
     }

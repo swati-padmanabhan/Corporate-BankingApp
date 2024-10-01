@@ -13,7 +13,7 @@ namespace CorporateBankingApp.Mappings
             Map(c => c.CompanyName).Not.Nullable();
             Map(c => c.Location).Nullable();
             Map(c => c.ContactInformation).Nullable();
-            Map(c => c.OnBoardingStatus).CustomType<Status>().Not.Nullable();
+            Map(c => c.OnBoardingStatus).CustomType<CompanyStatus>().Not.Nullable();
             Map(c => c.IsActive).Not.Nullable();
             Map(c => c.AccountNumber).Not.Nullable();
             Map(c => c.ClientIFSC).Not.Nullable();

@@ -632,6 +632,7 @@
     <Content Include="Scripts\jquery.jqGrid.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\salaryDisbursement.js" />
     <Content Include="Scripts\Script.js" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -645,10 +646,11 @@
     <Compile Include="DTOs\AdminDTO.cs" />
     <Compile Include="DTOs\ClientDTO.cs" />
     <Compile Include="DTOs\EmployeeDTO.cs" />
+    <Compile Include="DTOs\SalaryDisbursementDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="Enums\BeneficiaryType.cs" />
     <Compile Include="Enums\Designation.cs" />
-    <Compile Include="Enums\Status.cs" />
+    <Compile Include="Enums\CompanyStatus.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -676,14 +678,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AdminRepository.cs" />
     <Compile Include="Repositories\ClientRepository.cs" />
+    <Compile Include="Repositories\EmailRepository.cs" />
     <Compile Include="Repositories\IAdminRepository.cs" />
     <Compile Include="Repositories\IClientRepository.cs" />
+    <Compile Include="Repositories\IEmailRepository.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Services\ClientService.cs" />
+    <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\IClientService.cs" />
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\IAdminService.cs" />
+    <Compile Include="Services\IEmailService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\PasswordHashing.cs" />
@@ -731,6 +737,7 @@
     <Content Include="Views\Admin\ViewClientDetails.cshtml" />
     <Content Include="Views\User\RegistrationSuccess.cshtml" />
     <Content Include="Views\Client\ManageBeneficiaries.cshtml" />
+    <Content Include="Views\Admin\SalaryDisbursementApprovals.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

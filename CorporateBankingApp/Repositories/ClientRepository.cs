@@ -72,5 +72,39 @@ namespace CorporateBankingApp.Repositories
             var client = _session.Query<Client>().FetchMany(c => c.Beneficiaries).SingleOrDefault(c => c.Id == clientId);
             return client?.Beneficiaries.ToList() ?? new List<Beneficiary>();
         }
+
+        //salary disbursement 
+        public List<Employee> RetrieveEmployeesByIds(List<Guid> employeeIds)
+        {
+            return _session.Query<Employee>()
+                   .Where(e => employeeIds.Contains(e.Id))
+                   .ToList();
+        }
+
+        public void AddSalaryDisbursement(SalaryDisbursement salaryDisbursement)
+        {
+            using (var transaction = _session.BeginTransaction())
+            {
+                _session.Save(salaryDisbursement);
+                transaction.Commit();
+            }
+        }
+
+        public SalaryDisbursement GetEmployeeSalaryDisbursement(Guid employeeId, DateTime currentDate)
+        {
+            var (startOfMonth, endOfMonth) = GetMonthDateRange(currentDate);
+
+            return _session.Query<SalaryDisbursement>()
+                           .FirstOrDefault(sd => sd.Employee.Id == employeeId &&
+                                                 sd.DisbursementDate >= startOfMonth &&
+                                                 sd.DisbursementDate < endOfMonth);
+        }
+
+        private (DateTime start, DateTime end) GetMonthDateRange(DateTime date)
+        {
+            var start = new DateTime(date.Year, date.Month, 1);
+            var end = start.AddMonths(1);
+            return (start, end);
+        }
     }
 }

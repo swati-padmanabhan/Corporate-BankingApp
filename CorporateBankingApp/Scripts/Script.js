@@ -54,3 +54,22 @@ function searchUsers() {
     }
   });
 }
+
+// user detail page --> search filter
+function filterTable(columnIndex) {
+    const input = document.querySelectorAll("#search-row input")[columnIndex];
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById("data-table");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 2; i < rows.length; i++) {
+        // Start at 2 to skip header rows
+        const cells = rows[i].getElementsByTagName("td");
+        const cellValue = cells[columnIndex].textContent.toLowerCase();
+        if (cellValue.includes(filter)) {
+            rows[i].style.display = ""; // Show row
+        } else {
+            rows[i].style.display = "none"; // Hide row
+        }
+    }
+}

@@ -86,6 +86,7 @@ namespace CorporateBankingApp.Controllers
                 Email = e.Email,
                 Phone = e.Phone,
                 Designation = e.Designation,
+                Salary = e.Salary,
                 IsActive = e.IsActive
             }).ToList();
 
@@ -121,6 +122,7 @@ namespace CorporateBankingApp.Controllers
                 employeeDTO.Email,
                 employeeDTO.Phone,
                 employeeDTO.Designation,
+                employeeDTO.Salary,
                 employeeDTO.IsActive
             });
 
@@ -147,6 +149,7 @@ namespace CorporateBankingApp.Controllers
                     employee.Email,
                     employee.Phone,
                     employee.Designation,
+                    employee.Salary,
                 }
             }, JsonRequestBehavior.AllowGet);
         }
@@ -227,10 +230,60 @@ namespace CorporateBankingApp.Controllers
             return View();
         }
 
+        //******************************************Salary Disbursement******************************************
+
         // GET: SalaryDisbursement
-        public ActionResult SalaryDisbursement()
+        //public ActionResult SalaryDisbursement()
+        //{
+        //    return View();
+        //}
+
+        [HttpPost]
+        public ActionResult ProcessSalaryDisbursements(List<Guid> employeeIds, bool isBatch)
         {
-            return View();
+            if (employeeIds == null || !employeeIds.Any())
+            {
+                return Json(new { success = false, message = "No employees have been selected for salary disbursement." });
+            }
+
+            try
+            {
+                var result = _clientService.ProcessSalaryDisbursements(employeeIds, isBatch, out var excludedEmployees);
+                if (result)
+                {
+                    if (isBatch)
+                    {
+                        // Message for batch processing
+                        if (excludedEmployees.Any())
+                        {
+                            return Json(new { success = true, message = "Salary disbursement has started, but some employees were excluded as they already received their salary this month." });
+                        }
+                        else
+                        {
+                            return Json(new { success = true, message = "Salary disbursement has been initiated for all employees." });
+                        }
+                    }
+                    else
+                    {
+                        if (excludedEmployees.Any())
+                        {
+                            return Json(new { success = false, message = "Salary has already been distributed to these employees for this month." });
+                        }
+                        else
+                        {
+                            return Json(new { success = true, message = "Salary disbursement has been initiated." });
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { success = false, message = "An error occurred during the salary disbursement process." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An unexpected error occurred: " + ex.Message });
+            }
         }
 
         // GET: UploadDocuments

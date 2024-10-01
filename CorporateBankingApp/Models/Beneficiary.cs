@@ -17,7 +17,6 @@ namespace CorporateBankingApp.Models
         //public virtual Payment Payment { get; set; }
         public virtual IList<Payment> Payments { get; set; } = new List<Payment>();
 
-
         public virtual BeneficiaryType BeneficiaryType { get; set; }
 
         public virtual Client Client { get; set; }

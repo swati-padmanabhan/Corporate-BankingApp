@@ -63,7 +63,7 @@ namespace CorporateBankingApp.Services
                     AccountNumber = clientDTO.AccountNumber,
                     ClientIFSC = clientDTO.ClientIFSC,
                     Balance = clientDTO.Balance,
-                    OnBoardingStatus = Status.PENDING,
+                    OnBoardingStatus = CompanyStatus.PENDING,
                     IsActive = true
                 };
 

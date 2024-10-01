@@ -10,10 +10,10 @@ namespace CorporateBankingApp.Mappings
         {
             Table("SalaryDisbursements");
             Id(x => x.Id).GeneratedBy.GuidComb();
-            Map(x => x.Salary).Not.Nullable();
+            //Map(x => x.Salary).Not.Nullable();
             Map(x => x.DisbursementDate).Not.Nullable();
             Map(x => x.IsBatch).Not.Nullable();
-            Map(x => x.SalaryStatus).CustomType<Status>().Not.Nullable();
+            Map(x => x.SalaryStatus).CustomType<CompanyStatus>().Not.Nullable();
             References(x => x.Employee).Column("EmployeeId").Cascade.None().Not.Nullable();
         }
     }

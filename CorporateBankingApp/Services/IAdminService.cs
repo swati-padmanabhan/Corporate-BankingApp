@@ -20,5 +20,10 @@ namespace CorporateBankingApp.Services
         List<Client> GetAllClients();
         void UpdateClientDetails(ClientDTO clientDTO, Guid id);
         void DeleteClientDetails(Guid id);
+
+        //salary
+        IEnumerable<SalaryDisbursementDTO> ListPendingSalaryDisbursements();
+        bool ApproveSalaryDisbursement(Guid salaryDisbursementId);
+        bool RejectSalaryDisbursement(Guid salaryDisbursementId);
     }
 }

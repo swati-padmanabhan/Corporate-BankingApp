@@ -13,7 +13,7 @@ namespace CorporateBankingApp.Services
     {
         List<Employee> GetAllEmployees(Guid clientId);
 
-        Employee MapToEmployee(EmployeeDTO employeeDTO, Client client);
+        //Employee MapToEmployee(EmployeeDTO employeeDTO, Client client);
 
         void UploadEmployeeCsv(HttpPostedFileBase csvFile, Client client);
 
@@ -29,7 +29,6 @@ namespace CorporateBankingApp.Services
 
         List<Beneficiary> GetAllBeneficiaries(Guid clientId);
 
-
-
+        bool ProcessSalaryDisbursements(List<Guid> employeeIds, bool isBatch, out List<Guid> excludedEmployees);
     }
 }

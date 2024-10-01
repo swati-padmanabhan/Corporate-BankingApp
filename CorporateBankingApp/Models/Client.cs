@@ -11,7 +11,7 @@ namespace CorporateBankingApp.Models
 
         public virtual string ContactInformation { get; set; }
 
-        public virtual Status OnBoardingStatus { get; set; }
+        public virtual CompanyStatus OnBoardingStatus { get; set; }
 
         public virtual bool IsActive { get; set; }
 

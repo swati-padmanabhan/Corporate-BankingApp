@@ -13,7 +13,7 @@ namespace CorporateBankingApp.Mappings
             Map(d => d.DocumentType).Not.Nullable();
             Map(d => d.FilePath).Not.Nullable();
             Map(d => d.UploadDate).Not.Nullable();
-            References(x => x.Client).Column("ClientId").Cascade.None().Not.Nullable();
+            References(d => d.Client).Column("ClientId").Cascade.None().Not.Nullable();
         }
     }
 }

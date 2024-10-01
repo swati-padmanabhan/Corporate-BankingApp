@@ -17,6 +17,8 @@ namespace CorporateBankingApp.Models
 
         public virtual string Designation { get; set; }
 
+        public virtual double Salary { get; set; }
+
         public virtual bool IsActive { get; set; }
 
         public virtual Client Client { get; set; }

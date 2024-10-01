@@ -13,7 +13,7 @@ namespace CorporateBankingApp.Models
 
         public virtual double Amount { get; set; }
 
-        public virtual Status PaymentStatus { get; set; }
+        public virtual CompanyStatus PaymentStatus { get; set; }
 
         public virtual DateTime PaymentRequestDate { get; set; }
 

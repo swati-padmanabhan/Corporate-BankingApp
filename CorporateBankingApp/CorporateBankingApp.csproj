@@ -484,8 +484,6 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
-    <Content Include="Content\Documents\Beneficiary\gd\Screenshot %282%29.png" />
-    <Content Include="Content\Documents\Beneficiary\gd\Screenshot %288%29.png" />
     <Content Include="Content\Documents\ClientRegistration\max.johnson\Screenshot %281%29.png" />
     <Content Include="Content\Documents\ClientRegistration\max.johnson\Screenshot %282%29.png" />
     <Content Include="Content\Documents\ClientRegistration\max.johnson\Screenshot %287%29.png" />

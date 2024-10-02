@@ -188,7 +188,7 @@ namespace CorporateBankingApp.Controllers
             var uploadedFiles = new List<HttpPostedFileBase>();
 
             var idProof = Request.Files["uploadedDocs1"];
-            var addressProof = Request.Files["uploadedDocs1"];
+            var addressProof = Request.Files["uploadedDocs2"];
 
 
             if (idProof != null && idProof.ContentLength > 0)
@@ -242,7 +242,7 @@ namespace CorporateBankingApp.Controllers
             {
                 return new HttpStatusCodeResult(400, "Client not found");
             }
-            var existingBeneficiary = _beneficiaryService.GetBeneficiaryById(beneficiaryDTO.Id);
+            //var existingBeneficiary = _beneficiaryService.GetBeneficiaryById(beneficiaryDTO.Id);
             var uploadedFiles = new List<HttpPostedFileBase>();
 
             var idProof = Request.Files["newIdProof"];

@@ -100,8 +100,9 @@ function addNewBeneficiary() {
     formData.append("BankIFSC", $("#newBankIFSC").val());
 
     // Append file inputs
-    var idProofFile = $("#BeneficiaryIdProof")[0].files[0];
     var addressProofFile = $("#BeneficiaryAddressProof")[0].files[0];
+    var idProofFile = $("#BeneficiaryIdProof")[0].files[0];
+ 
 
 
     formData.append("uploadedDocs1", idProofFile);
@@ -136,19 +137,19 @@ function saveBeneficiaryChanges() {
     formData.append("BankIFSC", $("#editBankIFSC").val());
 
     // Handle file inputs for ID proof and address proof
-    var idProofInput = $("#BeneficiaryIdProof")[0]; // Change to correct input ID
-    var addressProofInput = $("#BeneficiaryAddressProof")[0]; // Change to correct input ID
-
+    var addressProofInput = $("#newAddressProof")[0]; // Change to correct input ID
+    var idProofInput = $("#newIdProof")[0]; // Change to correct input ID
+   
     var idProofFile = idProofInput.files[0]; // Access the first file
-    formData.append("BeneficiaryIdProof", idProofFile); // Append the file to FormData
+    formData.append("newIdProof", idProofFile); // Append the file to FormData
 
 
     var addressProofFile = addressProofInput.files[0]; // Access the first file
-    formData.append("BeneficiaryAddressProof", addressProofFile); // Append the file to FormData
+    formData.append("newAddressProof", addressProofFile); // Append the file to FormData
 
 
-// Send the form data with AJAX
-modifyBeneficiary(formData);
+    // Send the form data with AJAX
+    modifyBeneficiary(formData);
 }
 
 

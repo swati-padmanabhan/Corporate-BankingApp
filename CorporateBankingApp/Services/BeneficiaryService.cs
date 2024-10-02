@@ -62,7 +62,7 @@ namespace CorporateBankingApp.Services
             for (int i = 0; i < uploadedFiles.Count; i++)
             {
 
-                var file = uploadedFiles[i];
+               var file = uploadedFiles[i];
                 if (file != null && file.ContentLength > 0)
                 {
                     string fileName = Path.GetFileName(file.FileName);
@@ -127,6 +127,7 @@ namespace CorporateBankingApp.Services
                             FilePath = relativeFilePath,
                             UploadDate = DateTime.Now,
                             Beneficiary = existingBeneficiary,
+                            Client = client
                         };
                         existingBeneficiary.Documents.Add(document);
                     }

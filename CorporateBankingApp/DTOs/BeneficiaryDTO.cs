@@ -26,10 +26,12 @@ namespace CorporateBankingApp.DTOs
         public string BeneficiaryStatus { get; set; }
 
         [Required]
-        public HttpPostedFileBase BeneficiaryDocument1 { get; set; }
+        [Display(Name = "Beneficiary Id Proof")]
+        public HttpPostedFileBase BeneficiaryAddressProof { get; set; }
 
         [Required]
-        public HttpPostedFileBase BeneficiaryDocument2 { get; set; }
+        [Display(Name = "Beneficiary Address Proof")]
+        public HttpPostedFileBase BeneficiaryIdProof { get; set; }
 
         public List<string> DocumentPaths { get; set; }
 

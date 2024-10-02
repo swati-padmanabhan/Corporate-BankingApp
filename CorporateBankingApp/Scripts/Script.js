@@ -78,3 +78,17 @@ function filterTable(columnIndex) {
 function getDocument(filePath) {
     document.getElementById('documentFrame').src = filePath;
 }
+
+// password show and hide
+$(".passwordIcon").on("click", () => {
+    const passwordInput = $(".password");
+    const passwordIcon = $(".passwordIcon");
+
+    if (passwordInput.attr("type") === "password") {
+        passwordInput.attr("type", "text"); // Show password
+        passwordIcon.removeClass("bi-eye").addClass("bi-eye-slash"); // Change to eye-slash icon
+    } else {
+        passwordInput.attr("type", "password"); // Hide password
+        passwordIcon.removeClass("bi-eye-slash").addClass("bi-eye"); // Change to eye icon
+    }
+});

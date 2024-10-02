@@ -150,9 +150,58 @@ namespace CorporateBankingApp.Controllers
         // GET: ManageBeneficiaries
         public ActionResult ManageBeneficiaries()
         {
+            return View();
+        }
+
+        public ActionResult GetAllOutboundBeneficiaries()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
             Guid clientId = (Guid)Session["UserId"];
-            var beneficiaries = _clientService.GetAllBeneficiaries(clientId);
-            return View(beneficiaries);
+            var urlHelper = new UrlHelper(Request.RequestContext); // Create UrlHelper here
+            var beneficiaries = _beneficiaryService.GetAllOutboundBeneficiaries(clientId, urlHelper);
+            return Json(beneficiaries, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UpdateBeneficiaryStatus(Guid id, bool isActive)
+        {
+            Guid clientId = (Guid)Session["UserId"];
+            var client = _clientService.GetClientById(clientId);
+            _beneficiaryService.UpdateBeneficiaryStatus(id, isActive);
+            return Json(new { success = true });
+        }
+
+        public ActionResult AddNewBeneficiary(BeneficiaryDTO beneficiaryDTO)
+        {
+            if (Session["UserId"] == null)
+            {
+                return new HttpStatusCodeResult(401, "Unauthorized");
+            }
+
+            Guid clientId = (Guid)Session["UserId"];
+            var client = _clientService.GetClientById(clientId);
+            if (client == null)
+            {
+                return new HttpStatusCodeResult(400, "Client not found");
+            }
+            var uploadedFiles = new List<HttpPostedFileBase>();
+
+            var idProof = Request.Files["uploadedDocs1"];
+            var addressProof = Request.Files["uploadedDocs1"];
+
+
+            if (idProof != null && idProof.ContentLength > 0)
+            {
+                uploadedFiles.Add(idProof);
+            }
+
+            if (addressProof != null && addressProof.ContentLength > 0)
+            {
+                uploadedFiles.Add(addressProof);
+            }
+            _beneficiaryService.AddNewBeneficiary(beneficiaryDTO, client, uploadedFiles);
+            return Json(new { success = true });
         }
 
         public ActionResult GetBeneficiaryById(Guid id)
@@ -180,52 +229,6 @@ namespace CorporateBankingApp.Controllers
                 }
             }, JsonRequestBehavior.AllowGet);
         }
-
-        public ActionResult GetAllBeneficiaries()
-        {
-            if (Session["UserId"] == null)
-            {
-                return RedirectToAction("Login", "User");
-            }
-            Guid clientId = (Guid)Session["UserId"];
-            var urlHelper = new UrlHelper(Request.RequestContext);
-            var beneficiaries = _beneficiaryService.GetAllBeneficiaries(clientId, urlHelper);
-            return Json(beneficiaries, JsonRequestBehavior.AllowGet);
-        }
-
-
-        public ActionResult AddNewBeneficiary(BeneficiaryDTO beneficiaryDTO)
-        {
-            if (Session["UserId"] == null)
-            {
-                return new HttpStatusCodeResult(401, "Unauthorized");
-            }
-
-            Guid clientId = (Guid)Session["UserId"];
-            var client = _clientService.GetClientById(clientId);
-            if (client == null)
-            {
-                return new HttpStatusCodeResult(400, "Client not found");
-            }
-            var uploadedFiles = new List<HttpPostedFileBase>();
-
-            var idProof = Request.Files["uploadedDocs1"];
-            var addressProof = Request.Files["uploadedDocs2"];
-
-
-            if (idProof != null && idProof.ContentLength > 0)
-            {
-                uploadedFiles.Add(idProof);
-            }
-
-            if (addressProof != null && addressProof.ContentLength > 0)
-            {
-                uploadedFiles.Add(addressProof);
-            }
-            _beneficiaryService.AddNewBeneficiary(beneficiaryDTO, client, uploadedFiles);
-            return Json(new { success = true });
-        }
-
         public ActionResult EditBeneficiary(BeneficiaryDTO beneficiaryDTO)
         {
             if (Session["UserId"] == null)
@@ -255,7 +258,7 @@ namespace CorporateBankingApp.Controllers
             {
                 uploadedFiles.Add(addressProof);
             }
-            _beneficiaryService.EditBeneficiary(beneficiaryDTO, client, uploadedFiles);
+            _beneficiaryService.UpdateBeneficiary(beneficiaryDTO, client, uploadedFiles);
             return Json(new { success = true, message = "Beneficiary updated successfully" });
         }
 

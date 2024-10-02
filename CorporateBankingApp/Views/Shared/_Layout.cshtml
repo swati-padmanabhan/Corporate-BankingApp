@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>SetuPay</title>
 
     <!-- CSS Links -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -31,7 +31,7 @@
         <div class="container-fluid">
             @if (!User.Identity.IsAuthenticated)
             {
-                <h1 class="navbar-brand">Banking System</h1>
+                <h1 class="navbar-brand"><a href="@Url.Action("Index", "Home")" class="text-decoration-none text-white">SetuPay</a></h1>
             }
 
             <div class="">
@@ -122,5 +122,6 @@
             crossorigin="anonymous"></script>
 
     <script src="~/Scripts/Script.js"></script>
+
 </body>
 </html>

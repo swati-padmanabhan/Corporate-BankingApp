@@ -12,14 +12,14 @@ namespace CorporateBankingApp.Services
 {
     public interface IBeneficiaryService
     {
-        Beneficiary GetBeneficiaryById(Guid id);
+        List<BeneficiaryDTO> GetAllOutboundBeneficiaries(Guid clientId, UrlHelper urlHelper);
 
-        List<BeneficiaryDTO> GetAllBeneficiaries(Guid clientId, UrlHelper urlHelper);
+        void UpdateBeneficiaryStatus(Guid id, bool isActive);
 
         void AddNewBeneficiary(BeneficiaryDTO beneficiaryDTO, Client client, IList<HttpPostedFileBase> uploadedFiles);
 
-        void EditBeneficiary(BeneficiaryDTO beneficiaryDTO, Client client, IList<HttpPostedFileBase> uploadedFiles);
+        Beneficiary GetBeneficiaryById(Guid id);
 
-        void UpdateBeneficiaryStatus(Guid id, bool isActive);
+        void UpdateBeneficiary(BeneficiaryDTO beneficiaryDTO, Client client, IList<HttpPostedFileBase> uploadedFiles);
     }
 }

@@ -9,15 +9,11 @@ using System.Threading.Tasks;
 namespace CorporateBankingApp.Repositories
 {
     public interface IBeneficiaryRepository
-    { 
-        Beneficiary GetBeneficiaryById(Guid id);
-
-        List<Beneficiary> GetAllBeneficiaries(Guid clientId);
-
-        void AddNewBeneficiary(Beneficiary beneficiary);
-
-        void EditBeneficiary(Beneficiary beneficiary);
-
+    {
+        List<Beneficiary> GetAllOutboundBeneficiaries(Guid clientId);
         void UpdateBeneficiaryStatus(Guid id, bool isActive);
+        void AddNewBeneficiary(Beneficiary beneficiary);
+        Beneficiary GetBeneficiaryById(Guid id);
+        void UpdateBeneficiary(Beneficiary beneficiary);
     }
 }

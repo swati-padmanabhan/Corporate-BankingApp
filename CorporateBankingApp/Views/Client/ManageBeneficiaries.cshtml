@@ -1,162 +1,85 @@
-﻿@model IEnumerable<CorporateBankingApp.Models.Beneficiary>
-@using CorporateBankingApp.Enums
+﻿@model CorporateBankingApp.DTOs.BeneficiaryDTO
 
 @{
-    ViewBag.Title = "Manage Beneficiaries";
+    ViewBag.Title = "ManageBeneficiaries";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container" id="beneficiaryList">
+    <h2 class="text-center my-4 pt-3">List Of Outbound Beneficiaries</h2>
+    <p>
+        <div>
+            <button type="button" class="btn btn-outline-dark" id="btnAddBeneficiary">
+                Add New Beneficiary
+            </button>
+        </div>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.BeneficiaryName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AccountNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BankIFSC)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BeneficiaryStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BeneficiaryType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+                <th>@Html.DisplayName("Documents")</th><!--for document showing-->
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="beneficiaryTblBody">
+            <!--data comes from ajax-->
+        </tbody>
+    </table>
 
-<div class="container-fluid">
-    <h3 class="my-4">Manage Beneficiaries</h3>
-
-    <!-- Search Bar -->
-    <div class="my-4 float-start w-75">
-        <input type="text" id="searchInput" placeholder="Search beneficiaries..." class="form-control" onkeyup="searchUsers()" />
-    </div>
-
-    <!-- Filter Dropdown -->
-    <div class="dropdown my-4 float-end">
-        <button class="btn rounded-3 wrapper" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-filter me-1"></i>
-            <span>Filter</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" onclick="filterAll()">All</a></li>
-            <li><a class="dropdown-item" onclick="filterInbound()">INBOUND</a></li>
-            <li><a class="dropdown-item" onclick="filterOutbound()">OUTBOUND</a></li>
-        </ul>
-    </div>
-
-    <!-- Add Outbound Client Button -->
-    <div class="mb-3">
-        <button type="button" class="btn btn-primary" id="btnAdd">
-            <i class="bi bi-plus-circle"></i> Add Outbound Beneficiary
-        </button>
-    </div>
-
-    <!-- Beneficiary Table -->
-    <div class="table-responsive">
-        <table class="table align-middle mb-0">
-            <thead>
-                <tr>
-                    <th>Beneficiary Name</th>
-                    <th>Account No.</th>
-                    <th>Bank IFSC</th>
-                    <th>Type</th>
-                    <th>IsActive</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="beneficiaryTable">
-                @if (Model != null && Model.Any())
-                {
-                    foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="https://ui-avatars.com/api/?name=@item.BeneficiaryName.Replace(" ", "+")"
-                                         alt=""
-                                         style="width: 45px; height: 45px"
-                                         class="rounded-circle" />
-                                    <div class="ms-3">
-                                        <p class="fw-bold mb-1">@Html.DisplayFor(modelItem => item.BeneficiaryName)</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
-                            <td>@Html.DisplayFor(modelItem => item.BankIFSC)</td>
-                            <td>
-                                @if (item.BeneficiaryType == BeneficiaryType.INBOUND)
-                                {
-                                    <span class="badge rounded-pill text-bg-primary p-2">
-                                        <i class="bi bi-arrow-down-left-circle m-2"></i>
-                                        INBOUND
-                                    </span>
-                                }
-                                else if (item.BeneficiaryType == BeneficiaryType.OUTBOUND)
-                                {
-                                    <span class="badge rounded-pill text-bg-info p-2">
-                                        <i class="bi bi-arrow-up-right-circle m-2"></i>
-                                        OUTBOUND
-                                    </span>
-                                }
-                            </td>
-                            <td>
-                                <input type="checkbox" class="is-active-checkbox"
-                                       data-beneficiaryid="@item.Id"
-                                       @if (item.IsActive) { <text> checked</text> } />
-                            </td>
-                            <td>
-                                <!-- Edit and Add buttons -->
-                                <button onClick="editBeneficiary('@item.Id')" class="btn btn-secondary btn-thin" title="Edit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                                <button onClick="addBeneficiary('@item.Id')" class="btn btn-success btn-thin" title="Make payment">
-                                    <i class="bi bi-plus-circle"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="6" class="text-center">No beneficiaries found.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
 </div>
-
-<!-- Add/Edit Modals -->
-<div id="newRecord" style="display:none" class="container">
-    @Html.Partial("_AddOutBoundClient", new CorporateBankingApp.DTOs.BeneficiaryDTO())
-</div>
-
-<div id="editRecord" style="display:none" class="container">
-    @Html.Partial("_EditOutBoundClient", new CorporateBankingApp.DTOs.BeneficiaryDTO())
-</div>
-
-<!-- Success Modal -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="successModalLabel">Success</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header text-bg-primary" style="display: flex; justify-content: space-between; align-items: center;">
+                <h5 class="modal-title px-3" id="documentModalLabel" style="margin: 0;">Beneficiary Document</h5>
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">*@
+                <button type="button" class="close border-0 text-bg-primary btn-lg" data-dismiss="modal" aria-label="Close" style="font-size: 2rem; line-height: 1;">
+
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="modal-body" id="successModalBody"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-body">
+                <img id="documentFrame" src="" class="w-100" scrolling="yes"></img>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Error Modal -->
-<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="errorModalLabel">Error</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="errorModalBody"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
+
+<div id="addNewBeneficiary" style="display:none" class="container">
+    @Html.Partial("_AddBeneficiaryPartial")
 </div>
-
-<!-- Custom CSS for thin buttons -->
-<style>
-    .btn-thin {
-        padding: 0.2rem 0.5rem;
-        font-size: 0.8rem;
-    }
-</style>
-
+<div id="editBeneficiary" style="display:none" class="container">
+    @Html.Partial("_EditBeneficiaryPartial")
+</div>
 <script src="~/Scripts/crudForOutBound.js"></script>
+<script>
+    $(document).ready(() => {
+        loadOutboundBeneficiaries();
+    })
+    $("#btnAddBeneficiary").click(function () {
+        $("#beneficiaryList").hide();
+        $("#addNewBeneficiary").show();
+    });
+    //document modal closing button
+    $('.close').on('click', function () {
+        $('#documentModal').modal('hide');
+    });
+</script>

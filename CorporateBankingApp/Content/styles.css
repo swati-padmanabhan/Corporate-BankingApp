@@ -28,7 +28,6 @@
 
 .secondary-bg {
     background-color: var(--secondary-color) !important;
-    
 }
 
 .secondary-light-bg {
@@ -65,21 +64,32 @@
 
 /* Text color classes */
 .primary-text {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
+}
+
+.primary-dark-text {
+    color: var(--primary-dark) !important;
 }
 
 .secondary-text {
-    color: var(--secondary-color);
+    color: var(--secondary-color) !important;
 }
 
 .accent-text {
-    color: var(--accent-color);
+    color: var(--accent-color) !important;
+}
+
+.accent-dark-text {
+    color: var(--accent-dark) !important;
+}
+
+.neutral-light-text {
+    color: var(--neutral-light) !important;
 }
 
 .neutral-dark-text {
-    color: var(--neutral-dark);
+    color: var(--neutral-dark) !important;
 }
-
 body {
     font-family: "Raleway", sans-serif;
     font-size: 1rem;

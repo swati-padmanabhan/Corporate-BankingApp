@@ -21,13 +21,17 @@ namespace CorporateBankingApp.DTOs
         
         public bool IsActive { get; set; }
 
-        public CompanyStatus BeneficiaryStatus { get; set; }
+        public string BeneficiaryType { get; set; }
+
+        public string BeneficiaryStatus { get; set; }
 
         [Required]
         public HttpPostedFileBase BeneficiaryDocument1 { get; set; }
 
         [Required]
         public HttpPostedFileBase BeneficiaryDocument2 { get; set; }
+
+        public List<string> DocumentPaths { get; set; }
 
 
     }

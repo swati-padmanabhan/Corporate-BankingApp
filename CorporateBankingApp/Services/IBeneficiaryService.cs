@@ -6,21 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CorporateBankingApp.Services
 {
     public interface IBeneficiaryService
     {
+        Beneficiary GetBeneficiaryById(Guid id);
 
-        void AddOutboundDetails(BeneficiaryDTO beneficiaryDTO, Client client, IList<HttpPostedFileBase> files);
-        //void AddOutboudDetails(BeneficiaryDTO beneficiaryDTO, Client client);
-        List<BeneficiaryDTO> GetAllBeneficiaries(Guid clientId);
+        List<BeneficiaryDTO> GetAllBeneficiaries(Guid clientId, UrlHelper urlHelper);
 
-        Client GetClientById(Guid clientId);
+        void AddNewBeneficiary(BeneficiaryDTO beneficiaryDTO, Client client, IList<HttpPostedFileBase> uploadedFiles);
 
-        BeneficiaryDTO GetBeneficiaryById(Guid id);
-
-        void UpdateBeneficiaryDetails(BeneficiaryDTO beneficiaryDTO, Client client);
+        void EditBeneficiary(BeneficiaryDTO beneficiaryDTO, Client client, IList<HttpPostedFileBase> uploadedFiles);
 
         void UpdateBeneficiaryStatus(Guid id, bool isActive);
     }

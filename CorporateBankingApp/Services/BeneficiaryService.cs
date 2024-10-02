@@ -24,23 +24,6 @@ namespace CorporateBankingApp.Services
             return _beneficiaryRepository.GetBeneficiaryById(id);
         }
 
-        //public void AddOutboudDetails(BeneficiaryDTO beneficiaryDTO, Client client)
-        //{
-        //    var employee = new BeneficiaryDTO
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        BeneficiaryName = beneficiaryDTO.BeneficiaryName,
-        //        AccountNumber = beneficiaryDTO.AccountNumber,
-
-        //        BankIFSC = beneficiaryDTO.BankIFSC,
-        //        BeneficiaryType = BeneficiaryType.OUTBOUND,
-        //        OnBoardingStatus = Status.PENDING,
-        //        IsActive = true,
-        //        Client = client
-        //    };
-        //    _beneficiaryRepository.AddBeneficiaryDetails(employee);
-        //}
-
         public List<BeneficiaryDTO> GetAllBeneficiaries(Guid clientId, UrlHelper urlHelper)
         {
             var beneficiaries = _beneficiaryRepository.GetAllBeneficiaries(clientId);
@@ -53,7 +36,7 @@ namespace CorporateBankingApp.Services
                 BeneficiaryStatus = b.BeneficiaryStatus.ToString().ToUpper(),
                 BeneficiaryType = b.BeneficiaryType.ToString().ToUpper(),
                 IsActive = b.IsActive,
-                DocumentUrls = b.Documents.Select(d => urlHelper.Content(d.FilePath)).ToList()
+                DocumentPaths = b.Documents.Select(d => urlHelper.Content(d.FilePath)).ToList()
             }).ToList();
             return beneficiariesDto;
         }
@@ -99,7 +82,64 @@ namespace CorporateBankingApp.Services
                     beneficiary.Documents.Add(document);
                 }
             }
-            _clientRepository.AddNewBeneficiary(beneficiary);
+            _beneficiaryRepository.AddNewBeneficiary(beneficiary);
+        }
+
+        public void EditBeneficiary(BeneficiaryDTO beneficiaryDTO, Client client, IList<HttpPostedFileBase> uploadedFiles)
+        {
+            var currentBeneficiary = _beneficiaryRepository.GetBeneficiaryById(beneficiaryDTO.Id);
+
+            string folderPath = HttpContext.Current.Server.MapPath("~/Content/Documents/Beneficiary/") + currentBeneficiary.BeneficiaryName;
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            // Document update process
+            string[] documentTypes = { "Beneficiary Id Proof", "Beneficiary Address Proof" };
+            for (int i = 0; i < uploadedFiles.Count; i++)
+            {
+                var file = uploadedFiles[i];
+                if (file != null && file.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(file.FileName);
+                    string filePath = Path.Combine(folderPath, fileName);
+                    file.SaveAs(filePath);
+                    string relativeFilePath = $"~/Content/Documents/Beneficiary/{currentBeneficiary.BeneficiaryName}/{fileName}";
+
+                    // Check if the client already has this document type, if so, update it
+                    var existingDocument = currentBeneficiary.Documents.FirstOrDefault(d => d.DocumentType == documentTypes[i]);
+                    if (existingDocument != null)
+                    {
+                        // Update existing document
+                        existingDocument.FilePath = relativeFilePath;
+                        existingDocument.UploadDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        // Add new document if not present
+                        var document = new Document
+                        {
+                            DocumentType = documentTypes[i],
+                            FilePath = relativeFilePath,
+                            UploadDate = DateTime.Now,
+                            Beneficiary = currentBeneficiary
+                        };
+                        currentBeneficiary.Documents.Add(document);
+                    }
+                }
+            }
+            if (currentBeneficiary != null)
+            {
+                // Map the fields from the DTO to the existing Employee model
+                currentBeneficiary.BeneficiaryName = beneficiaryDTO.BeneficiaryName;
+                currentBeneficiary.AccountNumber = beneficiaryDTO.AccountNumber;
+                currentBeneficiary.BankIFSC = beneficiaryDTO.BankIFSC;
+                currentBeneficiary.Client = client;
+                currentBeneficiary.BeneficiaryStatus = CompanyStatus.PENDING;
+                //currentBeneficiary.Documents = 
+                _beneficiaryRepository.EditBeneficiary(currentBeneficiary);
+            }
         }
 
         public void UpdateBeneficiaryStatus(Guid id, bool isActive)

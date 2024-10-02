@@ -453,3 +453,6 @@ C:\Users\swati.padmanabhan\Desktop\payments_capstone\Corporate-BankingApp\Corpor
 C:\Users\swati.padmanabhan\Desktop\payments_capstone\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Bcl.HashCode.dll
 C:\Users\swati.padmanabhan\Desktop\payments_capstone\Corporate-BankingApp\CorporateBankingApp\bin\CsvHelper.xml
 C:\Users\swati.padmanabhan\Desktop\payments_capstone\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Bcl.HashCode.xml
+C:\Users\swati.padmanabhan\Desktop\payments_capstone\Corporate-BankingApp\CorporateBankingApp\bin\BouncyCastle.Crypto.dll
+C:\Users\swati.padmanabhan\Desktop\payments_capstone\Corporate-BankingApp\CorporateBankingApp\bin\Razorpay.dll
+C:\Users\swati.padmanabhan\Desktop\payments_capstone\Corporate-BankingApp\CorporateBankingApp\bin\BouncyCastle.Crypto.xml

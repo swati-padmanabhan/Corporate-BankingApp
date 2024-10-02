@@ -1,0 +1,159 @@
+﻿public ActionResult MakePaymentRequests()
+
+{
+
+     // Retrieve beneficiaries stored in session
+
+     List<Beneficiary>
+    paymentBeneficiaries = Session["PaymentBeneficiaries"] as List<Beneficiary>
+        ?? new List<Beneficiary>
+            ();
+
+            return View(paymentBeneficiaries);
+
+            }
+
+            [HttpPost]
+
+            public ActionResult MakePaymentRequests(Guid beneficiaryId)
+
+            {
+
+            // Use the BeneficiariesService or BeneficiariesRepository to get the selected beneficiary
+
+            var beneficiary = _beneficiaryService.GetBeneficiaryById(beneficiaryId);
+
+            if (beneficiary != null)
+
+            {
+
+            // Add the beneficiary to the session or a temporary data store for payment
+
+            List<BeneficiaryDTO>
+                paymentBeneficiaries = Session["PaymentBeneficiaries"] as List<BeneficiaryDTO>
+                    ;
+
+                    if (paymentBeneficiaries == null)
+
+                    {
+
+                    paymentBeneficiaries = new List<BeneficiaryDTO>
+                        ();
+
+                        }
+
+                        paymentBeneficiaries.Add(beneficiary);
+
+                        Session["PaymentBeneficiaries"] = paymentBeneficiaries;
+
+                        return Json(new { success = true });
+
+                        }
+
+                        return Json(new { success = false, message = "Beneficiary not found" });
+
+                        }
+
+                        @model IEnumerable<CorporateBankingApp.Models.Beneficiary>
+
+                        @{
+
+                            ViewBag.Title = "Make Payment Requests";
+
+                            Layout = "~/Views/Shared/_Layout.cshtml";
+
+                        }
+
+                        <h2>Make Payment Requests To Admin</h2>
+
+                        @if (Model != null && Model.Any())
+
+                        {
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Beneficiary Name</th>
+                                        <th>Account No.</th>
+                                        <th>Bank IFSC</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var beneficiary in Model)
+
+                                    {
+                                        <tr>
+                                            <td>@beneficiary.BeneficiaryName</td>
+                                            <td>@beneficiary.AccountNumber</td>
+                                            <td>@beneficiary.BankIFSC</td>
+                                            <td>
+                                                <!-- Proceed button that triggers the modal -->
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paymentModal-@beneficiary.Id">
+
+                                                    Proceed
+                                                </button>
+
+                                                <!-- Modal for payment input -->
+                                                <div class="modal fade" id="paymentModal-@beneficiary.Id" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel-@beneficiary.Id" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="paymentModalLabel-@beneficiary.Id">Enter Payment Amount</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="form-group">
+                                                                    <label for="amount-@beneficiary.Id">Please enter the amount you want to send to this beneficiary</label>
+                                                                    <input type="number" class="form-control" id="amount-@beneficiary.Id" placeholder="Enter amount">
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="button" class="btn btn-success" onclick="sendToAdmin('@beneficiary.Id')">Send to Admin</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+
+                        }
+
+                        else
+
+                        {
+                            <p>No beneficiaries selected for payment.</p>
+
+                        }
+
+
+                        <script>
+
+        function sendToAdmin(beneficiaryId) {
+
+            var amount = document.getElementById('amount-' + beneficiaryId).value;
+
+            if (amount) {
+
+                // Add your logic to send the amount to the admin here
+
+                alert('Amount ' + amount + ' sent to admin for beneficiary ID: ' + beneficiaryId);
+
+                // You can perform an AJAX request here to submit the amount to the server
+
+            } else {
+
+                alert('Please enter a valid amount.');
+
+            }
+
+        }
+                        </script>
+

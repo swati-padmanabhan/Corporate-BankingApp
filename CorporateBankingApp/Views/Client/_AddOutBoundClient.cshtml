@@ -1,0 +1,57 @@
+﻿@model CorporateBankingApp.DTOs.BeneficiaryDTO
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>BeneficiaryDTO</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Hidden("clientId", TempData["clientId"])
+        <div class="form-group">
+            @Html.LabelFor(model => model.BeneficiaryName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BeneficiaryName, new { htmlAttributes = new { @class = "form-control", id = "beneficiaryname" } })
+                @Html.ValidationMessageFor(model => model.BeneficiaryName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control", id = "accountnumber" } })
+                @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BankIFSC, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BankIFSC, new { htmlAttributes = new { @class = "form-control", id = "bankifsc" } })
+                @Html.ValidationMessageFor(model => model.BankIFSC, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Aadhar Card", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="uploadedFiles1" class="form-control" />
+                @Html.ValidationMessageFor(model => model.BeneficiaryDocument1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("PAN Card", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="uploadedFiles2" class="form-control" />
+                @Html.ValidationMessageFor(model => model.BeneficiaryDocument2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Add" class="btn btn-default" onclick="addOutBoundClient()" />
+            </div>
+        </div>
+    </div>
+}

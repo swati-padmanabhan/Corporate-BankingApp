@@ -17,12 +17,18 @@ namespace CorporateBankingApp.Repositories
         List<Client> GetAllClients();
         void UpdateClientDetails(Client client);
         void DeleteClientDetails(Guid id);
+        List<Client> GetPendingClients();
+
 
         //salary
+        SalaryDisbursement GetSalaryDisbursementById(Guid salaryDisbursementId);
+
         IEnumerable<SalaryDisbursementDTO> GetSalaryDisbursementsByStatus(CompanyStatus status);
 
         bool ApproveSalaryDisbursement(Guid salaryDisbursementId);
 
         bool RejectSalaryDisbursement(Guid salaryDisbursementId);
+
+        //bool ApproveSalaryDisbursement(Guid salaryDisbursementId, bool isBatch = false);
     }
 }

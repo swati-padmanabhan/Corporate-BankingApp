@@ -16,7 +16,32 @@ namespace CorporateBankingApp.Repositories
             _session = session;
         }
 
+        public void UpdateClientBalance(Guid clientId, double newBalance)
+        {
+            using (var transaction = _session.BeginTransaction())
+            {
+                var client = _session.Get<Client>(clientId);
+                if (client != null)
+                {
+                    client.Balance = newBalance;  // Update the balance
+                    _session.Update(client);
+                    transaction.Commit();
+                }
+            }
+        }
 
+        //*******************************************Client reupload documents*******************************************
+
+        public void EditClientRegistration(Client client)
+        {
+            using (var transaction = _session.BeginTransaction())
+            {
+                _session.Update(client);
+                transaction.Commit();
+            }
+        }
+
+        //*******************************************Employee*******************************************
         public void AddEmployeeDetails(Employee employee)
         {
             using (var transaction = _session.BeginTransaction())
@@ -24,12 +49,13 @@ namespace CorporateBankingApp.Repositories
                 _session.Save(employee);
                 transaction.Commit();
             }
-
         }
 
         public List<Employee> GetAllEmployees(Guid clientId)
         {
-            var client = _session.Query<Client>().FetchMany(c => c.Employees).SingleOrDefault(c => c.Id == clientId);
+            var client = _session.Query<Client>()
+                                 .FetchMany(c => c.Employees)
+                                 .SingleOrDefault(c => c.Id == clientId);
             return client?.Employees.ToList() ?? new List<Employee>();
         }
 
@@ -50,7 +76,6 @@ namespace CorporateBankingApp.Repositories
                 _session.Update(employee);
                 transaction.Commit();
             }
-
         }
 
         public void UpdateEmployeeStatus(Guid id, bool isActive)
@@ -69,11 +94,14 @@ namespace CorporateBankingApp.Repositories
 
         public List<Beneficiary> GetAllBeneficiaries(Guid clientId)
         {
-            var client = _session.Query<Client>().FetchMany(c => c.Beneficiaries).SingleOrDefault(c => c.Id == clientId);
+            var client = _session.Query<Client>()
+                                 .FetchMany(c => c.Beneficiaries)
+                                 .SingleOrDefault(c => c.Id == clientId);
             return client?.Beneficiaries.ToList() ?? new List<Beneficiary>();
         }
 
-        //salary disbursement 
+        //******************************************salary******************************************
+
         public List<Employee> RetrieveEmployeesByIds(List<Guid> employeeIds)
         {
             return _session.Query<Employee>()

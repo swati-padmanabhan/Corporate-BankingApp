@@ -13,7 +13,7 @@ namespace CorporateBankingApp.Services
     {
         void RegisterAdmin(AdminDTO adminDTO);
 
-        List<ClientDTO> GetRegisteredClientsPendingApproval();
+        List<ClientDTO> GetRegisteredClientsPendingApproval();  
         ClientDTO GetClientById(Guid id);
         void ApproveClient(Guid id);
         void RejectClient(Guid id);
@@ -21,9 +21,15 @@ namespace CorporateBankingApp.Services
         void UpdateClientDetails(ClientDTO clientDTO, Guid id);
         void DeleteClientDetails(Guid id);
 
+
+        List<ClientDTO> GetClientsForVerification(UrlHelper urlHelper);
+
+        bool UpdateClientOnboardingStatus(Guid id, string status);
+
         //salary
         IEnumerable<SalaryDisbursementDTO> ListPendingSalaryDisbursements();
-        bool ApproveSalaryDisbursement(Guid salaryDisbursementId);
-        bool RejectSalaryDisbursement(Guid salaryDisbursementId);
+        bool ApproveSalaryDisbursement(Guid salaryDisbursementId, bool isBatch = false);
+        bool RejectSalaryDisbursement(Guid salaryDisbursementId, bool isBatch = false);
+
     }
 }

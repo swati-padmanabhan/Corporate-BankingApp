@@ -10,9 +10,9 @@ namespace CorporateBankingApp.Repositories
     public class EmailRepository : IEmailRepository
     {
         private readonly string _fromEmail = "apropayments@gmail.com";
-        private readonly string _password = "grlc qmnn wdhj dgdc";
+        private readonly string _password = "hxby ycrh efvw sclw";
 
-        public void SendOnboardingEmailNotification(string to, string subject, string body)
+        public void SendEmailNotification(string to, string subject, string body)
         {
             var smtpClient = new SmtpClient("smtp.gmail.com")
             {

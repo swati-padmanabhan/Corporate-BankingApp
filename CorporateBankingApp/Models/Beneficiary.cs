@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Web;
 using CorporateBankingApp.Enums;
 
 namespace CorporateBankingApp.Models
@@ -14,10 +16,15 @@ namespace CorporateBankingApp.Models
 
         public virtual string BankIFSC { get; set; }
 
-        //public virtual Payment Payment { get; set; }
-        public virtual IList<Payment> Payments { get; set; } = new List<Payment>();
+        public virtual CompanyStatus BeneficiaryStatus { get; set; }
 
         public virtual BeneficiaryType BeneficiaryType { get; set; }
+
+        public virtual bool IsActive { get; set; }
+
+        public virtual IList<Payment> Payments { get; set; } = new List<Payment>();
+
+        public virtual IList<Document> Documents { get; set; } = new List<Document>();
 
         public virtual Client Client { get; set; }
     }

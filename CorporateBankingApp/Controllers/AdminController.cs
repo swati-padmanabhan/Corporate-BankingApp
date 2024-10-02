@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using CorporateBankingApp.Data;
 using CorporateBankingApp.DTOs;
 using CorporateBankingApp.Models;
+using CorporateBankingApp.Repositories;
 using CorporateBankingApp.Services;
+using NHibernate.Criterion;
+using Razorpay.Api;
 
 namespace CorporateBankingApp.Controllers
 {
@@ -13,11 +18,13 @@ namespace CorporateBankingApp.Controllers
     {
         private readonly IAdminService _adminService;
         private readonly IEmailService _emailService;
+        private readonly IClientRepository _clientRepository;
 
-        public AdminController(IAdminService adminService, IEmailService emailService)
+        public AdminController(IAdminService adminService, IEmailService emailService, IClientRepository clientRepository)
         {
             _adminService = adminService;
             _emailService = emailService;
+            _clientRepository = clientRepository;
         }
         // GET: Admin
         public ActionResult Index()
@@ -65,7 +72,7 @@ namespace CorporateBankingApp.Controllers
             var client = _adminService.GetClientById(clientId);
             _emailService.SendOnboardingAcceptanceEmail(client.Email);
 
-            return RedirectToAction("ClientApproval"); 
+            return RedirectToAction("ClientApproval");
         }
 
         // Action for rejecting client
@@ -78,14 +85,14 @@ namespace CorporateBankingApp.Controllers
 
             _emailService.SendOnboardingRejectionEmail(client.Email, rejectionReason);
 
-            return RedirectToAction("ClientApproval"); 
+            return RedirectToAction("ClientApproval");
         }
-    
 
 
 
-    // GET: ClientManagement
-    public ActionResult ClientManagement()
+
+        // GET: ClientManagement
+        public ActionResult ClientManagement()
         {
             return View();
         }
@@ -186,6 +193,40 @@ namespace CorporateBankingApp.Controllers
         }
 
 
+        //razor pages
+        public ActionResult InitiatePayment(string amount)
+        {
+            var key = ConfigurationManager.AppSettings["RazorPaykey"].ToString();
+
+            var secret = ConfigurationManager.AppSettings["RazorPaySecret"].ToString();
+            RazorpayClient client = new RazorpayClient(key, secret);
+            Dictionary<string, object> options = new Dictionary<string, object>();
+            options.Add("amount", Convert.ToDecimal(amount) * 100);
+            options.Add("currency", "USD");
+            //Order order = client.Order.Create(options);
+            //ViewBag.orderId = order["id"].ToString();
+            return View("Payment");
+        }
+
+
+        public ActionResult Payment(string razorpay_payment_id, string razorpay_order_id, string razorpay_signature)
+        {
+            Dictionary<string, string> attributes = new Dictionary<string, string>();
+            attributes.Add("razorpay_payment_id", razorpay_payment_id);
+            attributes.Add("razorpay_order_id", razorpay_order_id);
+            attributes.Add("razorpay_signature", razorpay_signature);
+            try
+            {
+                //Utils.verifyPaymentSignature(attributes);
+                return View("PaymentSuccess");
+            }
+            catch (Exception ex)
+            {
+                return View("PaymentFailure");
+            }
+            return View();
+        }
+
 
         // GET: BeneficiaryManagement
         public ActionResult BeneficiaryManagement()
@@ -199,17 +240,35 @@ namespace CorporateBankingApp.Controllers
             var pendingDisbursements = _adminService.ListPendingSalaryDisbursements();
             return View(pendingDisbursements);
         }
-        [HttpPost]
-        public ActionResult ApproveDisbursement(Guid salaryDisbursementId)
-        {
-            bool success = _adminService.ApproveSalaryDisbursement(salaryDisbursementId);
 
+
+        [HttpPost]
+        public ActionResult ApproveDisbursements(List<Guid> disbursementIds)
+        {
+            if (disbursementIds == null || !disbursementIds.Any())
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "No salary disbursement selected for approval."
+                });
+            }
+            bool success = true;
+            foreach (var id in disbursementIds)
+            {
+                bool approved = _adminService.ApproveSalaryDisbursement(id, true);
+                if (!approved)
+                {
+                    success = false;
+                    break;
+                }
+            }
             if (success)
             {
                 return Json(new
                 {
                     success = true,
-                    message = "Salary disbursement approved successfully."
+                    message = "Salary disbursements approved successfully."
                 });
             }
             else
@@ -217,24 +276,42 @@ namespace CorporateBankingApp.Controllers
                 return Json(new
                 {
                     success = false,
-                    message = "Failed to approve salary disbursement. Insufficient balance or invalid request."
+                    message = "Failed to approve salary disbursements."
                 });
             }
         }
 
 
         [HttpPost]
-        public ActionResult RejectDisbursement(Guid salaryDisbursementId)
+        public ActionResult RejectDisbursements(List<Guid> disbursementIds)
         {
 
-            bool success = _adminService.RejectSalaryDisbursement(salaryDisbursementId);
+            if (disbursementIds == null || !disbursementIds.Any())
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "No salary disbursement selected for rejection."
+                });
+            }
+
+            bool success = true;
+            foreach (var id in disbursementIds)
+            {
+                bool rejected = _adminService.RejectSalaryDisbursement(id, true);
+                if (!rejected)
+                {
+                    success = false;
+                    break;
+                }
+            }
 
             if (success)
             {
                 return Json(new
                 {
                     success = true,
-                    message = "Salary disbursement rejected successfully."
+                    message = "Salary disbursements rejected successfully."
                 });
             }
             else
@@ -242,10 +319,16 @@ namespace CorporateBankingApp.Controllers
                 return Json(new
                 {
                     success = false,
-                    message = "Failed to reject salary disbursement."
+                    message = "Failed to reject salary disbursements."
                 });
             }
         }
+
+
+
+
+
+
 
 
         // GET: ReportGeneration

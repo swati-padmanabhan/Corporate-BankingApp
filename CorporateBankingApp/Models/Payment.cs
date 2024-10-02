@@ -7,17 +7,19 @@ namespace CorporateBankingApp.Models
     {
         public virtual Guid Id { get; set; }
 
-        //public virtual Client Client { get; set; }
-
-        public virtual Beneficiary Beneficiary { get; set; }
+        public virtual Guid ClientId { get; set; }
 
         public virtual double Amount { get; set; }
 
-        public virtual CompanyStatus PaymentStatus { get; set; }
-
         public virtual DateTime PaymentRequestDate { get; set; }
 
-        public virtual DateTime PaymentApprovalDate { get; set; }
+        public virtual DateTime? PaymentApprovalDate { get; set; }
+
+        public virtual string RazorpayPaymentId { get; set; }
+
+        public virtual CompanyStatus PaymentStatus { get; set; }
+
+        public virtual Beneficiary Beneficiary { get; set; }
     }
 }
 /* The Payment class represents a payment transaction in the Corporate Banking 

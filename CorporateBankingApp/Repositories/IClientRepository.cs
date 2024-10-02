@@ -9,6 +9,10 @@ namespace CorporateBankingApp.Repositories
 {
     public interface IClientRepository
     {
+        void UpdateClientBalance(Guid clientId, double newBalance);
+
+        void EditClientRegistration(Client client);
+
         List<Employee> GetAllEmployees(Guid clientId);
 
         void AddEmployeeDetails(Employee employee);

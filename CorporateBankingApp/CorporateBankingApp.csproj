@@ -55,6 +55,9 @@
     <Reference Include="BCrypt.Net-Next, Version=4.0.3.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
       <HintPath>..\packages\BCrypt.Net-Next.4.0.3\lib\net48\BCrypt.Net-Next.dll</HintPath>
     </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.9.0\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="CloudinaryDotNet, Version=1.26.2.0, Culture=neutral, PublicKeyToken=c8234dc617ae7841, processorArchitecture=MSIL">
       <HintPath>..\packages\CloudinaryDotNet.1.26.2\lib\net452\CloudinaryDotNet.dll</HintPath>
     </Reference>
@@ -115,6 +118,9 @@
     </Reference>
     <Reference Include="NHibernate, Version=5.4.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.5.4.9\lib\net48\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Razorpay, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Razorpay.3.1.3\lib\net48\Razorpay.dll</HintPath>
     </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
@@ -577,6 +583,7 @@
     <Content Include=".vs\VSWorkspaceState.json" />
     <Content Include="Content\Documents\EmployeeCSV\max.johnson\employees.csv" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
+    <Content Include="Scripts\crudForOutBound.js" />
     <Content Include="Scripts\crudOnEmployee.js" />
     <Content Include="Scripts\i18n\grid.locale-ar.js" />
     <Content Include="Scripts\i18n\grid.locale-bg.js" />
@@ -644,8 +651,12 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Data\NHibernateHelper.cs" />
     <Compile Include="DTOs\AdminDTO.cs" />
+    <Compile Include="DTOs\BeneficiaryDTO.cs" />
+    <Compile Include="DTOs\BeneficiaryPaymentDTO.cs" />
     <Compile Include="DTOs\ClientDTO.cs" />
+    <Compile Include="DTOs\DocumentDTO.cs" />
     <Compile Include="DTOs\EmployeeDTO.cs" />
+    <Compile Include="DTOs\PaymentDTO.cs" />
     <Compile Include="DTOs\SalaryDisbursementDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="Enums\BeneficiaryType.cs" />
@@ -677,15 +688,19 @@
     <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AdminRepository.cs" />
+    <Compile Include="Repositories\BeneficiaryRepository.cs" />
     <Compile Include="Repositories\ClientRepository.cs" />
     <Compile Include="Repositories\EmailRepository.cs" />
     <Compile Include="Repositories\IAdminRepository.cs" />
+    <Compile Include="Repositories\IBeneficiaryRepository.cs" />
     <Compile Include="Repositories\IClientRepository.cs" />
     <Compile Include="Repositories\IEmailRepository.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Services\BeneficiaryService.cs" />
     <Compile Include="Services\ClientService.cs" />
     <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\IBeneficiaryService.cs" />
     <Compile Include="Services\IClientService.cs" />
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\IAdminService.cs" />
@@ -736,8 +751,13 @@
     <Content Include="Views\Admin\AdminRegistration.cshtml" />
     <Content Include="Views\Admin\ViewClientDetails.cshtml" />
     <Content Include="Views\User\RegistrationSuccess.cshtml" />
-    <Content Include="Views\Client\ManageBeneficiaries.cshtml" />
     <Content Include="Views\Admin\SalaryDisbursementApprovals.cshtml" />
+    <Content Include="Views\Client\UserProfile.cshtml" />
+    <Content Include="Views\Client\EditClientRegistrationDetails.cshtml" />
+    <Content Include="Views\Client\ManageBeneficiaries.cshtml" />
+    <Content Include="Views\Client\_AddOutBoundClient.cshtml" />
+    <Content Include="Views\Client\_EditOutBoundClient.cshtml" />
+    <Content Include="Views\Client\MakePaymentRequests.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

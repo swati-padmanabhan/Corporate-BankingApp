@@ -260,3 +260,148 @@ body {
     display: flex;
     gap: 10px; /* Space between buttons */
 }
+
+
+/*user profile*/
+/* User Profile Section */
+
+/* Profile Card Styles */
+.user-profile-card {
+    padding: 1.5rem;
+    background-color: var(--neutral-light);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px var(--neutral-gray-dark);
+    text-align: center;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .user-profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px var(--neutral-gray-dark);
+    }
+
+/* Profile Avatar Styles */
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid var(--secondary-color);
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+/* Profile Info Text */
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-dark);
+}
+
+.profile-email {
+    font-size: 1rem;
+    color: var(--neutral-gray-dark);
+    margin-bottom: 10px;
+}
+
+.profile-status {
+    font-size: 0.9rem;
+    color: var(--secondary-light);
+    margin-bottom: 15px;
+}
+
+/* Edit Profile Button */
+.edit-profile-btn {
+    background-color: var(--primary-light);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+    .edit-profile-btn:hover {
+        background-color: var(--primary-color);
+        transform: scale(1.05);
+    }
+
+/* Profile Form Styles */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+    .profile-form input,
+    .profile-form select {
+        padding: 10px;
+        border: 1px solid var(--neutral-gray-dark);
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+        .profile-form input:focus,
+        .profile-form select:focus {
+            border-color: var(--primary-color);
+        }
+
+    /* Save and Cancel Buttons */
+    .profile-form .btn-save {
+        background-color: var(--secondary-color);
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .profile-form .btn-save:hover {
+            background-color: var(--secondary-dark);
+        }
+
+    .profile-form .btn-cancel {
+        background-color: var(--neutral-gray-light);
+        color: var(--neutral-dark);
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .profile-form .btn-cancel:hover {
+            background-color: var(--neutral-gray-dark);
+        }
+
+    /* Flexbox for Save and Cancel Buttons */
+    .profile-form .button-group {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+
+/* Modal Styles for edit client registration*/
+.modal-header {
+    background-color: var(--primary-color);
+}
+
+.modal-title {
+    color: #fff; /* Light text */
+}
+
+/*.modal-body {
+    overflow: hidden; 
+    padding: 0; 
+}
+
+.modal-body iframe {
+    width: 100%;
+    border: none;
+}*/

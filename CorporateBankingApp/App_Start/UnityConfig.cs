@@ -35,6 +35,11 @@ namespace CorporateBankingApp
             container.RegisterType<IAdminService, AdminService>();
             container.RegisterType<IAdminRepository, AdminRepository>();
 
+            container.RegisterType<IBeneficiaryService, BeneficiaryService>();
+            container.RegisterType<IBeneficiaryRepository, BeneficiaryRepository>();
+
+            container.RegisterType<IPaymentService, PaymentService>();
+            container.RegisterType<IPaymentRepository, PaymentRepository>();
 
 
             // e.g. container.RegisterType<ITestService, TestService>();

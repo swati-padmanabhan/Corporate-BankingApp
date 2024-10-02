@@ -38,6 +38,11 @@ namespace CorporateBankingApp.Services
         //    };
         //}
 
+        public void UpdateClientBalance(Guid clientId, double newBalance)
+        {
+            _clientRepository.UpdateClientBalance(clientId, newBalance);
+        }
+
         public void UploadEmployeeCsv(HttpPostedFileBase csvFile, Client client)
         {
             // Save the CSV file locally
@@ -85,7 +90,76 @@ namespace CorporateBankingApp.Services
             }
         }
 
+        //*******************************************Client reupload documents*******************************************
 
+        public void EditClientRegistration(Client client, IList<HttpPostedFileBase> uploadedFiles)
+        {
+            string clientFolderPath = GetClientFolderPath(client.UserName);
+
+            // Ensure the client folder exists
+            EnsureDirectoryExists(clientFolderPath);
+
+            // Document update process
+            string[] documentTypes = { "Company Id Proof", "Address Proof" };
+            for (int i = 0; i < uploadedFiles.Count; i++)
+            {
+                var uploadedFile = uploadedFiles[i];
+                if (uploadedFile != null && uploadedFile.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(uploadedFile.FileName);
+                    string filePath = Path.Combine(clientFolderPath, fileName);
+                    uploadedFile.SaveAs(filePath);
+                    string relativeFilePath = GetRelativeFilePath(client.UserName, fileName);
+
+                    UpdateClientDocument(client, documentTypes[i], relativeFilePath);
+                }
+            }
+
+            _clientRepository.EditClientRegistration(client);
+        }
+
+        private string GetClientFolderPath(string userName)
+        {
+            return HttpContext.Current.Server.MapPath($"~/Content/Documents/ClientRegistration/{userName}");
+        }
+
+        private void EnsureDirectoryExists(string folderPath)
+        {
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+        }
+
+        private string GetRelativeFilePath(string userName, string fileName)
+        {
+            return $"~/Content/Documents/ClientRegistration/{userName}/{fileName}";
+        }
+
+        private void UpdateClientDocument(Client client, string documentType, string filePath)
+        {
+            var existingDocument = client.Documents.FirstOrDefault(d => d.DocumentType == documentType);
+            if (existingDocument != null)
+            {
+                // Update existing document
+                existingDocument.FilePath = filePath;
+                existingDocument.UploadDate = DateTime.Now;
+            }
+            else
+            {
+                // Add new document if not present
+                var newDocument = new Document
+                {
+                    DocumentType = documentType,
+                    FilePath = filePath,
+                    UploadDate = DateTime.Now,
+                    Client = client
+                };
+                client.Documents.Add(newDocument);
+            }
+        }
+
+        //*******************************************Employee*******************************************
 
         public void AddEmployeeDetails(EmployeeDTO employeeDTO, Client client)
         {

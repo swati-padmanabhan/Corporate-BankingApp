@@ -23,10 +23,11 @@ function loadEmployees() {
                             <input type="checkbox" class="is-SalaryDisbursed-checkbox"
                                 data-employeeid="${employee.Id}"
                                 data-salary="${employee.Salary}"
-                                ${employee.SalaryDisburseSelect ? "checked" : ""} />
+                                ${employee.SalaryDisburseSelect ? "checked" : ""} 
+                                ${employee.IsActive ? "" : "disabled"} />
                         </td>
                         <td>
-                            <button onClick="editEmployee('${employee.Id}')" class="action-btn btn btn-secondary btn-sm" title="Edit">
+                            <button onClick="editEmployee('${employee.Id}')" class="action-btn btn btn-secondary btn-sm" title="Edit" ${employee.IsActive ? "" : "disabled"}>
                                 <i class="bi bi-pencil-square"></i>
                             </button>
                         </td>
@@ -49,8 +50,10 @@ function loadEmployees() {
                 // Select all salary disbursement checkboxes
                 $("#selectAllSalaryDisbursement").change(function () {
                     var isChecked = $(this).is(":checked");
-                    $(".is-SalaryDisbursed-checkbox").prop("checked", isChecked);
-                    updateTotalSalary();
+                    $(".is-SalaryDisbursed-checkbox").prop("checked", isChecked).trigger("change");
+                    if (!isChecked) {
+                        updateTotalSalary(); // Reset total salary when unchecked
+                    }
                 });
 
                 // Initialize total salary on page load
@@ -68,8 +71,16 @@ function loadEmployees() {
 function updateTotalSalary() {
     let totalSalary = 0;
     $(".is-SalaryDisbursed-checkbox:checked").each(function () {
+        let employeeId = $(this).data("employeeid");
         let salary = parseFloat($(this).data("salary")); // Get the salary from the data attribute
-        totalSalary += salary;
+
+        // Check if the employee is active
+        let isActive = $(".is-active-checkbox[data-employeeid='" + employeeId + "']").is(":checked");
+
+        // Only include salary if the employee is active
+        if (isActive) {
+            totalSalary += salary;
+        }
     });
     $("#salaryAmountInput").val(totalSalary.toFixed(2)); // Update the total salary
 }
@@ -191,6 +202,7 @@ function updateEmployeeStatus(employeeId, isActive) {
                     "Employee Status Updated",
                     `Employee's status has been ${isActive ? "activated" : "deactivated"}.`
                 );
+                loadEmployees(); // Reload the employee list to reflect status change
             } else {
                 showModal(
                     "error",
@@ -262,4 +274,8 @@ $("#uploadCSVForm").on("submit", function (event) {
 // Optional: To reset the form when the modal is closed
 $('#uploadCSVModal').on('hidden.bs.modal', function () {
     $(this).find('form')[0].reset(); // Reset the form
+});
+
+$(document).ready(() => {
+    loadEmployees();
 });

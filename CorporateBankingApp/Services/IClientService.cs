@@ -11,6 +11,10 @@ namespace CorporateBankingApp.Services
 {
     public interface IClientService
     {
+        void UpdateClientBalance(Guid clientId, double newBalance);
+
+        void EditClientRegistration(Client client, IList<HttpPostedFileBase> uploadedFiles);
+
         List<Employee> GetAllEmployees(Guid clientId);
 
         //Employee MapToEmployee(EmployeeDTO employeeDTO, Client client);

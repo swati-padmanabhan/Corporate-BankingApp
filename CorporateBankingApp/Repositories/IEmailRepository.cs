@@ -8,6 +8,6 @@ namespace CorporateBankingApp.Repositories
 {
     public interface IEmailRepository
     {
-        void SendOnboardingEmailNotification(string to, string subject, string body);
+        void SendEmailNotification(string to, string subject, string body);
     }
 }

@@ -44,8 +44,9 @@ namespace CorporateBankingApp.DTOs
         public HttpPostedFileBase Document2 { get; set; }
 
         [Required]
-        public List<String> DocumentLocation { get; set; } = new List<String>();    
+        public List<String> DocumentLocation { get; set; } = new List<String>();
 
+        public List<DocumentDTO> Documents { get; set; }
     }
 
 }

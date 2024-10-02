@@ -1,5 +1,6 @@
 ﻿using CorporateBankingApp.Data;
 using CorporateBankingApp.DTOs;
+using CorporateBankingApp.Enums;
 using CorporateBankingApp.Models;
 using CorporateBankingApp.Services;
 using CsvHelper;
@@ -18,10 +19,12 @@ namespace CorporateBankingApp.Controllers
     public class ClientController : Controller
     {
         private readonly IClientService _clientService;
+        private readonly IBeneficiaryService _beneficiaryService;
 
-        public ClientController(IClientService clientService)
+        public ClientController(IClientService clientService, IBeneficiaryService beneficiaryService)
         {
             _clientService = clientService;
+            _beneficiaryService = beneficiaryService;
         }
 
         // GET: Client
@@ -31,6 +34,119 @@ namespace CorporateBankingApp.Controllers
             ViewBag.Username = username;
             return View();
         }
+
+        public ActionResult UserProfile()
+        {
+            Guid clientId = (Guid)Session["UserId"];
+            var client = _clientService.GetClientById(clientId);
+
+            if (client == null)
+            {
+                return HttpNotFound();
+            }
+
+            var clientDto = new ClientDTO
+            {
+                Id = client.Id,
+                UserName = client.UserName,
+                Email = client.Email,
+                CompanyName = client.CompanyName,
+                Location = client.Location,
+                ContactInformation = client.ContactInformation,
+                AccountNumber = client.AccountNumber,
+                ClientIFSC = client.ClientIFSC,
+                Balance = client.Balance,
+            };
+
+            return View(clientDto);
+        }
+
+        //*******************************************Client reupload documents*******************************************
+        public ActionResult EditClientRegistrationDetails()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            Guid clientId = (Guid)Session["UserId"];
+            var client = _clientService.GetClientById(clientId);
+            var clientDTO = new ClientDTO
+            {
+                //UserName = client.UserName,
+                Email = client.Email,
+                CompanyName = client.CompanyName,
+                Location = client.Location,
+                ContactInformation = client.ContactInformation,
+                AccountNumber = client.AccountNumber,
+                ClientIFSC = client.ClientIFSC,
+                Balance = client.Balance,
+                Documents = client.Documents.Select(d => new DocumentDTO
+                {
+                    DocumentType = d.DocumentType,
+                    FilePath = d.FilePath,
+                    UploadDate = d.UploadDate
+                }).ToList()
+            };
+            return View(clientDTO);
+        }
+        [HttpPost]
+        public ActionResult EditClientRegistrationDetails(ClientDTO clientDTO)
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            
+            Guid clientId = (Guid)Session["UserId"];
+
+            var client = _clientService.GetClientById(clientId);
+            client.Email = clientDTO.Email;
+            client.CompanyName = clientDTO.CompanyName;
+            client.Location = clientDTO.Location;
+            client.ContactInformation = clientDTO.ContactInformation;
+            client.AccountNumber = clientDTO.AccountNumber;
+            client.ClientIFSC = clientDTO.ClientIFSC;
+            client.Balance = clientDTO.Balance;
+            client.OnBoardingStatus = CompanyStatus.PENDING;
+            var uploadedFiles = new List<HttpPostedFileBase>();
+
+            var companyIdProof = Request.Files["uploadedFiles1"];
+            var addressProof = Request.Files["uploadedFiles2"];
+
+            if (companyIdProof != null && companyIdProof.ContentLength > 0)
+            {
+                uploadedFiles.Add(companyIdProof);
+            }
+
+            if (addressProof != null && addressProof.ContentLength > 0)
+            {
+                uploadedFiles.Add(addressProof);
+            }
+
+            _clientService.EditClientRegistration(client, uploadedFiles);
+
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpPost]
+        public ActionResult UpdateBalance(double newBalance)
+        {
+            Guid clientId = (Guid)Session["UserId"];
+
+            // Validate the new balance, if necessary
+            if (newBalance < 0)
+            {
+                ModelState.AddModelError("Balance", "Balance cannot be negative.");
+                return RedirectToAction("UserProfile");
+            }
+
+            _clientService.UpdateClientBalance(clientId, newBalance);
+            TempData["SuccessMessage"] = "Balance updated successfully!";
+            return RedirectToAction("UserProfile");
+        }
+
+
         // GET: ManageBeneficiaries
         public ActionResult ManageBeneficiaries()
         {
@@ -39,25 +155,121 @@ namespace CorporateBankingApp.Controllers
             return View(beneficiaries);
         }
 
-        public ActionResult GetAllBeneficiaries()
+        public ActionResult AddOutboundClient(BeneficiaryDTO beneficiaryDTO)
         {
             if (Session["UserId"] == null)
             {
-                return RedirectToAction("Login", "User");
+                return new HttpStatusCodeResult(401, "Unauthorized");
+            }
+
+            Guid clientId = (Guid)Session["UserId"];
+            var client = _clientService.GetClientById(clientId);
+
+            if (client == null)
+            {
+                return new HttpStatusCodeResult(400, "Client not found");
+            }
+
+            var files = new List<HttpPostedFileBase>();
+
+            var doc1 = Request.Files["BeneficiaryDocument1"];
+            var doc2 = Request.Files["BeneficiaryDocument2"];
+
+            if (doc1 != null && doc1.ContentLength > 0)
+            {
+                files.Add(doc1);
+            }
+
+            if (doc2 != null && doc2.ContentLength > 0)
+            {
+                files.Add(doc2);
+            }
+
+
+            //_beneficiaryService.AddOutboudDetails(beneficiaryDTO, client);
+
+            //return Json(new
+            //{
+            //    beneficiaryDTO.Id,
+            //    beneficiaryDTO.BeneficiaryName,
+            //    beneficiaryDTO.AccountNumber,
+            //    beneficiaryDTO.BankIFSC,
+            //    BeneficiaryType.OUTBOUND,
+            //    Status.PENDING
+
+
+            //});
+
+            _beneficiaryService.AddOutboundDetails(beneficiaryDTO, client, files);
+
+            return Json(new
+            {
+                beneficiaryDTO.Id,
+                beneficiaryDTO.BeneficiaryName,
+                beneficiaryDTO.AccountNumber,
+                beneficiaryDTO.BankIFSC,
+                BeneficiaryType = BeneficiaryType.OUTBOUND,
+                Status = CompanyStatus.PENDING,
+                Documents = beneficiaryDTO.DocumentLocation
+            });
+
+        }
+
+
+        public ActionResult GetBeneficiaryById(Guid id)
+        {
+
+            var beneficiary = _beneficiaryService.GetBeneficiaryById(id);
+            if (beneficiary == null)
+            {
+                return Json(new { success = false, message = "Beneficiary Not Found" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new
+            {
+                success = true,
+                beneficiary = new
+                {
+                    beneficiary.Id,
+                    beneficiary.BeneficiaryName,
+                    beneficiary.AccountNumber,
+                    beneficiary.BankIFSC,
+                    BeneficiaryType.OUTBOUND,
+                    beneficiary.BeneficiaryStatus,
+
+
+                }
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult EditBeneficiaries(BeneficiaryDTO beneficiaryDTO)
+        {
+            if (Session["UserId"] == null)
+            {
+                return new HttpStatusCodeResult(401, "Unauthorized");
             }
             Guid clientId = (Guid)Session["UserId"];
-            var beneficiaries = _clientService.GetAllBeneficiaries(clientId);
+            var client = _beneficiaryService.GetClientById(clientId);
 
-            var beneficiary = beneficiaries.Select(b => new Beneficiary
+            if (client == null)
             {
-                Id = b.Id,
-                BeneficiaryName = b.BeneficiaryName,
-                AccountNumber = b.AccountNumber,
-                BankIFSC = b.BankIFSC,
-                BeneficiaryType = b.BeneficiaryType,
-            }).ToList();
+                return new HttpStatusCodeResult(400, "Client not found");
+            }
+            // employeeDto.Client = client;
+            _beneficiaryService.UpdateBeneficiaryDetails(beneficiaryDTO, client);
 
-            return View(beneficiary);
+            return Json(new { success = true, message = "Beneficiary updated successfully" });
+        }
+
+
+        [HttpPost]
+        public ActionResult UpdateBeneficiaryStatus(Guid id, bool isActive)
+        {
+            Guid clientId = (Guid)Session["UserId"];
+            var client = _beneficiaryService.GetClientById(clientId);
+            _beneficiaryService.UpdateBeneficiaryStatus(id, isActive);
+            return Json(new { success = true });
         }
 
         //******************************************Employee Management******************************************
@@ -227,7 +439,34 @@ namespace CorporateBankingApp.Controllers
         // GET: MakePaymentRequests
         public ActionResult MakePaymentRequests()
         {
-            return View();
+            // Retrieve beneficiaries stored in session
+            List<Beneficiary> paymentBeneficiaries = Session["PaymentBeneficiaries"] as List<Beneficiary> ?? new List<Beneficiary>();
+
+            return View(paymentBeneficiaries);
+        }
+
+        [HttpPost]
+        public ActionResult MakePaymentRequests(Guid beneficiaryId)
+        {
+            // Use the BeneficiariesService or BeneficiariesRepository to get the selected beneficiary
+            var beneficiary = _beneficiaryService.GetBeneficiaryById(beneficiaryId);
+
+            if (beneficiary != null)
+            {
+                // Add the beneficiary to the session or a temporary data store for payment
+                List<BeneficiaryDTO> paymentBeneficiaries = Session["PaymentBeneficiaries"] as List<BeneficiaryDTO>;
+                if (paymentBeneficiaries == null)
+                {
+                    paymentBeneficiaries = new List<BeneficiaryDTO>();
+                }
+
+                paymentBeneficiaries.Add(beneficiary);
+                Session["PaymentBeneficiaries"] = paymentBeneficiaries;
+
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false, message = "Beneficiary not found" });
         }
 
         //******************************************Salary Disbursement******************************************

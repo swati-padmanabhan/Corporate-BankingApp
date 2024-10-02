@@ -73,3 +73,8 @@ function filterTable(columnIndex) {
         }
     }
 }
+
+//edit client document model
+function getDocument(filePath) {
+    document.getElementById('documentFrame').src = filePath;
+}

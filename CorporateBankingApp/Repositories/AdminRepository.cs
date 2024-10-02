@@ -3,10 +3,10 @@ using CorporateBankingApp.Enums;
 using CorporateBankingApp.Models;
 using CorporateBankingApp.Utils;
 using NHibernate;
+using NHibernate.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace CorporateBankingApp.Repositories
 {
@@ -35,7 +35,6 @@ namespace CorporateBankingApp.Repositories
             }
         }
 
-
         public Client GetClientById(Guid id)
         {
             return _session.Get<Client>(id);
@@ -50,16 +49,17 @@ namespace CorporateBankingApp.Repositories
                 if (currentClient != null)
                 {
                     currentClient.IsActive = false;
+                    _session.Update(currentClient);
                 }
-                _session.Update(currentClient);
                 transaction.Commit();
             }
         }
 
         public List<Client> GetAllClients()
         {
-            var clients = _session.Query<Client>().Where(c => c.IsActive == true).ToList();
-            return clients;
+            return _session.Query<Client>()
+                           .Where(c => c.IsActive)
+                           .ToList();
         }
 
         public void UpdateClientDetails(Client client)
@@ -75,13 +75,29 @@ namespace CorporateBankingApp.Repositories
                     existingClient.CompanyName = client.CompanyName;
                     existingClient.Location = client.Location;
                     existingClient.ContactInformation = client.ContactInformation;
+
+                    _session.Update(existingClient);
                 }
-                _session.Update(existingClient);
                 transaction.Commit();
             }
         }
 
-        //salary disbursement 
+        public List<Client> GetPendingClients()
+        {
+            var clients = _session.Query<Client>().FetchMany(c => c.Documents).Where(c => c.OnBoardingStatus == CompanyStatus.PENDING).ToList();
+            return clients;
+        }
+
+
+        // Salary Disbursement 
+        public SalaryDisbursement GetSalaryDisbursementById(Guid id)
+        {
+            return _session.Query<SalaryDisbursement>()
+                           .Fetch(sd => sd.Employee) 
+                           .ThenFetch(e => e.Client) 
+                           .FirstOrDefault(sd => sd.Id == id);
+        }
+
         public IEnumerable<SalaryDisbursementDTO> GetSalaryDisbursementsByStatus(CompanyStatus status)
         {
             return _session.Query<SalaryDisbursement>()
@@ -127,13 +143,12 @@ namespace CorporateBankingApp.Repositories
                     transaction.Commit();
                     return true;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     transaction.Rollback();
                     throw;
                 }
             }
-
         }
 
         public bool RejectSalaryDisbursement(Guid salaryDisbursementId)
@@ -146,21 +161,18 @@ namespace CorporateBankingApp.Repositories
                     if (salaryDisbursement == null || salaryDisbursement.SalaryStatus != CompanyStatus.PENDING)
                         return false;
 
-                    // Set the status to REJECTED
                     salaryDisbursement.SalaryStatus = CompanyStatus.REJECTED;
 
                     _session.Update(salaryDisbursement);
                     transaction.Commit();
                     return true;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-
                     transaction.Rollback();
                     throw;
                 }
             }
         }
-
     }
 }

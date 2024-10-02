@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CorporateBankingApp.Models
 {
@@ -7,18 +8,25 @@ namespace CorporateBankingApp.Models
     {
         public virtual Guid Id { get; set; }
 
+        [Required]
         public virtual string FirstName { get; set; }
 
+        [Required]
         public virtual string LastName { get; set; }
 
+        [Required]
         public virtual string Email { get; set; }
 
+        [Required]
         public virtual long Phone { get; set; }
 
+        [Required]
         public virtual string Designation { get; set; }
 
+        [Required]
         public virtual double Salary { get; set; }
 
+        [Required]
         public virtual bool IsActive { get; set; }
 
         public virtual Client Client { get; set; }

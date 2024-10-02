@@ -12,6 +12,8 @@ namespace CorporateBankingApp.DTOs
 
         public string CompanyName { get; set; }
 
+        public EmployeeDTO Employee { get; set; }
+
         public string EmployeeFirstName { get; set; }
 
         public string EmployeeLastName { get; set; }

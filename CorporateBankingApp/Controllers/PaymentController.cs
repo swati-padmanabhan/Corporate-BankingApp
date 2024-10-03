@@ -84,7 +84,7 @@ namespace CorporateBankingApp.Controllers
                 //Utils.verifyPaymentSignature(attributes);
 
                 // Update payment status in the database
-                _paymentService.UpdatePaymentStatus(razorpay_order_id, CompanyStatus.APPROVED);
+                _paymentService.UpdatePaymentStatus(razorpay_order_id, CompanyStatus.PENDING);
 
                 return Json(new { success = true, message = "Payment Verified Successfully" });
             }

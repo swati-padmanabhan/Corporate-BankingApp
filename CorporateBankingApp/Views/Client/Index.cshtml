@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Client Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -9,7 +8,7 @@
 </div>
 
 <div class="row my-4">
-    <div class="col-md-4 mb-2">
+    <div class="col-md-6 mb-2">
         <div class="card">
             <div class="card-header bg-white h4">
                 <i class="bi bi-people"></i>
@@ -25,7 +24,7 @@
         </div>
     </div>
 
-    <div class="col-md-4 mb-2">
+    <div class="col-md-6 mb-2">
         <div class="card">
             <div class="card-header bg-white h4">
                 <i class="bi bi-briefcase"></i>
@@ -40,8 +39,10 @@
             </div>
         </div>
     </div>
+</div>
 
-    <div class="col-md-4 mb-2">
+<div class="row my-4">
+    <div class="col-md-6 mb-2">
         <div class="card">
             <div class="card-header bg-white h4">
                 <i class="bi bi-cash"></i>
@@ -56,42 +57,41 @@
             </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-md-4 mb-2">
-        <div class="card">
-            <div class="card-header bg-white h4">
-                <i class="bi bi-piggy-bank"></i>
-                <a href="@Url.Action("SalaryDisbursement", "Client")" class="float-right">
-                    <i class="bi bi-arrow-right"></i>
-                </a>
+    @*<div class="row">
+        <div class="col-md-4 mb-2">
+            <div class="card">
+                <div class="card-header bg-white h4">
+                    <i class="bi bi-piggy-bank"></i>
+                    <a href="@Url.Action("SalaryDisbursement", "Client")" class="float-right">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-body">
+                    <h4 class="card-title">Salary Disbursement</h4>
+                    <p class="card-text">Disburse salaries to your employees in batch or individually.</p>
+                </div>
             </div>
+        </div>*@
 
-            <div class="card-body">
-                <h4 class="card-title">Salary Disbursement</h4>
-                <p class="card-text">Disburse salaries to your employees in batch or individually.</p>
+    @*<div class="col-md-4 mb-2">
+            <div class="card">
+                <div class="card-header bg-white h4">
+                    <i class="bi bi-file-earmark-arrow-up"></i>
+                    <a href="@Url.Action("UploadDocuments", "Client")" class="float-right">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-body">
+                    <h4 class="card-title">Upload Documents</h4>
+                    <p class="card-text">Upload important documents for verification and transactions.</p>
+                </div>
             </div>
-        </div>
-    </div>
+        </div>*@
 
-    <div class="col-md-4 mb-2">
-        <div class="card">
-            <div class="card-header bg-white h4">
-                <i class="bi bi-file-earmark-arrow-up"></i>
-                <a href="@Url.Action("UploadDocuments", "Client")" class="float-right">
-                    <i class="bi bi-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="card-body">
-                <h4 class="card-title">Upload Documents</h4>
-                <p class="card-text">Upload important documents for verification and transactions.</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-2">
+    <div class="col-md-6 mb-2">
         <div class="card">
             <div class="card-header bg-white h4">
                 <i class="bi bi-bar-chart-line"></i>
@@ -107,4 +107,3 @@
         </div>
     </div>
 </div>
-

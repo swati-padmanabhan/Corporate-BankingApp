@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CorporateBankingApp.DTOs.BeneficiaryReportDTO>
+
+@{
+    ViewBag.Title = "BeneficiaryReportByClient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Beneficiary Report By Client</h2>
+
+
+<table class="table">
+    <tr>
+
+        <th>Beneficiary Name</th>
+        <th>Account Number</th>
+        <th>Bank IFSC</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Payment Request Date</th>
+        <th>Payment Approval Date</th>
+        <th>Payment Status</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.BeneficiaryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankIFSC)
+
+            </td>
+            <td>@item.BeneficiaryStatus</td>
+            <td>@item.BeneficiaryType</td>
+            <
+            <td>@item.PaymentRequestDate?.ToString("yyyy-MM-dd")</td>
+            <td>@item.PaymentApprovalDate?.ToString("yyyy-MM-dd")</td>
+            <td>@item.PaymentStatus</td>
+
+        </tr>
+    }
+
+</table>

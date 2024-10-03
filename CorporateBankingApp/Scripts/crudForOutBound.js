@@ -14,26 +14,46 @@ function loadOutboundBeneficiaries() {
                     }).join("<br/> ");
 
                     var row = `<tr>
-                        <td>${item.BeneficiaryName}</td>
-                        <td>${item.AccountNumber}</td>
-                        <td>${item.BankIFSC}</td>
-                        <td>${item.BeneficiaryStatus}</td>
-                        <td>${item.BeneficiaryType}</td>
-                        <td>
-                            <input type="checkbox" class="is-active-checkbox" data-beneficiaryid="${item.Id}" ${item.IsActive ? "checked" : ""} />
-                        </td>
-                        <td>${documentLinks}</td>
-                        <td class="editbeneficiary-btn-cell">
-        <i class="bi bi-pencil-square edit-icon" onclick="editBeneficiary('${item.Id}')" style="${item.IsActive ? '' : 'display:none;'}"></i>
-    </td>
-                    </tr>`;
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(item.BeneficiaryName)}&background=4e4187&color=ffffff" alt="" style="width: 40px; height: 40px" class="rounded-circle" />
+                                    <div class="ms-3">
+                                        <p class="fw-bold mb-1">${item.BeneficiaryName}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="fw-normal mb-1">${item.AccountNumber}</p>
+                            </td>
+                            <td>${item.BankIFSC}</td>
+                            <td>
+                                <span class="badge ${item.BeneficiaryStatus === 'PENDING' ? 'bg-warning' : 'bg-success'} rounded-pill d-inline">${item.BeneficiaryStatus}</span>
+                            </td>
+                            <td>
+                                <span class="badge ${item.BeneficiaryType === 'INBOUND' ? 'primary-bg neutral-light-text' : 'bg-secondary'} rounded-pill d-inline">${item.BeneficiaryType}</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <input type="checkbox" id="toggle-${item.Id}" data-beneficiaryid="${item.Id}" class="toggle" ${item.IsActive ? "checked" : ""} />
+                                    <label for="toggle-${item.Id}" class="toggle-label"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="open-document">
+                                    ${documentLinks}
+                                </div>
+                            </td>
+                            <td class="editbeneficiary-btn-cell">
+                                <i class="bi bi-pencil-square edit-icon" onclick="editBeneficiary('${item.Id}')" style="${item.IsActive ? '' : 'display:none;'}"></i>
+                            </td>
+                        </tr>`;
 
                     $("#beneficiaryTblBody").append(row);
                 });
-
-                $(".is-active-checkbox").change(function () {
+                $(".toggle").change(function () {
                     var beneficiaryId = $(this).data("beneficiaryid");
                     var isActive = $(this).is(":checked");
+                    console.log(beneficiaryId, isActive)
                     updateBeneficiaryStatus(beneficiaryId, isActive);
                 });
             } else {
@@ -48,18 +68,6 @@ function loadOutboundBeneficiaries() {
     });
 }
 
-
-
-
-$(document).on("click", ".document-link", function (e) {
-    e.preventDefault(); // Prevent the default link behavior
-    var url = $(this).data("url"); // Get the URL from the data attribute
-    console.log("Document URL:", url); // Log the URL to the console for debugging
-    $("#documentFrame").attr("src", url); // Set the src of the iframe
-    $("#documentModal").modal("show"); // Show the modal
-});
-
-//isactive updation
 function updateBeneficiaryStatus(beneficiaryId, isActive) {
     $.ajax({
         url: "/Client/UpdateBeneficiaryStatus",
@@ -67,14 +75,15 @@ function updateBeneficiaryStatus(beneficiaryId, isActive) {
         data: { Id: beneficiaryId, isActive: isActive },
         success: function (response) {
             if (response.success) {
+
                 alert("Beneficiary status updated successfully");
 
-                // Find the row containing the employee
+                // Find the row containing the beneficiary using the toggle ID
                 var beneficiaryRow = $(`#beneficiaryTblBody tr`).filter(function () {
-                    return $(this).find(".is-active-checkbox").data("beneficiaryid") == beneficiaryId;
+                    return $(this).find(`#toggle-${beneficiaryId}`).length > 0;
                 });
 
-                var editButton = beneficiaryRow.find(".editbeneficiary-btn-cell button");
+                var editButton = beneficiaryRow.find(".editbeneficiary-btn-cell .edit-icon");
 
                 if (isActive) {
                     editButton.show();

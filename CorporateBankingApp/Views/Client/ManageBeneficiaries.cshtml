@@ -4,64 +4,60 @@
     ViewBag.Title = "ManageBeneficiaries";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container" id="beneficiaryList">
+
+<div class="container-fluid" id="beneficiaryList">
     <h2 class="text-center my-4 pt-3">List Of Outbound Beneficiaries</h2>
-    <p>
-        <div>
-            <button type="button" class="btn btn-outline-dark" id="btnAddBeneficiary">
-                Add New Beneficiary
-            </button>
+    <button type="button" class="btn primary-bg text-white" id="btnAddBeneficiary">
+        Add New Beneficiary
+    </button>
+    <div class="table-responsive">
+
+        <div class="my-4 float-start w-75">
+            <input type="text" id="searchInput" placeholder="Search users..." class="form-control" onkeyup="searchUsers()" />
         </div>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.BeneficiaryName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AccountNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BankIFSC)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BeneficiaryStatus)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BeneficiaryType)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IsActive)
-                </th>
-                <th>@Html.DisplayName("Documents")</th><!--for document showing-->
-                <th></th>
-            </tr>
-        </thead>
-        <tbody id="beneficiaryTblBody">
-            <!--data comes from ajax-->
-        </tbody>
-    </table>
-
+        <div class="dropdown my-4 float-end">
+            <button class="btn rounded-3 wrapper" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-filter me-1"></i>
+                <span>Filter</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" onclick="filterAll()">All</a></li>
+                <li><a class="dropdown-item" onclick="filterInbound()">INBOUND</a></li>
+                <li><a class="dropdown-item" onclick="filterOutbound()">OUTBOUND</a></li>
+            </ul>
+        </div>
+        <table class="table align-middle accent-dark-b mb-0">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.BeneficiaryName)</th>
+                    <th>@Html.DisplayNameFor(model => model.AccountNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.BankIFSC)</th>
+                    <th>@Html.DisplayNameFor(model => model.BeneficiaryStatus)</th>
+                    <th>@Html.DisplayNameFor(model => model.BeneficiaryType)</th>
+                    <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+                    <th>Documents</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="beneficiaryTblBody"></tbody>
+        </table>
+    </div>
 </div>
-<div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-bg-primary" style="display: flex; justify-content: space-between; align-items: center;">
-                <h5 class="modal-title px-3" id="documentModalLabel" style="margin: 0;">Beneficiary Document</h5>
-                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">*@
-                <button type="button" class="close border-0 text-bg-primary btn-lg" data-dismiss="modal" aria-label="Close" style="font-size: 2rem; line-height: 1;">
 
-                    <span aria-hidden="true">&times;</span>
-                </button>
+<!-- Document Modal Structure -->
+<div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-bg-primary">
+                <h5 class="modal-title" id="documentModalLabel">Beneficiary Document</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <img id="documentFrame" src="" class="w-100" scrolling="yes"></img>
+                <img id="documentFrame" src="" class="w-100" scrolling="yes" />
             </div>
         </div>
     </div>
 </div>
-
 
 <div id="addNewBeneficiary" style="display:none" class="container">
     @Html.Partial("_AddBeneficiaryPartial")
@@ -69,17 +65,10 @@
 <div id="editBeneficiary" style="display:none" class="container">
     @Html.Partial("_EditBeneficiaryPartial")
 </div>
+
 <script src="~/Scripts/crudForOutBound.js"></script>
 <script>
     $(document).ready(() => {
         loadOutboundBeneficiaries();
-    })
-    $("#btnAddBeneficiary").click(function () {
-        $("#beneficiaryList").hide();
-        $("#addNewBeneficiary").show();
-    });
-    //document modal closing button
-    $('.close').on('click', function () {
-        $('#documentModal').modal('hide');
     });
 </script>

@@ -11,24 +11,34 @@ namespace CorporateBankingApp.DTOs
         public Guid Id { get; set; }
 
         [Required]
+        [Display(Name = "Username")]
+        [StringLength(20, ErrorMessage = "Username cannot exceed 20 characters.")]
         public string UserName { get; set; }
 
         [Required]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters long.")]
+        //[RegularExpression(@"^(?=.*[a-zA-Z])(?=.*\d).+$", ErrorMessage = "Password must contain at least one letter and one number.")]
         public string Password { get; set; }
 
         [Required]
+        [Display(Name = "Email Id")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address.")]
         public string Email { get; set; }
 
         [Required]
+        [Display(Name = "Company Name")]
         public string CompanyName { get; set; }
 
         [Required]
         public string Location { get; set; }
 
         [Required]
+        [Display(Name = "Contact Information")]
         public string ContactInformation { get; set; }
 
         [Required]
+        [Display(Name = "Account Number")]
+        [RegularExpression(@"^\d{12}$", ErrorMessage = "Account number must be exactly 12 digits.")]
         public string AccountNumber { get; set; }
 
         [Required]

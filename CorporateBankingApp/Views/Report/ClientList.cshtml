@@ -1,0 +1,35 @@
+﻿@model IEnumerable<CorporateBankingApp.DTOs.ClientReportDTO>
+
+@{
+    ViewBag.Title = "Client List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2>Select a Client</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Client Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var client in Model)
+        {
+            <tr>
+                <td>@client.CompanyName</td>
+                <td>
+                    <a href="@Url.Action("EmployeeReportByClient", "Report", new { clientId = client.Id })" class="btn btn-primary">View Employees</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("BeneficiaryReport", "Report", new { clientId = client.Id })">View Beneficiaries</a>
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>

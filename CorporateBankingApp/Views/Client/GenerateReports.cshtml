@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "GenerateReports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Generate Reports</h2>
+<h2>What do you wish to do? </h2>
+
+<td>
+    <a href="@Url.Action("EmployeeReport", "Report")" class="btn btn-primary">View Employees</a>
+</td>
+<td>
+    <a href="@Url.Action("BeneficiaryReport", "Report")" class="btn btn-primary">View Beneficiaries</a>
+</td>

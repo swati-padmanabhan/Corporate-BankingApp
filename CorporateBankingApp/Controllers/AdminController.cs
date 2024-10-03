@@ -364,12 +364,6 @@ namespace CorporateBankingApp.Controllers
         }
 
 
-
-
-
-
-
-
         // GET: ReportGeneration
         public ActionResult ReportGeneration()
         {

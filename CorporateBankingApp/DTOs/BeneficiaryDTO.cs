@@ -13,16 +13,21 @@ namespace CorporateBankingApp.DTOs
     {
         public virtual Guid Id { get; set; }
 
+        [Display(Name = "Beneficiary Name")]
         public string BeneficiaryName { get; set; }
 
+        [Display(Name = "Account Number")]
         public string AccountNumber { get; set; }
 
+        [Display(Name = "Bank IFSC")]
         public string BankIFSC { get; set; }
         
         public bool IsActive { get; set; }
 
+        [Display(Name = "Type")]
         public string BeneficiaryType { get; set; }
 
+        [Display(Name = "Beneficiary Status")]
         public string BeneficiaryStatus { get; set; }
 
         [Required]

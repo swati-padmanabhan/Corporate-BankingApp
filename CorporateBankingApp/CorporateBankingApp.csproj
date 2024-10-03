@@ -658,14 +658,18 @@
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Data\NHibernateHelper.cs" />
     <Compile Include="DTOs\AdminDTO.cs" />
     <Compile Include="DTOs\BeneficiaryDTO.cs" />
     <Compile Include="DTOs\BeneficiaryPaymentDTO.cs" />
+    <Compile Include="DTOs\BeneficiaryReportDTO.cs" />
     <Compile Include="DTOs\ClientDTO.cs" />
+    <Compile Include="DTOs\ClientReportDTO.cs" />
     <Compile Include="DTOs\DocumentDTO.cs" />
     <Compile Include="DTOs\EmployeeDTO.cs" />
+    <Compile Include="DTOs\EmployeeReportDTO.cs" />
     <Compile Include="DTOs\PaymentDTO.cs" />
     <Compile Include="DTOs\SalaryDisbursementDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
@@ -777,6 +781,13 @@
     <Content Include="Views\Admin\BeneficiaryManagement.cshtml" />
     <Content Include="Views\Client\MakePaymentRequests.cshtml" />
     <Content Include="Views\Admin\PaymentApprovals.cshtml" />
+    <Content Include="Views\Report\BeneficiaryReport.cshtml" />
+    <Content Include="Views\Report\EmployeeReport.cshtml" />
+    <Content Include="Views\Report\ClientList.cshtml" />
+    <Content Include="Views\Report\BeneficiaryReportByClient.cshtml" />
+    <Content Include="Views\Report\EmployeeReportByClient.cshtml" />
+    <Content Include="Views\Client\GenerateReports.cshtml" />
+    <Content Include="Views\Admin\ReportGeneration.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

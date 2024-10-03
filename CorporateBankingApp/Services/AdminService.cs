@@ -113,13 +113,107 @@ namespace CorporateBankingApp.Services
             if (status == "APPROVED")
             {
                 client.OnBoardingStatus = CompanyStatus.APPROVED;
-                _emailRepository.SendEmailNotification(client.Email, "Client Approved!!", $"Dear {client.UserName}, Your client account has been approved as all submitted details and documents meet our onboarding requirements. Now you can access all our services.");
+                var title = "Client Account Approval Notification";
+                var messageContent = $@"
+            <html>
+            <head>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f4f4f4;
+                    }}
+                    .container {{
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #ffffff;
+                        border-radius: 5px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        padding: 20px;
+                    }}
+                    .header {{
+                        background-color: #4e4187; /* Primary color */
+                        color: white;
+                        padding: 10px;
+                        text-align: center;
+                        border-radius: 5px 5px 0 0;
+                    }}
+                    .content {{
+                        line-height: 1.6;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <div class='header'>
+                        <h1>{title}</h1>
+                    </div>
+                    <div class='content'>
+                        <p>Dear {client.UserName},</p>
+                        <p>We are delighted to inform you that your client account has been successfully approved! All submitted details and documents have met our onboarding requirements.</p>
+                        <p>You are now granted full access to our range of services. If you have any questions or need assistance, please do not hesitate to reach out to our support team.</p>
+                        <p>Thank you for choosing us!</p>
+                    </div>
+                </div>
+            </body>
+            </html>";
+
+                _emailRepository.SendEmailNotification(client.Email, title, messageContent);
             }
             else if (status == "REJECTED")
             {
                 client.OnBoardingStatus = CompanyStatus.REJECTED;
-                _emailRepository.SendEmailNotification(client.Email, "Client Rejected!!", $"Dear {client.UserName}, Your client account has been rejected due to discrepancies in the submitted details and documents, which do not meet our onboarding requirements.");
+
+                var title = "Client Account Rejection Notification";
+                var messageContent = $@"
+            <html>
+            <head>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f4f4f4;
+                    }}
+                    .container {{
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #ffffff;
+                        border-radius: 5px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        padding: 20px;
+                    }}
+                    .header {{
+                        background-color: #4e4187; /* Primary color */
+                        color: white;
+                        padding: 10px;
+                        text-align: center;
+                        border-radius: 5px 5px 0 0;
+                    }}
+                    .content {{
+                        line-height: 1.6;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <div class='header'>
+                        <h1>{title}</h1>
+                    </div>
+                    <div class='content'>
+                        <p>Dear {client.UserName},</p>
+                        <p>We regret to inform you that your client account application has been declined. This decision was made due to discrepancies found in the details and documents you submitted, which do not meet our onboarding standards.</p>
+                        <p>If you have any questions or require clarification regarding this decision, please feel free to contact our support team. We are here to assist you.</p>
+                        <p>Thank you for your understanding.</p>
+                    </div>
+                </div>
+            </body>
+            </html>";
+
+                _emailRepository.SendEmailNotification(client.Email, title, messageContent);
             }
+
             _adminRepository.UpdateClientDetails(client);
             return true;
         }
@@ -257,20 +351,117 @@ namespace CorporateBankingApp.Services
                 // Client not found
                 return false;
             }
+
             // Update onboarding status based on the status string
             if (status == "APPROVED")
             {
                 beneficiary.BeneficiaryStatus = CompanyStatus.APPROVED;
-                _emailService.SendClientOnboardingStatusEmail(beneficiary.Client.Email, "Beneficiary Approved!!", $"Dear {beneficiary.Client.UserName}, Your beneficiary {beneficiary.BeneficiaryName} has been approved after verification of the details and documents submitted by you.");
+
+                var title = "Beneficiary Approval Notification";
+                var messageContent = $@"
+            <html>
+            <head>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f4f4f4;
+                    }}
+                    .container {{
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #ffffff;
+                        border-radius: 5px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        padding: 20px;
+                    }}
+                    .header {{
+                        background-color: #4e4187; /* Primary color */
+                        color: white;
+                        padding: 10px;
+                        text-align: center;
+                        border-radius: 5px 5px 0 0;
+                    }}
+                    .content {{
+                        line-height: 1.6;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <div class='header'>
+                        <h1>{title}</h1>
+                    </div>
+                    <div class='content'>
+                        <p>Dear {beneficiary.Client.UserName},</p>
+                        <p>We are pleased to inform you that your beneficiary, <strong>{beneficiary.BeneficiaryName}</strong>, has been successfully approved. This decision comes after a thorough verification of the details and documents you submitted.</p>
+                        <p>You can now proceed with any transactions involving this beneficiary. Should you have any questions or require further assistance, please do not hesitate to reach out to our support team.</p>
+                        <p>Thank you for choosing our services.</p>
+                    </div>
+                </div>
+            </body>
+            </html>";
+
+                _emailService.SendClientOnboardingStatusEmail(beneficiary.Client.Email, title, messageContent);
             }
             else if (status == "REJECTED")
             {
                 beneficiary.BeneficiaryStatus = CompanyStatus.REJECTED;
-                _emailService.SendClientOnboardingStatusEmail(beneficiary.Client.Email, "Beneficiary Rejected!!", $"Dear {beneficiary.Client.UserName}, Your beneficiary {beneficiary.BeneficiaryName} has been rejected due to discrepancies in the submitted details and documents.");
+
+                var title = "Beneficiary Application Update";
+                var messageContent = $@"
+            <html>
+            <head>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f4f4f4;
+                    }}
+                    .container {{
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #ffffff;
+                        border-radius: 5px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        padding: 20px;
+                    }}
+                    .header {{
+                        background-color: #4e4187; /* Primary color */
+                        color: white;
+                        padding: 10px;
+                        text-align: center;
+                        border-radius: 5px 5px 0 0;
+                    }}
+                    .content {{
+                        line-height: 1.6;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <div class='header'>
+                        <h1>{title}</h1>
+                    </div>
+                    <div class='content'>
+                        <p>Dear {beneficiary.Client.UserName},</p>
+                        <p>We regret to inform you that the application for your beneficiary, <strong>{beneficiary.BeneficiaryName}</strong>, has been declined. This decision was made due to discrepancies found in the details and documents you submitted.</p>
+                        <p>If you need any further assistance or clarification regarding this decision, please feel free to contact our support team. We are here to help you.</p>
+                        <p>Thank you for your understanding.</p>
+                    </div>
+                </div>
+            </body>
+            </html>";
+
+                _emailService.SendClientOnboardingStatusEmail(beneficiary.Client.Email, title, messageContent);
             }
+
             _adminRepository.UpdateBeneficiary(beneficiary);
             return true;
         }
+
 
 
         //verify payment

@@ -153,5 +153,7 @@ namespace CorporateBankingApp.Services
             var body = GenerateEmailTemplate(title, messageContent);
             _emailRepository.SendEmailNotification(clientEmail, title, body);
         }
+
+
     }
 }

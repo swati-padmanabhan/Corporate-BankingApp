@@ -34,5 +34,7 @@ namespace CorporateBankingApp.Services
         List<Beneficiary> GetAllBeneficiaries(Guid clientId);
 
         bool ProcessSalaryDisbursements(List<Guid> employeeIds, bool isBatch, out List<Guid> excludedEmployees);
+
+        List<BeneficiaryDTO> GetBeneficiaryList(Guid id);
     }
 }

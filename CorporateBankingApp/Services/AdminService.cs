@@ -154,26 +154,6 @@ namespace CorporateBankingApp.Services
 
         //salary
 
-        //public SalaryDisbursementDTO GetSalaryDisbursementById(Guid salaryDisbursementId)
-        //{
-        //    var salaryDisbursement = _adminRepository.GetSalaryDisbursementById(salaryDisbursementId);
-        //    if (salaryDisbursement == null)
-        //    {
-        //        return null; // or handle accordingly
-        //    }
-
-        //    return new SalaryDisbursementDTO
-        //    {
-        //        SalaryDisbursementId = salaryDisbursement.Id,
-        //        CompanyName = salaryDisbursement.Employee.Client.CompanyName,
-        //        EmployeeFirstName = salaryDisbursement.Employee.FirstName,
-        //        EmployeeLastName = salaryDisbursement.Employee.LastName,
-        //        Salary = salaryDisbursement.Employee.Salary,
-        //        DisbursementDate = salaryDisbursement.DisbursementDate,
-        //        SalaryStatus = salaryDisbursement.SalaryStatus
-        //    };
-        //}
-
         public IEnumerable<SalaryDisbursementDTO> ListPendingSalaryDisbursements()
         {
             return _adminRepository.GetSalaryDisbursementsByStatus(CompanyStatus.PENDING);
@@ -253,7 +233,59 @@ namespace CorporateBankingApp.Services
 
         }
 
+        //outbound client verification
+        public List<BeneficiaryDTO> GetBeneficiariesForVerification(UrlHelper urlHelper)
+        {
+            var beneficiaries = _adminRepository.GetPendingBeneficiaries();
+            var beneficiariesDto = beneficiaries.Select(b => new BeneficiaryDTO
+            {
+                Id = b.Id,
+                BeneficiaryName = b.BeneficiaryName,
+                AccountNumber = b.AccountNumber,
+                BankIFSC = b.BankIFSC,
+                BeneficiaryType = b.BeneficiaryType.ToString().ToUpper(),
+                DocumentPaths = b.Documents.Select(d => urlHelper.Content(d.FilePath)).ToList()
+            }).ToList();
+            return beneficiariesDto;
+        }
 
+        public bool UpdateOutboundBeneficiaryOnboardingStatus(Guid id, string status)
+        {
+            var beneficiary = _adminRepository.GetBeneficiaryById(id);
+            if (beneficiary.Client == null)
+            {
+                // Client not found
+                return false;
+            }
+            // Update onboarding status based on the status string
+            if (status == "APPROVED")
+            {
+                beneficiary.BeneficiaryStatus = CompanyStatus.APPROVED;
+                _emailService.SendClientOnboardingStatusEmail(beneficiary.Client.Email, "Beneficiary Approved!!", $"Dear {beneficiary.Client.UserName}, Your beneficiary {beneficiary.BeneficiaryName} has been approved after verification of the details and documents submitted by you.");
+            }
+            else if (status == "REJECTED")
+            {
+                beneficiary.BeneficiaryStatus = CompanyStatus.REJECTED;
+                _emailService.SendClientOnboardingStatusEmail(beneficiary.Client.Email, "Beneficiary Rejected!!", $"Dear {beneficiary.Client.UserName}, Your beneficiary {beneficiary.BeneficiaryName} has been rejected due to discrepancies in the submitted details and documents.");
+            }
+            _adminRepository.UpdateBeneficiary(beneficiary);
+            return true;
+        }
+
+
+        //verify payment
+        public IEnumerable<PaymentDTO> GetPendingPaymentsByStatus(CompanyStatus status)
+        {
+            return _adminRepository.GetPendingPaymentsByStatus(status);
+        }
+
+        public void UpdatePaymentStatuses(List<Guid> paymentIds, CompanyStatus status)
+        {
+            foreach (var paymentId in paymentIds)
+            {
+                _adminRepository.UpdatePaymentStatus(paymentId, status);
+            }
+        }
 
     }
 }

@@ -271,5 +271,23 @@ namespace CorporateBankingApp.Services
             };
         }
 
+        public List<BeneficiaryDTO> GetBeneficiaryList(Guid id)
+        {
+            var beneficiaries = _clientRepository.GetBeneficiaryList(id);
+
+            // Map each Beneficiary to a BeneficiaryDTO
+            var beneficiaryDTOs = beneficiaries.Select(b => new BeneficiaryDTO
+            {
+                Id = b.Id,
+                BeneficiaryName = b.BeneficiaryName,
+                AccountNumber = b.AccountNumber,
+                BankIFSC = b.BankIFSC,
+                IsActive = b.IsActive,
+                BeneficiaryType = b.BeneficiaryType.ToString().ToUpper(),
+                BeneficiaryStatus = b.BeneficiaryStatus.ToString().ToUpper()
+            }).ToList();
+            return beneficiaryDTOs;
+        }
+
     }
 }

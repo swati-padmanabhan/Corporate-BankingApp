@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Mvc;
 using CorporateBankingApp.Data;
 using CorporateBankingApp.DTOs;
+using CorporateBankingApp.Enums;
 using CorporateBankingApp.Models;
 using CorporateBankingApp.Repositories;
 using CorporateBankingApp.Services;
@@ -185,54 +186,92 @@ namespace CorporateBankingApp.Controllers
         }
 
 
-
+        //*****************************************************payments*****************************************************
         // GET: PaymentApprovals
         public ActionResult PaymentApprovals()
         {
-            return View();
+            var pendingPayments = _adminService.GetPendingPaymentsByStatus(CompanyStatus.PENDING);
+            return View(pendingPayments);
         }
 
-
-        //razor pages
-        public ActionResult InitiatePayment(string amount)
+        [HttpPost]
+        public JsonResult ApprovePayments(List<Guid> disbursementIds)
         {
-            var key = ConfigurationManager.AppSettings["RazorPaykey"].ToString();
+            if (disbursementIds == null || !disbursementIds.Any())
+            {
+                return Json(new { success = false, message = "No payments selected for approval." });
+            }
 
-            var secret = ConfigurationManager.AppSettings["RazorPaySecret"].ToString();
-            RazorpayClient client = new RazorpayClient(key, secret);
-            Dictionary<string, object> options = new Dictionary<string, object>();
-            options.Add("amount", Convert.ToDecimal(amount) * 100);
-            options.Add("currency", "USD");
-            //Order order = client.Order.Create(options);
-            //ViewBag.orderId = order["id"].ToString();
-            return View("Payment");
-        }
-
-
-        public ActionResult Payment(string razorpay_payment_id, string razorpay_order_id, string razorpay_signature)
-        {
-            Dictionary<string, string> attributes = new Dictionary<string, string>();
-            attributes.Add("razorpay_payment_id", razorpay_payment_id);
-            attributes.Add("razorpay_order_id", razorpay_order_id);
-            attributes.Add("razorpay_signature", razorpay_signature);
             try
             {
-                //Utils.verifyPaymentSignature(attributes);
-                return View("PaymentSuccess");
+                _adminService.UpdatePaymentStatuses(disbursementIds, CompanyStatus.APPROVED);
+                return Json(new { success = true, message = "Payments approved successfully." });
             }
             catch (Exception ex)
             {
-                return View("PaymentFailure");
+                return Json(new { success = false, message = $"Error while approving payments: {ex.Message}" });
             }
-            return View();
+        }
+
+        // Reject payments
+        [HttpPost]
+        public JsonResult RejectPayments(List<Guid> disbursementIds)
+        {
+            if (disbursementIds == null || !disbursementIds.Any())
+            {
+                return Json(new { success = false, message = "No payments selected for rejection." });
+            }
+
+            try
+            {
+                _adminService.UpdatePaymentStatuses(disbursementIds, CompanyStatus.REJECTED);
+                return Json(new { success = true, message = "Payments rejected successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error while rejecting payments: {ex.Message}" });
+            }
+
+
+
         }
 
 
+
+
+
+        //*****************************************verify outbound clients*****************************************
         // GET: BeneficiaryManagement
         public ActionResult BeneficiaryManagement()
         {
             return View();
         }
+
+        public ActionResult GetOutboundBeneficiaryForVerification()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var urlHelper = new UrlHelper(Request.RequestContext); // Create UrlHelper here
+            var beneficiaryDtos = _adminService.GetBeneficiariesForVerification(urlHelper);
+            return Json(beneficiaryDtos, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateOutboundBeneficiaryOnboardingStatus(Guid id, string status)
+        {
+            var result = _adminService.UpdateOutboundBeneficiaryOnboardingStatus(id, status);
+            if (result)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Failed to update status" });
+            }
+        }
+
 
         // GET: SalaryDisbursementApprovals
         public ActionResult SalaryDisbursementApprovals()

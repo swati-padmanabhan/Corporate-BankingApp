@@ -2,6 +2,8 @@
 using CorporateBankingApp.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Net.Mail;
+using System.Net;
 
 namespace CorporateBankingApp.Services
 {
@@ -97,6 +99,27 @@ namespace CorporateBankingApp.Services
             string body = GenerateEmailTemplate(title, messageContent);
             _emailRepository.SendEmailNotification(clientEmail, title, body);
         }
+
+
+        public void SendClientOnboardingStatusEmail(string toEmail, string subject, string body)
+        {
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("apropayments@gmail.com"),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            };
+            mailMessage.To.Add(toEmail);
+            var smtpClient = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential("apropayments", "hxby ycrh efvw sclw"),
+                EnableSsl = true,
+            };
+            smtpClient.Send(mailMessage);
+        }
+
 
         public void SendSalaryDisbursementApprovalEmail(string clientEmail, EmployeeDTO employee, double salaryAmount, string month)
         {

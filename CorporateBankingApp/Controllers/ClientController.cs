@@ -20,11 +20,13 @@ namespace CorporateBankingApp.Controllers
     {
         private readonly IClientService _clientService;
         private readonly IBeneficiaryService _beneficiaryService;
+        private readonly IPaymentService _paymentService;
 
-        public ClientController(IClientService clientService, IBeneficiaryService beneficiaryService)
+        public ClientController(IClientService clientService, IBeneficiaryService beneficiaryService, IPaymentService paymentService)
         {
             _clientService = clientService;
             _beneficiaryService = beneficiaryService;
+            _paymentService = paymentService;
         }
 
         // GET: Client
@@ -427,16 +429,6 @@ namespace CorporateBankingApp.Controllers
         }
 
 
-
-        // GET: MakePaymentRequests
-        public ActionResult MakePaymentRequests()
-        {
-            // Retrieve beneficiaries stored in session
-            List<Beneficiary> paymentBeneficiaries = Session["PaymentBeneficiaries"] as List<Beneficiary> ?? new List<Beneficiary>();
-
-            return View(paymentBeneficiaries);
-        }
-
         //******************************************Salary Disbursement******************************************
 
         // GET: SalaryDisbursement
@@ -493,16 +485,69 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
-        // GET: UploadDocuments
-        public ActionResult UploadDocuments()
+
+        //*************************************************payments*************************************************
+        // GET: MakePaymentRequests
+        public ActionResult MakePaymentRequests()
         {
-            return View();
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            Guid clientId = (Guid)Session["UserId"];
+            var beneficiaryList = _clientService.GetBeneficiaryList(clientId);
+
+            if (beneficiaryList == null || !beneficiaryList.Any())
+            {
+                return Json(new { success = false, message = "No beneficiaries found" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var model = new BeneficiaryPaymentDTO
+            {
+                Amount = 0,  // Default amount
+                Beneficiaries = beneficiaryList
+            };
+            return View(model);
+
+        }
+        [HttpGet]
+        public ActionResult GetBeneficiaryListForPayment()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            Guid clientId = (Guid)Session["UserId"];
+            var beneficiaryList = _clientService.GetBeneficiaryList(clientId);
+
+            if (beneficiaryList == null || !beneficiaryList.Any())
+            {
+                return Json(new { success = false, message = "No beneficiaries found" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var paymentBeneficiaryDTO = new BeneficiaryPaymentDTO
+            {
+                Amount = 0,  // Default amount
+                Beneficiaries = beneficiaryList
+            };
+
+            return Json(new { success = true, data = paymentBeneficiaryDTO }, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: GenerateReports
-        public ActionResult GenerateReports()
-        {
-            return View();
+
+
+        // GET: UploadDocuments
+        public ActionResult UploadDocuments()
+            {
+                return View();
+            }
+
+            // GET: GenerateReports
+            public ActionResult GenerateReports()
+            {
+                return View();
+            }
         }
     }
-}

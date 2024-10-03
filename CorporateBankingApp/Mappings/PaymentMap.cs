@@ -9,14 +9,20 @@ namespace CorporateBankingApp.Mappings
         public PaymentMap()
         {
             Table("Payments");
-            Id(p => p.Id).GeneratedBy.GuidComb();
-            Map(x => x.ClientId);
-            Map(p => p.Amount).Not.Nullable();
-            Map(p => p.PaymentStatus).CustomType<CompanyStatus>().Not.Nullable();
-            Map(p => p.PaymentRequestDate).Not.Nullable();
-            Map(p => p.PaymentApprovalDate).Not.Nullable();
+            Id(x => x.Id).GeneratedBy.GuidComb();
+
+            Map(x => x.Amount).Not.Nullable();
+
+            Map(x => x.PaymentStatus).CustomType<CompanyStatus>().Not.Nullable();
+
+            Map(x => x.PaymentRequestDate).Not.Nullable();
+
+            Map(x => x.PaymentApprovalDate).Nullable();
+
             Map(x => x.RazorpayPaymentId);
-            References(p => p.Beneficiary).Column("BeneficiaryId").Cascade.None().Not.Nullable();
+            Map(x => x.ClientId);
+
+            References(x => x.Beneficiary).Column("BeneficiaryId").Cascade.None().Not.Nullable();
         }
     }
 }

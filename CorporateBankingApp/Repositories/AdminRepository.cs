@@ -174,5 +174,80 @@ namespace CorporateBankingApp.Repositories
                 }
             }
         }
+
+        //verify outbound beneficiary
+        public List<Beneficiary> GetPendingBeneficiaries()
+        {
+            var beneficiaries = _session.Query<Beneficiary>().FetchMany(c => c.Documents).Where(b => b.BeneficiaryStatus == CompanyStatus.PENDING && b.BeneficiaryType == BeneficiaryType.OUTBOUND).ToList();
+            return beneficiaries;
+        }
+        public Beneficiary GetBeneficiaryById(Guid id)
+        {
+            return _session.Get<Beneficiary>(id);
+        }
+        public void UpdateBeneficiary(Beneficiary beneficiary)
+        {
+            using (var transaction = _session.BeginTransaction())
+            {
+                _session.Update(beneficiary);
+                transaction.Commit();
+            }
+        }
+
+        //verify payments
+        public IEnumerable<PaymentDTO> GetPendingPaymentsByStatus(CompanyStatus status)
+        {
+            return _session.Query<Payment>()
+                .Where(x => x.PaymentStatus == status)
+                .Select(x => new PaymentDTO
+                {
+                    PaymentId = x.Id,
+                    CompanyName = x.Beneficiary.BeneficiaryName,
+                    AccountNumber = x.Beneficiary.AccountNumber,
+                    BeneficiaryType = x.Beneficiary.BeneficiaryType.ToString().ToUpper(),
+                    Amount = x.Amount,
+                    PaymentRequestDate = x.PaymentRequestDate
+                })
+                .ToList();
+        }
+
+        public void UpdatePaymentStatus(Guid paymentId, CompanyStatus status)
+        {
+            var payment = _session.Get<Payment>(paymentId);
+
+
+
+            if (payment != null)
+            {
+                payment.PaymentStatus = status;
+                if (status == CompanyStatus.APPROVED)
+                {
+                    payment.PaymentApprovalDate = DateTime.Now;
+                    var client = _session.Get<Client>(payment.ClientId);
+
+                    if (client != null)
+                    {
+                        client.Balance -= payment.Amount;
+                        _session.Update(client);
+                    }
+                }
+                _session.Update(payment);
+                _session.Flush(); // Save changes to the database
+            }
+        }
+
+        public Payment GetPaymentById(Guid id)
+        {
+            return _session.Query<Payment>().FirstOrDefault(p => p.Id == id);
+        }
+
+        public void UpdatePayment(Payment payment)
+        {
+            using (ITransaction transaction = _session.BeginTransaction())
+            {
+                _session.Update(payment);
+                transaction.Commit();
+            }
+        }
     }
 }

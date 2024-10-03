@@ -1,4 +1,5 @@
-﻿using CorporateBankingApp.Models;
+﻿using CorporateBankingApp.Enums;
+using CorporateBankingApp.Models;
 using NHibernate;
 using NHibernate.Linq;
 using System;
@@ -133,6 +134,15 @@ namespace CorporateBankingApp.Repositories
             var start = new DateTime(date.Year, date.Month, 1);
             var end = start.AddMonths(1);
             return (start, end);
+        }
+
+        //payments
+        public List<Beneficiary> GetBeneficiaryList(Guid clientId)
+        {
+            var beneficiaries = _session.Query<Beneficiary>().Where(b =>
+            (b.Client.Id == clientId && b.BeneficiaryStatus == CompanyStatus.APPROVED && b.BeneficiaryType == BeneficiaryType.OUTBOUND && b.IsActive == true)
+            || (b.BeneficiaryStatus == CompanyStatus.APPROVED && b.BeneficiaryType == BeneficiaryType.INBOUND && b.IsActive == true)).ToList();
+            return beneficiaries;
         }
     }
 }

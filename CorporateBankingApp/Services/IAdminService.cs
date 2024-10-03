@@ -1,4 +1,5 @@
 using CorporateBankingApp.DTOs;
+using CorporateBankingApp.Enums;
 using CorporateBankingApp.Models;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,14 @@ namespace CorporateBankingApp.Services
         IEnumerable<SalaryDisbursementDTO> ListPendingSalaryDisbursements();
         bool ApproveSalaryDisbursement(Guid salaryDisbursementId, bool isBatch = false);
         bool RejectSalaryDisbursement(Guid salaryDisbursementId, bool isBatch = false);
+
+        //payments
+        List<BeneficiaryDTO> GetBeneficiariesForVerification(UrlHelper urlHelper);
+        bool UpdateOutboundBeneficiaryOnboardingStatus(Guid id, string status);
+
+        //verify payment
+        IEnumerable<PaymentDTO> GetPendingPaymentsByStatus(CompanyStatus status);
+        void UpdatePaymentStatuses(List<Guid> paymentIds, CompanyStatus status);
 
     }
 }

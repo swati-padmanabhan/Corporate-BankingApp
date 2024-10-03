@@ -559,6 +559,7 @@
     <Content Include="obj\Debug\CorporateBankingApp.csproj.FileListAbsolute.txt" />
     <Content Include="obj\Debug\CorporateBankingApp.dll" />
     <Content Include="obj\Debug\CorporateBankingApp.pdb" />
+    <Content Include="Scripts\beneficiaryVerification.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -656,6 +657,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Data\NHibernateHelper.cs" />
     <Compile Include="DTOs\AdminDTO.cs" />
@@ -703,7 +705,9 @@
     <Compile Include="Repositories\IBeneficiaryRepository.cs" />
     <Compile Include="Repositories\IClientRepository.cs" />
     <Compile Include="Repositories\IEmailRepository.cs" />
+    <Compile Include="Repositories\IPaymentRepository.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />
+    <Compile Include="Repositories\PaymentRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Services\BeneficiaryService.cs" />
     <Compile Include="Services\ClientService.cs" />
@@ -713,9 +717,12 @@
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\IAdminService.cs" />
     <Compile Include="Services\IEmailService.cs" />
+    <Compile Include="Services\IPaymentService.cs" />
     <Compile Include="Services\IUserService.cs" />
+    <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\PasswordHashing.cs" />
+    <Compile Include="Utils\Utils.cs" />
     <Compile Include="WebRoleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -763,11 +770,13 @@
     <Content Include="Views\Client\UserProfile.cshtml" />
     <Content Include="Views\Client\EditClientRegistrationDetails.cshtml" />
     <Content Include="Views\Client\ManageBeneficiaries.cshtml" />
-    <Content Include="Views\Client\MakePaymentRequests.cshtml" />
     <Content Include="Views\Client\_EditBeneficiaryPartial.cshtml" />
     <Content Include="Views\Client\_AddBeneficiaryPartial.cshtml" />
     <Content Include="Views\User\Landing.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Admin\BeneficiaryManagement.cshtml" />
+    <Content Include="Views\Client\MakePaymentRequests.cshtml" />
+    <Content Include="Views\Admin\PaymentApprovals.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

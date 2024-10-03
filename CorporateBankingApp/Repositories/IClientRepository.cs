@@ -34,5 +34,7 @@ namespace CorporateBankingApp.Repositories
 
         SalaryDisbursement GetEmployeeSalaryDisbursement(Guid employeeId, DateTime currentDate);
 
+        List<Beneficiary> GetBeneficiaryList(Guid clientId);
+
     }
 }

@@ -9,6 +9,6 @@ namespace CorporateBankingApp.DTOs
     {
         public double Amount { get; set; }
 
-        public List<BeneficiaryDTO> Beneficiaries { get; set; }
+        public List<BeneficiaryDTO> Beneficiaries { get; set; } = new List<BeneficiaryDTO>();
     }
 }

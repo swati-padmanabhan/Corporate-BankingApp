@@ -30,5 +30,15 @@ namespace CorporateBankingApp.Repositories
         bool RejectSalaryDisbursement(Guid salaryDisbursementId);
 
         //bool ApproveSalaryDisbursement(Guid salaryDisbursementId, bool isBatch = false);
+
+        IEnumerable<PaymentDTO> GetPendingPaymentsByStatus(CompanyStatus status);
+
+        void UpdatePaymentStatus(Guid paymentId, CompanyStatus status);
+
+        void UpdateBeneficiary(Beneficiary beneficiary);
+
+        List<Beneficiary> GetPendingBeneficiaries();
+
+        Beneficiary GetBeneficiaryById(Guid id);
     }
 }

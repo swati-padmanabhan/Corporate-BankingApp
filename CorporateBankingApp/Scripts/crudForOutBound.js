@@ -3,16 +3,16 @@ function loadOutboundBeneficiaries() {
         url: "/Client/GetAllOutboundBeneficiaries",
         type: "GET",
         success: function (data) {
-            $("#beneficiaryTblBody").empty()
+            $("#beneficiaryTblBody").empty();
+            $("#warningNotice").hide(); // Hide the warning notice initially
+
             if (data.length > 0) {
                 $.each(data, function (index, item) {
-                    console.log(data)
                     var documentLinks = item.DocumentPaths.map(function (url) {
-                        var fileName = url.split('/').pop(); // Extract file name from URL
-                        return `<a href="#" class="document-link" data-url="${url}">${fileName}</a>`; // Include data-url
+                        var fileName = url.split('/').pop();
+                        return `<a href="#" class="document-link" data-url="${url}">${fileName}</a>`;
                     }).join("<br/> ");
 
-                    console.log(documentLinks)
                     var row = `<tr>
                         <td>${item.BeneficiaryName}</td>
                         <td>${item.AccountNumber}</td>
@@ -24,8 +24,8 @@ function loadOutboundBeneficiaries() {
                         </td>
                         <td>${documentLinks}</td>
                         <td class="editbeneficiary-btn-cell">
-                            <button onclick="editBeneficiary('${item.Id}')" class="btn btn-outline-dark edit-btn" style="${item.IsActive ? '' : 'display:none;'}">Edit</button>
-                        </td>
+        <i class="bi bi-pencil-square edit-icon" onclick="editBeneficiary('${item.Id}')" style="${item.IsActive ? '' : 'display:none;'}"></i>
+    </td>
                     </tr>`;
 
                     $("#beneficiaryTblBody").append(row);
@@ -37,15 +37,18 @@ function loadOutboundBeneficiaries() {
                     updateBeneficiaryStatus(beneficiaryId, isActive);
                 });
             } else {
-                $("#beneficiaryTblBody").append("<tr><td colspan='5'>No outbound beneficiaries found.</td></tr>");
+                $("#warningNotice").show(); // Show warning notice if no beneficiaries
             }
         },
         error: function (err) {
             $("#beneficiaryTblBody").empty();
-            alert("No data available");
+            $("#warningNotice").show(); // Show warning notice on error
+            console.error("Error fetching beneficiaries:", err);
         }
     });
 }
+
+
 
 
 $(document).on("click", ".document-link", function (e) {

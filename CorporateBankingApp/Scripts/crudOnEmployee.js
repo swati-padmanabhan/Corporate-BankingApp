@@ -17,6 +17,9 @@ function loadEmployees() {
                         <td>
                             <input type="checkbox" class="is-active-checkbox"
                                 data-employeeid="${employee.Id}"
+                                data-toggle="toggle" 
+                                data-onstyle="outline-danger" 
+                                data-offstyle="outline-warning"
                                 ${employee.IsActive ? "checked" : ""} />
                         </td>
                         <td>
@@ -24,10 +27,10 @@ function loadEmployees() {
                                 data-employeeid="${employee.Id}"
                                 data-salary="${employee.Salary}"
                                 ${employee.SalaryDisburseSelect ? "checked" : ""} 
-                                ${employee.IsActive ? "" : "disabled"} />
+                                style="${employee.IsActive ? '' : 'display:none'}" />
                         </td>
                         <td>
-                            <button onClick="editEmployee('${employee.Id}')" class="action-btn btn btn-secondary btn-sm" title="Edit" ${employee.IsActive ? "" : "disabled"}>
+                            <button onClick="editEmployee('${employee.Id}')" class="action-btn btn btn-secondary btn-sm" title="Edit" style="${employee.IsActive ? '' : 'display:none'}">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
                         </td>
@@ -59,7 +62,11 @@ function loadEmployees() {
                 // Initialize total salary on page load
                 updateTotalSalary();
             } else {
-                $("#employeeTable").append("<tr><td colspan='9' class='text-center'>No employees found.</td></tr>");
+                // Create and append alert for no employees found
+                var alertMessage = `<div class="alert alert-warning text-center" role="alert">
+                                      No employees found.
+                                    </div>`;
+                $("#employeeTable").append(`<tr><td colspan='9'>${alertMessage}</td></tr>`);
             }
         },
         error: function (err) {
@@ -67,12 +74,11 @@ function loadEmployees() {
         }
     });
 }
-
 function updateTotalSalary() {
     let totalSalary = 0;
     $(".is-SalaryDisbursed-checkbox:checked").each(function () {
         let employeeId = $(this).data("employeeid");
-        let salary = parseFloat($(this).data("salary")); // Get the salary from the data attribute
+        let salary = parseFloat($(this).data("salary"));
 
         // Check if the employee is active
         let isActive = $(".is-active-checkbox[data-employeeid='" + employeeId + "']").is(":checked");

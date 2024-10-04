@@ -15,6 +15,8 @@ namespace CorporateBankingApp.Services
 
         void EditClientRegistration(Client client, IList<HttpPostedFileBase> uploadedFiles);
 
+        bool EmailExists(string email);
+
         List<Employee> GetAllEmployees(Guid clientId);
 
         //Employee MapToEmployee(EmployeeDTO employeeDTO, Client client);

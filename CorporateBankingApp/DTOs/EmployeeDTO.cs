@@ -26,7 +26,7 @@ namespace CorporateBankingApp.DTOs
         [StringLength(20, ErrorMessage = "Designation cannot exceed 20 characters")]
         public string Designation { get; set; }
 
-        [Required(ErrorMessage = "Mobile is required")]
+        [Required(ErrorMessage = "Phone is required")]
         [RegularExpression(@"\d{10}", ErrorMessage = "Please enter 10 digit Phone No.")]
         public long Phone { get; set; }
 

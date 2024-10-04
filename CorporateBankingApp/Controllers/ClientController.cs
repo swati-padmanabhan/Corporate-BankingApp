@@ -272,7 +272,6 @@ namespace CorporateBankingApp.Controllers
 
             return Json(employeeDtos, JsonRequestBehavior.AllowGet);
         }
-
         public ActionResult Add(EmployeeDTO employeeDTO)
         {
             if (Session["UserId"] == null)
@@ -285,6 +284,21 @@ namespace CorporateBankingApp.Controllers
             if (client == null)
             {
                 return new HttpStatusCodeResult(400, "Client not found");
+            }
+
+            // Check if the model state is valid
+            if (!ModelState.IsValid)
+            {
+                // Get validation errors
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                               .Select(e => e.ErrorMessage)
+                                               .ToList();
+                return Json(new { success = false, message = "Validation failed.", errors }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (_clientService.EmailExists(employeeDTO.Email))
+            {
+                return Json(new { success = false, message = "Email already exists." }, JsonRequestBehavior.AllowGet);
             }
 
             employeeDTO.IsActive = true;
@@ -302,6 +316,7 @@ namespace CorporateBankingApp.Controllers
                 employeeDTO.IsActive
             });
         }
+
 
         public ActionResult GetEmployeeById(Guid id)
         {

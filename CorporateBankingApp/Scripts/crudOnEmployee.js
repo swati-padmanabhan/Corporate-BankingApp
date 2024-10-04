@@ -1,3 +1,8 @@
+$(document).ready(() => {
+    loadEmployees();
+});
+
+// Function to load employees from the server
 function loadEmployees() {
     $.ajax({
         url: "/Client/GetAllEmployees",
@@ -74,6 +79,8 @@ function loadEmployees() {
         }
     });
 }
+
+// Function to update total salary based on selected employees
 function updateTotalSalary() {
     let totalSalary = 0;
     $(".is-SalaryDisbursed-checkbox:checked").each(function () {
@@ -124,14 +131,79 @@ $('#disburseSalary').click(function () {
     }
 });
 
+// Function to add a new employee
 function addNewEmployee() {
+    // Clear previous error messages
+    $(".error-message").remove();
+
+    // Validate fields
+    var isValid = true;
+
+    // Validate First Name
+    var firstName = $("#firstName").val().trim();
+    if (!firstName) {
+        isValid = false;
+        $("#firstName").after('<span class="error-message" style="color:red;">First Name is required.</span>');
+    }
+
+    // Validate Last Name
+    var lastName = $("#lastName").val().trim();
+    if (!lastName) {
+        isValid = false;
+        $("#lastName").after('<span class="error-message" style="color:red;">Last Name is required.</span>');
+    }
+
+    // Validate Email
+    var email = $("#email").val().trim();
+    if (!email) {
+        isValid = false;
+        $("#email").after('<span class="error-message" style="color:red;">Email is required.</span>');
+    } else if (!validateEmail(email)) {
+        isValid = false;
+        $("#email").after('<span class="error-message" style="color:red;">Invalid email format.</span>');
+    }
+
+    // Validate Phone
+    var phone = $("#phone").val().trim();
+    var phonePattern = /^\d{10}$/;
+    if (!phone) {
+        $("#phone").after('<span class="error-message" style="color:red;">Phone number is required.</span>');
+        isValid = false;
+    } else if (!phonePattern.test(phone)) {
+        $("#phone").after('<span class="error-message" style="color:red;">Phone number must be exactly 10 digits.</span>');
+        isValid = false;
+    }
+
+    // Validate Designation
+    var designation = $("#designation").val().trim();
+    if (!designation) {
+        isValid = false;
+        $("#designation").after('<span class="error-message" style="color:red;">Designation is required.</span>');
+    }
+
+    // Validate Salary
+    var salary = $("#salary").val().trim();
+    if (!salary) {
+        isValid = false;
+        $("#salary").after('<span class="error-message" style="color:red;">Salary is required.</span>');
+    } else if (isNaN(salary) || salary <= 0) {
+        isValid = false;
+        $("#salary").after('<span class="error-message" style="color:red;">Salary must be a positive number.</span>');
+    }
+
+    // If any field is invalid, stop the submission
+    if (!isValid) {
+        return; // Stop further execution
+    }
+
+    // If all fields are valid, proceed with the AJAX call
     var newEmployee = {
-        FirstName: $("#firstName").val(),
-        LastName: $("#lastName").val(),
-        Email: $("#email").val(),
-        Phone: $("#phone").val(),
-        Designation: $("#designation").val(),
-        Salary: $("#salary").val(),
+        FirstName: firstName,
+        LastName: lastName,
+        Email: email,
+        Phone: phone,
+        Designation: designation,
+        Salary: salary,
     };
 
     $.ajax({
@@ -139,10 +211,14 @@ function addNewEmployee() {
         type: "POST",
         data: newEmployee,
         success: function (response) {
-            alert("New Employee Added Successfully");
-            loadEmployees();
-            $("#newRecord").hide();
-            $("#employeeList").show();
+            if (response.success) {
+                alert("New Employee Added Successfully");
+                loadEmployees();
+                $("#newRecord").hide();
+                $("#employeeList").show();
+            } else {
+                alert(response.message); // Handle validation errors from the server
+            }
         },
         error: function (err) {
             alert("Error Adding New Employee");
@@ -151,6 +227,14 @@ function addNewEmployee() {
     });
 }
 
+// Email validation function
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+
+// Function to get an employee's details for editing
 function getEmployee(employeeId) {
     $.ajax({
         url: "/Client/GetEmployeeById",
@@ -175,6 +259,7 @@ function getEmployee(employeeId) {
     });
 }
 
+// Function to modify an employee's record
 function modifyRecord(modifiedEmployee) {
     $.ajax({
         url: "/Client/Edit",
@@ -185,17 +270,20 @@ function modifyRecord(modifiedEmployee) {
                 alert("Employee Edited Successfully");
                 loadEmployees();
                 $("#employeeList").show();
-                $("#editEmployee").hide();
+                $("#editRecord").hide();
+                window.scrollTo(0, 0);
             } else {
                 alert(response.message);
             }
         },
         error: function (err) {
+            $("#employeeList").hide();
             alert("Error Editing Employee Record");
         }
     });
 }
 
+// Function to update an employee's active status
 function updateEmployeeStatus(employeeId, isActive) {
     $.ajax({
         url: "/Client/UpdateEmployeeStatus",
@@ -219,38 +307,44 @@ function updateEmployeeStatus(employeeId, isActive) {
         },
         error: function (err) {
             console.log("Error Updating Employee Status: ", err);
-        },
+        }
     });
 }
 
+// Function to show modal messages
 function showModal(type, header, message) {
     $(`#${type}Modal`).modal("show");
     $(`#${type}ModalLabel`).text(header);
     $(`#${type}ModalBody`).text(message);
 }
 
+// Event handler to add a new employee form
 $("#btnAdd").click(function () {
     $("#employeeList").hide();
     $("#newRecord").show();
 });
 
+// Event handler to edit employee
 function editEmployee(employeeId) {
     getEmployee(employeeId);
     $("#employeeList").hide();
     $("#editRecord").show();
 }
 
-$("#btnEdit").click(() => {
-    var data = {
-        Id: $("#editEmployeeId").val(),
-        FirstName: $("#newFirstName").val(),
-        LastName: $("#newLastName").val(),
-        Email: $("#newEmail").val(),
-        Phone: $("#newPhone").val(),
-        Designation: $("#newDesignation").val(),
-        Salary: $("#newSalary").val()
-    };
-    modifyRecord(data);
+
+// Event handler for save button on edit
+$("#btnEdit").click(function (event) {
+    event.preventDefault(); // Prevent form submission
+        var data = {
+            Id: $("#editEmployeeId").val(),
+            FirstName: $("#newFirstName").val(),
+            LastName: $("#newLastName").val(),
+            Email: $("#newEmail").val(),
+            Phone: $("#newPhone").val(),
+            Designation: $("#newDesignation").val(),
+            Salary: $("#newSalary").val()
+        };
+        modifyRecord(data); // Call the function to modify the record
 });
 
 // CSV file upload
@@ -280,8 +374,4 @@ $("#uploadCSVForm").on("submit", function (event) {
 // Optional: To reset the form when the modal is closed
 $('#uploadCSVModal').on('hidden.bs.modal', function () {
     $(this).find('form')[0].reset(); // Reset the form
-});
-
-$(document).ready(() => {
-    loadEmployees();
 });

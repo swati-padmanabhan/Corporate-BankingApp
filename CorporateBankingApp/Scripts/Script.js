@@ -38,22 +38,7 @@ function filterOutbound() {
   });
 }
 
-function searchUsers() {
-  const input = document.getElementById("searchInput");
-  const filter = input.value.toLowerCase();
-  const rows = document.querySelectorAll("tbody tr");
 
-  rows.forEach((row) => {
-    const nameCell = row
-      .querySelector("td:nth-child(1) p")
-      .textContent.toLowerCase(); // Adjust index if necessary
-    if (nameCell.includes(filter)) {
-      row.style.display = ""; // Show the row if it matches
-    } else {
-      row.style.display = "none"; // Hide the row if it doesn't match
-    }
-  });
-}
 
 // user detail page --> search filter
 function filterTable(columnIndex) {

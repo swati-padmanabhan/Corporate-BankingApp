@@ -18,11 +18,11 @@ function loadOutboundBeneficiaries() {
         }
     });
 }
-function renderTable(page) {
+function renderTable(page, data = beneficiariesData) {
     $("#beneficiaryTblBody").empty();
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
-    const paginatedData = beneficiariesData.slice(start, end);
+    const paginatedData = data.slice(start, end);
 
     if (paginatedData.length > 0) {
         $.each(paginatedData, function (index, item) {
@@ -91,7 +91,30 @@ function setupPagination() {
 }
 function loadPage(page) {
     currentPage = page;
+    setupPagination()
     renderTable(currentPage);
+}
+
+function searchUsers() {
+    const searchTerm = $('#searchInput').val().toLowerCase(); // Get the search term
+    console.log(searchTerm)
+    const filteredData = beneficiariesData.filter(item => {
+
+        return (
+            item.BeneficiaryName.toLowerCase().includes(searchTerm) ||
+            item.AccountNumber.toLowerCase().includes(searchTerm) ||
+            item.BankIFSC.toLowerCase().includes(searchTerm)
+        );
+    });
+    console.log(filteredData)
+
+
+// Reset to the first page after filtering
+currentPage = 1;
+
+// Render the filtered data
+renderTable(currentPage, filteredData);
+setupPagination(filteredData.length);
 }
 function updateBeneficiaryStatus(beneficiaryId, isActive) {
     $.ajax({
@@ -210,25 +233,71 @@ function addNewBeneficiary() {
 
 
 function saveBeneficiaryChanges() {
+    // Clear previous error messages
+    $(".error-message").remove();
+
+    // Validate fields
+    var isValid = true;
+
+    // Validate Beneficiary ID
+    var beneficiaryId = $("#editBeneficiaryId").val();
+    if (!beneficiaryId) {
+        isValid = false;
+        $("#editBeneficiaryId").after('<span class="error-message" style="color:red;">Beneficiary ID is required.</span>');
+    }
+
+    // Validate Beneficiary Name
+    var beneficiaryName = $("#editBeneficiaryName").val();
+    if (!beneficiaryName) {
+        isValid = false;
+        $("#editBeneficiaryName").after('<span class="error-message" style="color:red;">Beneficiary Name is required.</span>');
+    }
+
+    // Validate Account Number
+    var accountNumber = $("#editAccountNumber").val();
+    var accountNumberPattern = /^\d{12}$/; // Exactly 12 digits
+    if (!accountNumber || !accountNumberPattern.test(accountNumber)) {
+        isValid = false;
+        $("#editAccountNumber").after('<span class="error-message" style="color:red;">Account Number must be exactly 12 digits.</span>');
+    }
+
+    // Validate Bank IFSC
+    var bankIFSC = $("#editBankIFSC").val();
+    var bankIFSCPattern = /^[A-Z]{4}0[A-Z0-9]{6}$/; // Adjust based on your requirement
+    if (!bankIFSC || !bankIFSCPattern.test(bankIFSC)) {
+        isValid = false;
+        $("#editBankIFSC").after('<span class="error-message" style="color:red;">Invalid Bank IFSC format.</span>');
+    }
+
+    // Validate File Inputs
+    var addressProofInput = $("#newAddressProof")[0];
+    var idProofInput = $("#newIdProof")[0];
+
+    var idProofFile = idProofInput.files[0];
+    if (!idProofFile) {
+        isValid = false;
+        $("#newIdProof").after('<span class="error-message" style="color:red;">Beneficiary ID Proof is required.</span>');
+    }
+
+    var addressProofFile = addressProofInput.files[0];
+    if (!addressProofFile) {
+        isValid = false;
+        $("#newAddressProof").after('<span class="error-message" style="color:red;">Beneficiary Address Proof is required.</span>');
+    }
+
+    // If any field is invalid, stop the submission
+    if (!isValid) {
+        return; // Stop further execution
+    }
+
+    // If all fields are valid, proceed with form submission
     var formData = new FormData();
-
-    // Gather form data
-    formData.append("Id", $("#editBeneficiaryId").val());
-    formData.append("BeneficiaryName", $("#editBeneficiaryName").val());
-    formData.append("AccountNumber", $("#editAccountNumber").val());
-    formData.append("BankIFSC", $("#editBankIFSC").val());
-
-    // Handle file inputs for ID proof and address proof
-    var addressProofInput = $("#newAddressProof")[0]; // Change to correct input ID
-    var idProofInput = $("#newIdProof")[0]; // Change to correct input ID
-
-    var idProofFile = idProofInput.files[0]; // Access the first file
-    formData.append("newIdProof", idProofFile); // Append the file to FormData
-
-
-    var addressProofFile = addressProofInput.files[0]; // Access the first file
-    formData.append("newAddressProof", addressProofFile); // Append the file to FormData
-
+    formData.append("Id", beneficiaryId);
+    formData.append("BeneficiaryName", beneficiaryName);
+    formData.append("AccountNumber", accountNumber);
+    formData.append("BankIFSC", bankIFSC);
+    formData.append("newIdProof", idProofFile);
+    formData.append("newAddressProof", addressProofFile);
 
     // Send the form data with AJAX
     modifyBeneficiary(formData);

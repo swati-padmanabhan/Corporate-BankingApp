@@ -9,60 +9,60 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => model.Id, new { id = "editBeneficiaryId" })
 
-            <div class="form-horizontal">
-                @* Common Fields *@
-                <div class="form-group">
-                    @Html.LabelFor(model => model.BeneficiaryName, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                    <span class="required-asterisk">*</span>
-                    <div class="col-md-8">
-                        @Html.EditorFor(model => model.BeneficiaryName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Beneficiary Name", id = "editBeneficiaryName" } })
-                        @Html.ValidationMessageFor(model => model.BeneficiaryName, "", new { @class = "text-danger" })
+                <div class="form-horizontal">
+                    @* Common Fields *@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BeneficiaryName, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        <span class="required-asterisk">*</span>
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.BeneficiaryName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Beneficiary Name", id = "editBeneficiaryName" } })
+                            @Html.ValidationMessageFor(model => model.BeneficiaryName, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                    <span class="required-asterisk">*</span>
-                    <div class="col-md-8">
-                        @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Account Number", id = "editAccountNumber" } })
-                        @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        <span class="required-asterisk">*</span>
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Account Number", id = "editAccountNumber" } })
+                            @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.BankIFSC, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                    <span class="required-asterisk">*</span>
-                    <div class="col-md-8">
-                        @Html.EditorFor(model => model.BankIFSC, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Bank IFSC", id = "editBankIFSC" } })
-                        @Html.ValidationMessageFor(model => model.BankIFSC, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BankIFSC, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        <span class="required-asterisk">*</span>
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.BankIFSC, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Bank IFSC", id = "editBankIFSC" } })
+                            @Html.ValidationMessageFor(model => model.BankIFSC, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
 
-                @* File Inputs *@
-                <div class="form-group">
-                    @Html.LabelFor(model => model.BeneficiaryIdProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                    <span class="required-asterisk">*</span>
-                    <div class="col-md-8">
-                        <input type="file" name="newIdProof" class="form-control mb-4" id="newIdProof" />
-                        @Html.ValidationMessageFor(model => model.BeneficiaryIdProof, "", new { @class = "text-danger" })
+                    @* File Inputs *@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BeneficiaryIdProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        <span class="required-asterisk">*</span>
+                        <div class="col-md-8">
+                            <input type="file" name="newIdProof" class="form-control mb-4" id="newIdProof" />
+                            @Html.ValidationMessageFor(model => model.BeneficiaryIdProof, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.BeneficiaryAddressProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                    <span class="required-asterisk">*</span>
-                    <div class="col-md-8">
-                        <input type="file" name="newAddressProof" class="form-control mb-4" id="newAddressProof" />
-                        @Html.ValidationMessageFor(model => model.BeneficiaryAddressProof, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BeneficiaryAddressProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        <span class="required-asterisk">*</span>
+                        <div class="col-md-8">
+                            <input type="file" name="newAddressProof" class="form-control mb-4" id="newAddressProof" />
+                            @Html.ValidationMessageFor(model => model.BeneficiaryAddressProof, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group row">
-                    <div class="col-md-12 text-center">
-                        <input type="button" value="Save Changes" class="btn primary-bg text-white edit-save" onclick="saveBeneficiaryChanges()" />
+                    <div class="form-group row">
+                        <div class="col-md-12 text-center">
+                            <input type="button" value="Save Changes" class="btn primary-bg text-white edit-save" onclick="saveBeneficiaryChanges()" />
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>

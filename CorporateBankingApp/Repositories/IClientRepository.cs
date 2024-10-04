@@ -13,6 +13,8 @@ namespace CorporateBankingApp.Repositories
 
         void EditClientRegistration(Client client);
 
+        bool EmailExists(string email);
+
         List<Employee> GetAllEmployees(Guid clientId);
 
         void AddEmployeeDetails(Employee employee);

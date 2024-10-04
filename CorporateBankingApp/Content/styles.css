@@ -462,14 +462,6 @@ body {
 
 /*button*/
 
-#btnAddBeneficiary:hover {
-    background-color: var(--primary-color);
-}
-
-#addBeneficiaryButton:hover {
-    background-color: var(--primary-color);
-}
-
 
 .edit-save:hover {
     background-color: var(--primary-color);
@@ -481,3 +473,8 @@ body {
     font-weight: bold; /* Makes it bold */
     font-size: 1.5em; /* Adjust size as needed */
 }
+
+.btn.primary-bg:hover{
+    background-color: #3e346a;
+}
+

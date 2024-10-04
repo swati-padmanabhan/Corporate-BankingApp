@@ -161,6 +161,12 @@ namespace CorporateBankingApp.Services
 
         //*******************************************Employee*******************************************
 
+
+        public bool EmailExists(string email)
+        {
+            return _clientRepository.EmailExists(email);
+        }
+
         public void AddEmployeeDetails(EmployeeDTO employeeDTO, Client client)
         {
             var employee = new Employee

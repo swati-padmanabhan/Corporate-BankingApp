@@ -43,6 +43,11 @@ namespace CorporateBankingApp.Repositories
         }
 
         //*******************************************Employee*******************************************
+        public bool EmailExists(string email)
+        {
+            return _session.Query<Employee>().Any(e => e.Email == email);
+        }
+
         public void AddEmployeeDetails(Employee employee)
         {
             using (var transaction = _session.BeginTransaction())

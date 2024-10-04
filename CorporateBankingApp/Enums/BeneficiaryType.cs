@@ -2,7 +2,7 @@
 {
     public enum BeneficiaryType
     {
-        INBOUND,
-        OUTBOUND
+        INBOUND=1,
+        OUTBOUND=2
     }
 }

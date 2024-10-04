@@ -1,14 +1,94 @@
 ﻿@{
-    ViewBag.Title = "GenerateReports";
+    ViewBag.Title = "Generate Reports";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Generate Reports</h2>
-<h2>What do you wish to do? </h2>
 
-<td>
-    <a href="@Url.Action("EmployeeReport", "Report")" class="btn btn-primary">View Employees</a>
-</td>
-<td>
-    <a href="@Url.Action("BeneficiaryReport", "Report")" class="btn btn-primary">View Beneficiaries</a>
-</td>
+<style>
+    /* Styles for the Generate Reports page */
+    .container {
+        max-width: 800px; /* Set a maximum width for the container */
+        margin: 0 auto; /* Center the container */
+        padding: 20px; /* Add padding to the container */
+    }
+
+    h2 {
+        text-align: center; /* Center align the main heading */
+        margin-bottom: 10px; /* Space below the main heading */
+        font-size: 2em; /* Larger font size for the main heading */
+    }
+
+    h3 {
+        text-align: center; /* Center align the subheading */
+        margin-bottom: 20px; /* Space below the subheading */
+        font-size: 1.5em; /* Slightly larger subheading font size */
+    }
+
+    .card-container {
+        display: flex;
+        justify-content: space-around; /* Space between cards */
+        margin-top: 20px; /* Space above the card container */
+        flex-wrap: wrap; /* Allow cards to wrap */
+    }
+
+    .card {
+        background-color: #f8f9fa; /* Light background for cards */
+        border: 1px solid #ced4da; /* Light border for cards */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        padding: 20px; /* Padding inside the card */
+        width: 300px; /* Fixed width for each card */
+        text-align: center; /* Center align text inside cards */
+        margin: 10px; /* Space between cards */
+    }
+
+        .card h4 {
+            margin-bottom: 15px; /* Space below card title */
+            font-size: 1.25em; /* Slightly larger card title font size */
+        }
+
+        .card p {
+            margin-bottom: 20px; /* Space below card description */
+            color: #6c757d; /* Gray color for the description */
+        }
+
+        .card .btn {
+            padding: 10px 15px; /* Increased button padding */
+            font-size: 16px; /* Larger font size for buttons */
+            text-decoration: none; /* Remove underline from links */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s, transform 0.3s; /* Smooth transitions for hover effects */
+            display: inline-block; /* Ensure button is inline-block */
+        }
+
+
+
+        .card .btn-primary {
+            background-color: #6f42c1; /* Violet color */
+            color: white; /* White text */
+            border: none; /* Remove border */
+        }
+
+            /* Hover effects for buttons */
+            .card .btn-primary:hover {
+                background-color: #5a3e9b; /* Darker purple on hover */
+                transform: translateY(-2px); /* Slight lift effect */
+            }
+</style>
+<div class="container">
+    <h2>Generate Reports</h2>
+    <h3>What do you wish to do?</h3>
+
+    <div class="card-container">
+        <div class="card">
+            <h4>Employee Reports</h4>
+            <p>View and manage employee details and reports.</p>
+            <a href="@Url.Action("EmployeeReport", "Report")" class="btn btn-primary">View Employees</a>
+        </div>
+        <div class="card">
+            <h4>Beneficiary Reports</h4>
+            <p>View and manage beneficiary details and reports.</p>
+            <a href="@Url.Action("BeneficiaryReport", "Report")" class="btn btn-primary">View Beneficiaries</a>
+        </div>
+    </div>
+</div>

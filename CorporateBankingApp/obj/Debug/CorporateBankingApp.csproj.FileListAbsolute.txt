@@ -576,3 +576,7 @@ C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\Corpora
 C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\obj\Debug\Corporat.7A9EF9E2.Up2Date
 C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\obj\Debug\CorporateBankingApp.dll
 C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\obj\Debug\CorporateBankingApp.pdb
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\BouncyCastle.Cryptography.dll
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\itextsharp.dll
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\BouncyCastle.Cryptography.xml
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\itextsharp.xml

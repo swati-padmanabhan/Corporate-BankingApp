@@ -114,7 +114,7 @@ function addNewBeneficiary() {
     // Append file inputs
     var addressProofFile = $("#BeneficiaryAddressProof")[0].files[0];
     var idProofFile = $("#BeneficiaryIdProof")[0].files[0];
- 
+
 
 
     formData.append("uploadedDocs1", idProofFile);
@@ -151,7 +151,7 @@ function saveBeneficiaryChanges() {
     // Handle file inputs for ID proof and address proof
     var addressProofInput = $("#newAddressProof")[0]; // Change to correct input ID
     var idProofInput = $("#newIdProof")[0]; // Change to correct input ID
-   
+
     var idProofFile = idProofInput.files[0]; // Access the first file
     formData.append("newIdProof", idProofFile); // Append the file to FormData
 

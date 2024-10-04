@@ -465,3 +465,15 @@ body {
 #btnAddBeneficiary:hover {
     background-color: var(--primary-color);
 }
+
+#addBeneficiaryButton:hover {
+    background-color: var(--primary-color);
+}
+
+
+.edit-save:hover {
+    background-color: var(--primary-color);
+}
+
+
+

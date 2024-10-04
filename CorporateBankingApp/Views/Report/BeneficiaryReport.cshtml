@@ -7,7 +7,54 @@
 
 <h2>Beneficiary Report</h2>
 
-<
+<style>
+    .container {
+        margin-top: 30px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Table styling */
+    table.table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        background-color: #fff; /* White background for contrast */
+    }
+
+        /* Table header */
+        table.table thead th {
+            background-color: #720e9e;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Table body rows */
+        table.table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+            table.table tbody tr:nth-child(even) {
+                background-color: #f3f3f3; /* Light grey for alternating rows */
+            }
+
+            table.table tbody tr:hover {
+                background-color: #e1d9f0; /* Light purple hover effect */
+            }
+
+        /* Table body cells */
+        table.table tbody td {
+            padding: 12px 15px;
+            text-align: center;
+            color: #333;
+        }
+</style>
 <table class="table">
     <thead>
         <tr>
@@ -23,7 +70,7 @@
         </tr>
     </thead>
     <tbody>
-        <
+
 
         @foreach (var item in Model)
         {
@@ -38,23 +85,19 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.BankIFSC)
                 </td>
-                <td>
+
                 <td>@item.BeneficiaryStatus.ToString()</td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Amount)
                 </td>
-                @*<td>
-                                @Html.DisplayFor(modelItem => item.PaymentRequestDate)
-                    </td>
-                    <td>
-                                @Html.DisplayFor(modelItem => item.PaymentApprovalDate)
-                    </td>*@
-                <td>@item.PaymentRequestDate?.ToString("dd/MM/yyyy")</td>
-                <td>@item.PaymentApprovalDate?.ToString("dd/MM/yyyy")</td>
-                <td>@item.PaymentStatus?.ToString()</td>
+
+                <td>@item.PaymentRequestDate</td>
+                <td>@item.PaymentApprovalDate</td>
+                <td>@item.PaymentStatus</td>
 
             </tr>
         }
     </tbody>
 
 </table>
+<a href="@Url.Action("DownloadBeneficiaryReport", "Report")" class="btn primary-bg text-white">Download PDF</a>

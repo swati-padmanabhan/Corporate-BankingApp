@@ -1,82 +1,105 @@
 ﻿@model IEnumerable<CorporateBankingApp.DTOs.EmployeeReportDTO>
 
 @{
-    ViewBag.Title = "EmployeeReport";
+    ViewBag.Title = "Employee Report";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Employee Report</h2>
+<style>
+    .container {
+        margin-top: 30px;
+        font-family: 'Arial', sans-serif;
+    }
 
+    /* Table styling */
+    table.table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        background-color: #fff; /* White background for contrast */
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Designation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Salary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DisbursementDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SalaryStatus)
-            </th>
-
-        </tr>
-    </thead>
-    <tbody>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Designation)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Salary)
-                </td>
-                <td>
-                    @if (item.DisbursementDate.HasValue)
-                    {
-                        @item.DisbursementDate.Value.ToString("dd/MM/yyyy")
-                    }
-                    else
-                    {
-                        <span>No disbursements</span>
-                    }
-                </td>
-                <td>
-                    @if (item.SalaryStatus.HasValue)
-                    {
-                        @item.SalaryStatus.Value.ToString()
-                    }
-                    else
-                    {
-                        <span>No status</span>
-                    }
-                </td>
-            </tr>
+        /* Table header */
+        table.table thead th {
+            background-color: #720e9e;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
         }
-    </tbody>
 
-</table>
+        /* Table body rows */
+        table.table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+            table.table tbody tr:nth-child(even) {
+                background-color: #f3f3f3; /* Light grey for alternating rows */
+            }
+
+            table.table tbody tr:hover {
+                background-color: #e1d9f0; /* Light purple hover effect */
+            }
+
+        /* Table body cells */
+        table.table tbody td {
+            padding: 12px 15px;
+            text-align: center;
+            color: #333;
+        }
+</style>
+<div class="container">
+    <h2>Employee Report</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+                <th>@Html.DisplayNameFor(model => model.LastName)</th>
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                <th>@Html.DisplayNameFor(model => model.Designation)</th>
+                <th>@Html.DisplayNameFor(model => model.Salary)</th>
+                <th>@Html.DisplayNameFor(model => model.DisbursementDate)</th>
+                <th>@Html.DisplayNameFor(model => model.SalaryStatus)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td data-label="First Name">@Html.DisplayFor(modelItem => item.FirstName)</td>
+                    <td data-label="Last Name">@Html.DisplayFor(modelItem => item.LastName)</td>
+                    <td data-label="Email">@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td data-label="Designation">@Html.DisplayFor(modelItem => item.Designation)</td>
+                    <td data-label="Salary">@Html.DisplayFor(modelItem => item.Salary)</td>
+                    <td data-label="Disbursement Date">
+                        @if (item.DisbursementDate.HasValue)
+                        {
+                            @item.DisbursementDate.Value.ToString("dd/MM/yyyy")
+                        }
+                        else
+                        {
+                            <span>No disbursements</span>
+                        }
+                    </td>
+                    <td data-label="Salary Status">
+                        @if (item.SalaryStatus.HasValue)
+                        {
+                            @item.SalaryStatus.Value.ToString()
+                        }
+                        else
+                        {
+                            <span>No status</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="@Url.Action("DownloadEmployeeReport", "Report")" class="btn primary-bg text-white">Download PDF</a>
+</div>

@@ -16,6 +16,6 @@ namespace CorporateBankingApp.DTOs
         public double Salary { get; set; }
 
         public DateTime? DisbursementDate { get; set; }
-        public CompanyStatus? SalaryStatus { get; set; } // Optional, based on your requirements
+        public CompanyStatus? SalaryStatus { get; set; }
     }
 }

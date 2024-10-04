@@ -32,8 +32,7 @@ namespace CorporateBankingApp.Controllers
         // GET: Client
         public ActionResult Index()
         {
-            var username = User.Identity.Name;
-            ViewBag.Username = username;
+            ViewBag.Username = User.Identity.Name;
             return View();
         }
 
@@ -63,18 +62,18 @@ namespace CorporateBankingApp.Controllers
             return View(clientDto);
         }
 
-        //*******************************************Client reupload documents*******************************************
+        // Edit Client Registration Details
         public ActionResult EditClientRegistrationDetails()
         {
             if (Session["UserId"] == null)
             {
                 return RedirectToAction("Login", "User");
             }
+
             Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
             var clientDTO = new ClientDTO
             {
-                //UserName = client.UserName,
                 Email = client.Email,
                 CompanyName = client.CompanyName,
                 Location = client.Location,
@@ -91,6 +90,7 @@ namespace CorporateBankingApp.Controllers
             };
             return View(clientDTO);
         }
+
         [HttpPost]
         public ActionResult EditClientRegistrationDetails(ClientDTO clientDTO)
         {
@@ -100,7 +100,6 @@ namespace CorporateBankingApp.Controllers
             }
 
             Guid clientId = (Guid)Session["UserId"];
-
             var client = _clientService.GetClientById(clientId);
             client.Email = clientDTO.Email;
             client.CompanyName = clientDTO.CompanyName;
@@ -110,33 +109,22 @@ namespace CorporateBankingApp.Controllers
             client.ClientIFSC = clientDTO.ClientIFSC;
             client.Balance = clientDTO.Balance;
             client.OnBoardingStatus = CompanyStatus.PENDING;
-            var uploadedFiles = new List<HttpPostedFileBase>();
 
-            var companyIdProof = Request.Files["uploadedFiles1"];
-            var addressProof = Request.Files["uploadedFiles2"];
-
-            if (companyIdProof != null && companyIdProof.ContentLength > 0)
+            var uploadedFiles = new List<HttpPostedFileBase>
             {
-                uploadedFiles.Add(companyIdProof);
-            }
-
-            if (addressProof != null && addressProof.ContentLength > 0)
-            {
-                uploadedFiles.Add(addressProof);
-            }
+                Request.Files["uploadedFiles1"],
+                Request.Files["uploadedFiles2"]
+            }.Where(file => file != null && file.ContentLength > 0).ToList();
 
             _clientService.EditClientRegistration(client, uploadedFiles);
-
             return RedirectToAction("Index");
         }
-
 
         [HttpPost]
         public ActionResult UpdateBalance(double newBalance)
         {
             Guid clientId = (Guid)Session["UserId"];
 
-            // Validate the new balance, if necessary
             if (newBalance < 0)
             {
                 ModelState.AddModelError("Balance", "Balance cannot be negative.");
@@ -148,12 +136,8 @@ namespace CorporateBankingApp.Controllers
             return RedirectToAction("UserProfile");
         }
 
-
-        // GET: ManageBeneficiaries
-        public ActionResult ManageBeneficiaries()
-        {
-            return View();
-        }
+        // Manage Beneficiaries
+        public ActionResult ManageBeneficiaries() => View();
 
         public ActionResult GetAllOutboundBeneficiaries()
         {
@@ -161,15 +145,28 @@ namespace CorporateBankingApp.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
+
             Guid clientId = (Guid)Session["UserId"];
-            var urlHelper = new UrlHelper(Request.RequestContext); // Create UrlHelper here
+            var urlHelper = new UrlHelper(Request.RequestContext);
             var beneficiaries = _beneficiaryService.GetAllOutboundBeneficiaries(clientId, urlHelper);
             return Json(beneficiaries, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult InboundBeneficiaries()
+        {
+            using (var session = NHibernateHelper.CreateSession())
+            {
+                var inboundBeneficiaries = session.Query<Beneficiary>()
+                    .Where(b => b.BeneficiaryType == BeneficiaryType.INBOUND)
+                    .ToList();
+
+                return View(inboundBeneficiaries);
+            }
+        }
+
         public ActionResult UpdateBeneficiaryStatus(Guid id, bool isActive)
         {
             Guid clientId = (Guid)Session["UserId"];
-            var client = _clientService.GetClientById(clientId);
             _beneficiaryService.UpdateBeneficiaryStatus(id, isActive);
             return Json(new { success = true });
         }
@@ -187,21 +184,13 @@ namespace CorporateBankingApp.Controllers
             {
                 return new HttpStatusCodeResult(400, "Client not found");
             }
-            var uploadedFiles = new List<HttpPostedFileBase>();
 
-            var idProof = Request.Files["uploadedDocs1"];
-            var addressProof = Request.Files["uploadedDocs2"];
-
-
-            if (idProof != null && idProof.ContentLength > 0)
+            var uploadedFiles = new List<HttpPostedFileBase>
             {
-                uploadedFiles.Add(idProof);
-            }
+                Request.Files["uploadedDocs1"],
+                Request.Files["uploadedDocs2"]
+            }.Where(file => file != null && file.ContentLength > 0).ToList();
 
-            if (addressProof != null && addressProof.ContentLength > 0)
-            {
-                uploadedFiles.Add(addressProof);
-            }
             _beneficiaryService.AddNewBeneficiary(beneficiaryDTO, client, uploadedFiles);
             return Json(new { success = true });
         }
@@ -231,48 +220,33 @@ namespace CorporateBankingApp.Controllers
                 }
             }, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult EditBeneficiary(BeneficiaryDTO beneficiaryDTO)
         {
             if (Session["UserId"] == null)
             {
                 return new HttpStatusCodeResult(401, "Unauthorized");
             }
+
             Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
-
             if (client == null)
             {
                 return new HttpStatusCodeResult(400, "Client not found");
             }
-            //var existingBeneficiary = _beneficiaryService.GetBeneficiaryById(beneficiaryDTO.Id);
-            var uploadedFiles = new List<HttpPostedFileBase>();
 
-            var idProof = Request.Files["newIdProof"];
-            var addressProof = Request.Files["newAddressProof"];
-
-
-            if (idProof != null && idProof.ContentLength > 0)
+            var uploadedFiles = new List<HttpPostedFileBase>
             {
-                uploadedFiles.Add(idProof);
-            }
+                Request.Files["newIdProof"],
+                Request.Files["newAddressProof"]
+            }.Where(file => file != null && file.ContentLength > 0).ToList();
 
-            if (addressProof != null && addressProof.ContentLength > 0)
-            {
-                uploadedFiles.Add(addressProof);
-            }
             _beneficiaryService.UpdateBeneficiary(beneficiaryDTO, client, uploadedFiles);
             return Json(new { success = true, message = "Beneficiary updated successfully" });
         }
 
-
-
-        //******************************************Employee Management******************************************
-
-        // GET: ManageEmployees
-        public ActionResult ManageEmployees()
-        {
-            return View();
-        }
+        // Manage Employees
+        public ActionResult ManageEmployees() => View();
 
         public ActionResult GetAllEmployees()
         {
@@ -299,9 +273,7 @@ namespace CorporateBankingApp.Controllers
             return Json(employeeDtos, JsonRequestBehavior.AllowGet);
         }
 
-
-
-        public ActionResult Add(EmployeeDTO employeeDTO) //employeedto
+        public ActionResult Add(EmployeeDTO employeeDTO)
         {
             if (Session["UserId"] == null)
             {
@@ -310,14 +282,12 @@ namespace CorporateBankingApp.Controllers
 
             Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
-
             if (client == null)
             {
                 return new HttpStatusCodeResult(400, "Client not found");
             }
-            employeeDTO.IsActive = true;
-            //employeedto.Client = client;
 
+            employeeDTO.IsActive = true;
             _clientService.AddEmployeeDetails(employeeDTO, client);
 
             return Json(new
@@ -331,13 +301,10 @@ namespace CorporateBankingApp.Controllers
                 employeeDTO.Salary,
                 employeeDTO.IsActive
             });
-
         }
-
 
         public ActionResult GetEmployeeById(Guid id)
         {
-
             var employee = _clientService.GetEmployeeById(id);
             if (employee == null)
             {
@@ -367,45 +334,38 @@ namespace CorporateBankingApp.Controllers
             {
                 return new HttpStatusCodeResult(401, "Unauthorized");
             }
+
             Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
-
             if (client == null)
             {
                 return new HttpStatusCodeResult(400, "Client not found");
             }
-            // employeeDto.Client = client;
-            _clientService.UpdateEmployeeDetails(employeeDTO, client);
 
+            _clientService.UpdateEmployeeDetails(employeeDTO, client);
             return Json(new { success = true, message = "Employee updated successfully" });
         }
-
 
         [HttpPost]
         public ActionResult UpdateEmployeeStatus(Guid id, bool isActive)
         {
             Guid clientId = (Guid)Session["UserId"];
-            var client = _clientService.GetClientById(clientId);
             _clientService.UpdateEmployeeStatus(id, isActive);
             return Json(new { success = true });
         }
 
-
-        //************************************Employee CSV************************************
+        // Upload CSV
         [HttpPost]
         public ActionResult UploadCsv()
         {
-            var file = new List<HttpPostedFileBase>();
-
             var csvFile = Request.Files["csvFile"];
-
             if (Session["UserId"] == null)
             {
                 return new HttpStatusCodeResult(401, "Unauthorized");
             }
+
             Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
-
             if (client == null)
             {
                 return new HttpStatusCodeResult(400, "Client not found");
@@ -413,30 +373,20 @@ namespace CorporateBankingApp.Controllers
 
             if (csvFile != null && csvFile.ContentLength > 0)
             {
-                file.Add(csvFile);
+                try
+                {
+                    _clientService.UploadEmployeeCsv(csvFile, client);
+                    return RedirectToAction("ManageEmployees");
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = ex.Message });
+                }
             }
-
-            try
-            {
-                _clientService.UploadEmployeeCsv(csvFile, client);
-                //return Json(new { success = true, message = "CSV uploaded and employees added successfully." });
-                return RedirectToAction("ManageEmployees");
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
+            return Json(new { success = false, message = "No file uploaded." });
         }
 
-
-        //******************************************Salary Disbursement******************************************
-
-        // GET: SalaryDisbursement
-        //public ActionResult SalaryDisbursement()
-        //{
-        //    return View();
-        //}
-
+        // Salary Disbursement
         [HttpPost]
         public ActionResult ProcessSalaryDisbursements(List<Guid> employeeIds, bool isBatch)
         {
@@ -452,32 +402,23 @@ namespace CorporateBankingApp.Controllers
                 {
                     if (isBatch)
                     {
-                        // Message for batch processing
-                        if (excludedEmployees.Any())
+                        return Json(new
                         {
-                            return Json(new { success = true, message = "Salary disbursement has started, but some employees were excluded as they already received their salary this month." });
-                        }
-                        else
-                        {
-                            return Json(new { success = true, message = "Salary disbursement has been initiated for all employees." });
-                        }
+                            success = true,
+                            message = excludedEmployees.Any() ?
+                            "Salary disbursement has started, but some employees were excluded as they already received their salary this month." :
+                            "Salary disbursement has been initiated for all employees."
+                        });
                     }
-                    else
+                    return Json(new
                     {
-                        if (excludedEmployees.Any())
-                        {
-                            return Json(new { success = false, message = "Salary has already been distributed to these employees for this month." });
-                        }
-                        else
-                        {
-                            return Json(new { success = true, message = "Salary disbursement has been initiated." });
-                        }
-                    }
+                        success = true,
+                        message = excludedEmployees.Any() ?
+                        "Salary has already been distributed to these employees for this month." :
+                        "Salary disbursement has been initiated."
+                    });
                 }
-                else
-                {
-                    return Json(new { success = false, message = "An error occurred during the salary disbursement process." });
-                }
+                return Json(new { success = false, message = "An error occurred during the salary disbursement process." });
             }
             catch (Exception ex)
             {
@@ -485,9 +426,7 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
-
-        //*************************************************payments*************************************************
-        // GET: MakePaymentRequests
+        // Payments
         public ActionResult MakePaymentRequests()
         {
             if (Session["UserId"] == null)
@@ -505,12 +444,12 @@ namespace CorporateBankingApp.Controllers
 
             var model = new BeneficiaryPaymentDTO
             {
-                Amount = 0,  // Default amount
+                Amount = 0,
                 Beneficiaries = beneficiaryList
             };
             return View(model);
-
         }
+
         [HttpGet]
         public ActionResult GetBeneficiaryListForPayment()
         {
@@ -529,25 +468,17 @@ namespace CorporateBankingApp.Controllers
 
             var paymentBeneficiaryDTO = new BeneficiaryPaymentDTO
             {
-                Amount = 0,  // Default amount
+                Amount = 0,
                 Beneficiaries = beneficiaryList
             };
 
             return Json(new { success = true, data = paymentBeneficiaryDTO }, JsonRequestBehavior.AllowGet);
         }
 
+        // Upload Documents
+        public ActionResult UploadDocuments() => View();
 
-
-        // GET: UploadDocuments
-        public ActionResult UploadDocuments()
-            {
-                return View();
-            }
-
-            // GET: GenerateReports
-            public ActionResult GenerateReports()
-            {
-                return View();
-            }
-        }
+        // Generate Reports
+        public ActionResult GenerateReports() => View();
     }
+}

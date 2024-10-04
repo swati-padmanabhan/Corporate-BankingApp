@@ -1,122 +1,109 @@
 ﻿@model IEnumerable<CorporateBankingApp.DTOs.PaymentDTO>
 
 @{
-    ViewBag.Title = "PaymentApprovals";
+    ViewBag.Title = "Payment Approvals";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="container-fluid" id="paymentApprovalsList">
+    <!-- Title Centered -->
+    <h2 class="text-center my-4 pt-3 fw-bold">Payment Approvals</h2>
 
-<div>
-    <h2 class="text-center my-4 pt-3">Payment Approval Requests</h2>
-    <table id="paymentApprovalsTable" class="table text-center">
-        <thead class="thead-dark my-3">
-            <tr>
-                <th>Select</th>
-                <th>Payment ID</th>
-                <th>Account Number</th>
-                <th>Beneficiary Type</th>
-                <th>Amount</th>
-                <th>Payment Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                foreach (var payment in Model)
-                {
-                    <tr>
-                        <td>
-                            <input type="checkbox" class="payment-checkbox" value="@payment.PaymentId" />
-                        </td>
-                        <td>@payment.PaymentId</td>
-                        <td>@payment.AccountNumber</td>
-                        <td>@payment.BeneficiaryType</td>
-                        <td>@payment.Amount.ToString("F2")</td>
-                        <td>@payment.PaymentRequestDate.ToShortDateString()</td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="6" class="text-center">No pending payment approvals available.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <!-- Search and Filter Row -->
+    <div class="row my-4">
+        <div class="col-md-8">
+            <!-- Search Input -->
+            <input type="text" id="searchInput" placeholder="Search payments..." class="form-control" onkeyup="searchPayments()" />
+        </div>
+        <div class="col-md-4 text-end">
+            <!-- Filter Dropdown -->
+            <div class="dropdown">
+                <button class="btn rounded-3 wrapper" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-filter me-1"></i> Filter
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="javascript:void(0)" onclick="filterAll()">All</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0)" onclick="filterApproved()">Approved</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0)" onclick="filterRejected()">Rejected</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
+    <!-- Approve/Reject Buttons -->
     @if (Model != null && Model.Any())
     {
-        <button id="approveSelectedPayments" class="btn btn-outline-dark">Approve Selected</button>
-        <button id="rejectSelectedPayments" class="btn btn-outline-dark">Reject Selected</button>
+        <div class="my-4 d-flex justify-content-between">
+            <button id="approveSelectedPayments" class="btn btn-success">Approve Selected</button>
+            <button id="rejectSelectedPayments" class="btn btn-danger">Reject Selected</button>
+        </div>
     }
-    <br />
-    @Html.ActionLink("Go Back To Dashboard", "AdminDashboard", null, new { @class = "btn btn-lg btn-primary" })
+
+    <!-- Payment Approvals Table -->
+    <div class="table-responsive">
+        <table class="table align-middle accent-dark-b mb-0" id="paymentApprovalsTable">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Account Number</th>
+                    <th>Beneficiary Type</th>
+                    <th>Amount</th>
+                    <th>Payment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var payment in Model)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="payment-checkbox" value="@payment.PaymentId" />
+                            </td>
+                            <td>@payment.AccountNumber</td>
+                            <td>@payment.BeneficiaryType</td>
+                            <td>@payment.Amount.ToString("F2")</td>
+                            <td>@payment.PaymentRequestDate.ToShortDateString()</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No pending payment approvals available.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
-    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
-    <script>
-        // Get selected checkboxes
-        function getSelectedPayments() {
-            var selectedIds = [];
-            $(".payment-checkbox:checked").each(function () {
-                selectedIds.push($(this).val());
-            });
-            return selectedIds;
-        }
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script>
+    // Search function to filter table rows
+    function searchPayments() {
+        var input = document.getElementById("searchInput").value.toLowerCase();
+        var rows = document.querySelectorAll("#paymentApprovalsTable tbody tr");
 
-        // Approve selected payments
-        $('#approveSelectedPayments').click(function () {
-            var selectedIds = getSelectedPayments();
-            if (selectedIds.length === 0) {
-                alert("Please select at least one payment approval request.");
-                return;
-            }
-
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("ApprovePayments", "Admin")',
-                data: { disbursementIds: selectedIds },
-                traditional: true,
-                success: function (response) {
-                    if (response.success) {
-                        alert(response.message);
-                        location.reload();
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    alert("An error occurred while approving the payments: " + error);
-                }
+        rows.forEach(function (row) {
+            var cells = row.querySelectorAll("td");
+            var found = Array.from(cells).some(function (cell) {
+                return cell.textContent.toLowerCase().includes(input);
             });
+            row.style.display = found ? "" : "none";
         });
+    }
 
-        // Reject selected payments
-        $('#rejectSelectedPayments').click(function () {
-            var selectedIds = getSelectedPayments();
-            if (selectedIds.length === 0) {
-                alert("Please select at least one payment approval request.");
-                return;
-            }
+    // Filter Functions
+    function filterAll() {
+        $("#paymentApprovalsTable tbody tr").show();
+    }
 
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("RejectPayments", "Admin")',
-                data: { disbursementIds: selectedIds },
-                traditional: true,
-                success: function (response) {
-                    if (response.success) {
-                        alert(response.message);
-                        location.reload();
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    alert("An error occurred while rejecting the payments: " + error);
-                }
-            });
-        });
-    </script>
+    function filterApproved() {
+        // Implement logic to filter approved payments
+    }
 
+    function filterRejected() {
+        // Implement logic to filter rejected payments
+    }
+</script>

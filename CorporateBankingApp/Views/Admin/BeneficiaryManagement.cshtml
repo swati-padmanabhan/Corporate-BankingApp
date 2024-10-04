@@ -1,38 +1,61 @@
 ﻿@model IEnumerable<CorporateBankingApp.DTOs.BeneficiaryDTO>
 
 @{
-    ViewBag.Title = "BeneficiaryManagement";
+    ViewBag.Title = "Beneficiary Management";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="text-center my-4 pt-3">Outbound Beneficiaries Verification</h2>
-<div class="container py-5" id="beneficiaryToBeVerifiedList">
-    <table class="table text-center">
-        <thead class="thead-dark">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.BeneficiaryName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AccountNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BankIFSC)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BeneficiaryType)
-                </th>
-                <th>@Html.DisplayName("Documents")</th><!--for document showing-->
-                <th>@Html.DisplayName("Action")</th>
-            </tr>
-        </thead>
-        <tbody id="beneficiaryToBeVerifiedTblBody">
-            <!-- Data comes from AJAX -->
-        </tbody>
-    </table>
-    @Html.ActionLink("Go Back To Dashboard", "AdminDashboard", null, new { @class = "btn btn-lg btn-primary" })
-</div>
+<h2 class="text-center my-4 pt-3">Beneficiary Management</h2>
 
+<div class="container py-5" id="beneficiaryToBeVerifiedList">
+    <!-- Updated Table for Consistency -->
+    <div class="table-responsive">
+        <table class="table align-middle accent-dark-b mb-0" id="beneficiaryVerificationTable">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.BeneficiaryName)</th>
+                    <th>@Html.DisplayNameFor(model => model.AccountNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.BankIFSC)</th>
+                    <th>@Html.DisplayNameFor(model => model.BeneficiaryType)</th>
+                    <th>@Html.DisplayName("Documents")</th>
+                    <th>@Html.DisplayName("Action")</th>
+                </tr>
+            </thead>
+            <tbody id="beneficiaryToBeVerifiedTblBody">
+                <!-- Data comes from AJAX -->
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var beneficiary in Model)
+                    {
+                        <tr>
+                            <td>@beneficiary.BeneficiaryName</td>
+                            <td>@beneficiary.AccountNumber</td>
+                            <td>@beneficiary.BankIFSC</td>
+                            <td>@beneficiary.BeneficiaryType</td>
+                            <td>
+                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#documentModal"
+                                        onclick="viewDocument('@beneficiary.DocumentPaths')">
+                                    View Document
+                                </button>
+                            </td>
+                            <td>
+                                <!-- Ensure btn-success and btn-danger are styled correctly -->
+                                <button class="btn btn-sm btn-success">Approve</button>
+                                <button class="btn btn-sm btn-danger">Reject</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No pending beneficiaries available for verification.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <!-- Modal HTML structure -->
 <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
@@ -55,26 +78,10 @@
 <script>
     $(document).ready(() => {
         loadBeneficiaryForVerification();
-    })
+    });
+
+    // Function to load document in modal
+    function viewDocument(url) {
+        $('#documentFrame').attr('src', url);
+    }
 </script>
-
-<style>
-    /* Additional Custom Styles */
-    #beneficiaryToBeVerifiedList {
-        margin-top: 20px; /* Add spacing above the table */
-    }
-
-    .modal-header {
-        background-color: #343a40; /* Dark background for the modal header */
-        color: white; /* White text color */
-    }
-
-    .modal-title {
-        margin: 0; /* Remove margin from the title */
-    }
-
-    .table th, .table td {
-        vertical-align: middle;
-        padding: 15px;
-    }
-</style>

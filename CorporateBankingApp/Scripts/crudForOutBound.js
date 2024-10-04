@@ -1,6 +1,6 @@
 let beneficiariesData = [];
-let currentPage = 1;
-const pageSize = 2;
+let currentBeneficiaryPage = 1;
+const beneficiaryPageSize = 2;
 
 let currentFilters = {
     status: null, // For status filtering
@@ -23,24 +23,38 @@ function applyFilters() {
     let filteredData = beneficiariesData;
 
     // Filter by status if applicable
-    if (currentFilters.status != null) {
+    if (currentFilters.status) {
         filteredData = filteredData.filter(
             (item) => item.BeneficiaryStatus === currentFilters.status
         );
     }
 
     // Reset to the first page after filtering
-    currentPage = 1;
+    currentBeneficiaryPage = 1;
 
     // Render the filtered data
-    renderTable(currentPage, filteredData);
-    setupPagination(filteredData.length);
+    renderTable(currentBeneficiaryPage, filteredData);
+    setupBeneficiaryPagination(filteredData.length);
 }
 
+//function loadPage(page) {
+//    currentBeneficiaryPage = page;
+//    applyFilters(); // Reapply filters when changing page
+//}
+
 function loadPage(page) {
-    currentPage = page;
-    applyFilters(); // Reapply filters when changing page
+    currentBeneficiaryPage = page;
+
+    // Only apply filters if there's a current filter set
+    if (currentFilters.status != null) {
+        applyFilters(); // Reapply filters when changing page
+    } else {
+        // If no filters, simply render the full list
+        renderTable(currentBeneficiaryPage, beneficiariesData);
+        setupBeneficiaryPagination(beneficiariesData.length);
+    }
 }
+
 
 function loadOutboundBeneficiaries() {
     $.ajax({
@@ -48,8 +62,8 @@ function loadOutboundBeneficiaries() {
         type: "GET",
         success: function (data) {
             beneficiariesData = data;
-            renderTable(currentPage);
-            setupPagination();
+            renderTable(currentBeneficiaryPage);
+            setupBeneficiaryPagination();
         },
         error: function (err) {
             $("#beneficiaryTblBody").empty();
@@ -60,8 +74,8 @@ function loadOutboundBeneficiaries() {
 }
 function renderTable(page, data = beneficiariesData) {
     $("#beneficiaryTblBody").empty();
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
+    const start = (page - 1) * beneficiaryPageSize;
+    const end = start + beneficiaryPageSize;
     const paginatedData = data.slice(start, end);
 
     if (paginatedData.length > 0) {
@@ -107,23 +121,23 @@ function renderTable(page, data = beneficiariesData) {
                 </tr>`;
 
             $("#beneficiaryTblBody").append(row);
-       
+
         });
     } else {
         $("#warningNotice").show();
     }
 }
-function setupPagination(totalCount = beneficiariesData.length) {
-    const totalPages = Math.ceil(totalCount / pageSize);
+function setupBeneficiaryPagination(totalCount = beneficiariesData.length) {
+    const totalPages = Math.ceil(totalCount / beneficiaryPageSize);
     let paginationHtml = '';
 
     for (let i = 1; i <= totalPages; i++) {
-        paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+        paginationHtml += `<li class="page-item ${i === currentBeneficiaryPage ? 'active' : ''}">
             <a class="page-link" href="#" onclick="loadPage(${i})">${i}</a>
         </li>`;
     }
 
-    $("#pagination").html(paginationHtml);
+    $("#beneficiaryPagination").html(paginationHtml);
 }
 
 function searchUsers() {
@@ -140,12 +154,12 @@ function searchUsers() {
     console.log(filteredData)
 
 
-// Reset to the first page after filtering
-currentPage = 1;
+    // Reset to the first page after filtering
+    currentBeneficiaryPage = 1;
 
-// Render the filtered data
-renderTable(currentPage, filteredData);
-setupPagination(filteredData.length);
+    // Render the filtered data
+    renderTable(currentBeneficiaryPage, filteredData);
+    setupBeneficiaryPagination(filteredData.length);
 }
 function updateBeneficiaryStatus(beneficiaryId, isActive) {
     $.ajax({

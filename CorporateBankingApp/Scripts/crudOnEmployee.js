@@ -1,6 +1,8 @@
-$(document).ready(() => {
-    loadEmployees();
-});
+let employeesData = [];
+let currentEmployeePage = 1;
+const employeePageSize = 10; // Number of items per page
+
+
 
 // Function to load employees from the server
 function loadEmployees() {
@@ -8,76 +10,105 @@ function loadEmployees() {
         url: "/Client/GetAllEmployees",
         type: "GET",
         success: function (data) {
-            $("#employeeTable").empty();
-
-            if (data.length > 0) {
-                $.each(data, function (index, employee) {
-                    var row = `<tr>
-                        <td>${employee.FirstName}</td>
-                        <td>${employee.LastName}</td>
-                        <td>${employee.Email}</td>
-                        <td>${employee.Phone}</td>
-                        <td>${employee.Designation}</td>
-                        <td>${employee.Salary}</td>
-                        <td>
-                            <input type="checkbox" class="is-active-checkbox"
-                                data-employeeid="${employee.Id}"
-                                data-toggle="toggle" 
-                                data-onstyle="outline-danger" 
-                                data-offstyle="outline-warning"
-                                ${employee.IsActive ? "checked" : ""} />
-                        </td>
-                        <td>
-                            <input type="checkbox" class="is-SalaryDisbursed-checkbox"
-                                data-employeeid="${employee.Id}"
-                                data-salary="${employee.Salary}"
-                                ${employee.SalaryDisburseSelect ? "checked" : ""} 
-                                style="${employee.IsActive ? '' : 'display:none'}" />
-                        </td>
-                        <td>
-                            <button onClick="editEmployee('${employee.Id}')" class="action-btn btn btn-secondary btn-sm" title="Edit" style="${employee.IsActive ? '' : 'display:none'}">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
-                        </td>
-                    </tr>`;
-                    $("#employeeTable").append(row);
-                });
-
-                // Event listener for changing the active status
-                $(".is-active-checkbox").change(function () {
-                    var employeeId = $(this).data("employeeid");
-                    var isActive = $(this).is(":checked");
-                    updateEmployeeStatus(employeeId, isActive);
-                });
-
-                // Event listener for salary disbursement checkbox
-                $(".is-SalaryDisbursed-checkbox").change(function () {
-                    updateTotalSalary();
-                });
-
-                // Select all salary disbursement checkboxes
-                $("#selectAllSalaryDisbursement").change(function () {
-                    var isChecked = $(this).is(":checked");
-                    $(".is-SalaryDisbursed-checkbox").prop("checked", isChecked).trigger("change");
-                    if (!isChecked) {
-                        updateTotalSalary(); // Reset total salary when unchecked
-                    }
-                });
-
-                // Initialize total salary on page load
-                updateTotalSalary();
-            } else {
-                // Create and append alert for no employees found
-                var alertMessage = `<div class="alert alert-warning text-center" role="alert">
-                                      No employees found.
-                                    </div>`;
-                $("#employeeTable").append(`<tr><td colspan='9'>${alertMessage}</td></tr>`);
-            }
+            employeesData = data; // Store all employees data
+            setupEmployeePagination(); // Setup pagination
+            renderEmployeeTable(); // Render the first page
         },
         error: function (err) {
             console.log("Error Retrieving Employees:", err);
         }
     });
+}
+
+function renderEmployeeTable() {
+    $("#employeeTable").empty();
+    const start = (currentEmployeePage - 1) * employeePageSize;
+    const end = start + employeePageSize;
+    const paginatedData = employeesData.slice(start, end);
+
+    if (paginatedData.length > 0) {
+        $.each(paginatedData, function (index, employee) {
+            const row = `<tr>
+                <td>${employee.FirstName}</td>
+                <td>${employee.LastName}</td>
+                <td>${employee.Email}</td>
+                <td>${employee.Phone}</td>
+                <td>${employee.Designation}</td>
+                <td>${employee.Salary}</td>
+                <td>
+                    <input type="checkbox" class="is-active-checkbox"
+                        data-employeeid="${employee.Id}"
+                        data-toggle="toggle" 
+                        data-onstyle="outline-danger" 
+                        data-offstyle="outline-warning"
+                        ${employee.IsActive ? "checked" : ""} />
+                </td>
+                <td>
+                    <input type="checkbox" class="is-SalaryDisbursed-checkbox"
+                        data-employeeid="${employee.Id}"
+                        data-salary="${employee.Salary}"
+                        ${employee.SalaryDisburseSelect ? "checked" : ""} 
+                        style="${employee.IsActive ? '' : 'display:none'}" />
+                </td>
+                <td>
+                    <button onClick="editEmployee('${employee.Id}')" class="action-btn btn btn-secondary btn-sm" title="Edit" style="${employee.IsActive ? '' : 'display:none'}">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                </td>
+            </tr>`;
+            $("#employeeTable").append(row);
+        });
+
+        // Attach event listeners for checkboxes and other actions
+        attachEventListeners();
+    } else {
+        // Alert for no employees found
+        $("#employeeTable").append(`<tr><td colspan='9' class="text-center">No employees found.</td></tr>`);
+    }
+}
+
+
+function setupEmployeePagination() {
+    const totalPages = Math.ceil(employeesData.length / employeePageSize);
+    const paginationHtml = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+        paginationHtml.push(`<li class="page-item ${i === currentEmployeePage ? 'active' : ''}">
+            <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+        </li>`);
+    }
+
+    $("#employeePagination").html(paginationHtml.join(''));
+
+}
+
+function changePage(page) {
+    currentEmployeePage = page;
+    renderEmployeeTable(); // Render the new page
+}
+
+// Function to attach event listeners for checkboxes
+function attachEventListeners() {
+    $(".is-active-checkbox").change(function () {
+        var employeeId = $(this).data("employeeid");
+        var isActive = $(this).is(":checked");
+        updateEmployeeStatus(employeeId, isActive);
+    });
+
+    $(".is-SalaryDisbursed-checkbox").change(function () {
+        updateTotalSalary();
+    });
+
+    $("#selectAllSalaryDisbursement").change(function () {
+        var isChecked = $(this).is(":checked");
+        $(".is-SalaryDisbursed-checkbox").prop("checked", isChecked).trigger("change");
+        if (!isChecked) {
+            updateTotalSalary(); // Reset total salary when unchecked
+        }
+    });
+
+    // Initialize total salary on page load
+    updateTotalSalary();
 }
 
 // Function to update total salary based on selected employees

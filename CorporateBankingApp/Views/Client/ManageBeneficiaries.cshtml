@@ -22,8 +22,10 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" onclick="filterAll()">All</a></li>
-                <li><a class="dropdown-item" onclick="filterInbound()">INBOUND</a></li>
-                <li><a class="dropdown-item" onclick="filterOutbound()">OUTBOUND</a></li>
+                <li><a class="dropdown-item" onclick="filterByStatus('PENDING')">Pending</a></li>
+                <li><a class="dropdown-item" onclick="filterByStatus('APPROVED')">Approved</a></li>
+                <li><a class="dropdown-item" onclick="filterByStatus('REJECTED')">Rejected</a></li>
+
             </ul>
         </div>
         <table class="table align-middle accent-dark-b mb-0">
@@ -79,5 +81,11 @@
     $("#btnAddBeneficiary").click(function () {
         $("#beneficiaryList").hide();
         $("#addNewBeneficiary").show();
+    });
+
+    $("#beneficiaryTblBody").on("change", ".toggle", function () {
+        var beneficiaryId = $(this).data("beneficiaryid");
+        var isActive = $(this).is(":checked");
+        updateBeneficiaryStatus(beneficiaryId, isActive);
     });
 </script>

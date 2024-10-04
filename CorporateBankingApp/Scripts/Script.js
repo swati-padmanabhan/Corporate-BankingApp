@@ -13,30 +13,7 @@
 }
 
 
-//beneficiary
-function filterAll() {
-  const rows = document.querySelectorAll("tbody tr");
-  rows.forEach((row) => {
-    row.style.display = ""; // Show all rows
-  });
-}
 
-
-function filterInbound() {
-  const rows = document.querySelectorAll("tbody tr");
-  rows.forEach((row) => {
-    const typeCell = row.children[3].textContent; // Adjust index based on your structure
-    row.style.display = typeCell.trim() === "INBOUND" ? "" : "none"; // Show only INBOUND
-  });
-}
-
-function filterOutbound() {
-  const rows = document.querySelectorAll("tbody tr");
-  rows.forEach((row) => {
-    const typeCell = row.children[3].textContent; // Adjust index based on your structure
-    row.style.display = typeCell.trim() === "OUTBOUND" ? "" : "none"; // Show only OUTBOUND
-  });
-}
 
 
 

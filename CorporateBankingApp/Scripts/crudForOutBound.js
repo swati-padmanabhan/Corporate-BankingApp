@@ -2,6 +2,46 @@ let beneficiariesData = [];
 let currentPage = 1;
 const pageSize = 2;
 
+let currentFilters = {
+    status: null, // For status filtering
+};
+
+// Function to filter by status
+function filterByStatus(status) {
+    currentFilters.status = status; // Set the current filter
+    applyFilters(); // Apply filters
+}
+
+// Function to reset filters
+function filterAll() {
+    currentFilters.status = null; // Reset the status filter
+    applyFilters(); // Apply filters
+}
+
+// Function to apply filters based on current settings
+function applyFilters() {
+    let filteredData = beneficiariesData;
+
+    // Filter by status if applicable
+    if (currentFilters.status != null) {
+        filteredData = filteredData.filter(
+            (item) => item.BeneficiaryStatus === currentFilters.status
+        );
+    }
+
+    // Reset to the first page after filtering
+    currentPage = 1;
+
+    // Render the filtered data
+    renderTable(currentPage, filteredData);
+    setupPagination(filteredData.length);
+}
+
+function loadPage(page) {
+    currentPage = page;
+    applyFilters(); // Reapply filters when changing page
+}
+
 function loadOutboundBeneficiaries() {
     $.ajax({
         url: "/Client/GetAllOutboundBeneficiaries",
@@ -67,18 +107,14 @@ function renderTable(page, data = beneficiariesData) {
                 </tr>`;
 
             $("#beneficiaryTblBody").append(row);
-            $(".toggle").change(function () {
-                var beneficiaryId = $(this).data("beneficiaryid");
-                var isActive = $(this).is(":checked");
-                updateBeneficiaryStatus(beneficiaryId, isActive);
-            });
+       
         });
     } else {
         $("#warningNotice").show();
     }
 }
-function setupPagination() {
-    const totalPages = Math.ceil(beneficiariesData.length / pageSize);
+function setupPagination(totalCount = beneficiariesData.length) {
+    const totalPages = Math.ceil(totalCount / pageSize);
     let paginationHtml = '';
 
     for (let i = 1; i <= totalPages; i++) {
@@ -88,11 +124,6 @@ function setupPagination() {
     }
 
     $("#pagination").html(paginationHtml);
-}
-function loadPage(page) {
-    currentPage = page;
-    setupPagination()
-    renderTable(currentPage);
 }
 
 function searchUsers() {

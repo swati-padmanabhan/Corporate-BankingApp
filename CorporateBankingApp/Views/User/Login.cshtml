@@ -16,33 +16,36 @@
             {
                 @Html.AntiForgeryToken()
 
-            <div class="form-horizontal">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                <!-- Username input -->
-                <div class="form-outline mb-4">
-                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label" })
-                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", id = "loginName" } })
-                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
-                </div>
-
-                <!-- Password input -->
-                <div class="form-outline mb-4">
-                    @Html.LabelFor(model => model.Password, new { @class = "form-label", @for = "loginPassword" })
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control password", id = "loginPassword", required = "required" } })
-                        <span class="input-group-text" id="toggleLoginPassword">
-                            <i class="bi bi-eye passwordIcon" id="passwordIcon"></i>
-                        </span>
+                    <!-- Username input -->
+                    <div class="form-outline mb-4">
+                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label" })
+                        <span class="required-asterisk">*</span>
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", id = "loginName" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                     </div>
-                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                </div>
 
-                <!-- Submit button -->
-                <button type="submit" class="btn primary-bg btn-hover text-white w-100 btn-block mb-4">
-                    Sign in
-                </button>
-            </div>
+                    <!-- Password input -->
+                    <div class="form-outline mb-4">
+                        @Html.LabelFor(model => model.Password, new { @class = "form-label", @for = "loginPassword" })
+                        <span class="required-asterisk">*</span>
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control password", id = "loginPassword"} })
+                            <span class="input-group-text" id="toggleLoginPassword">
+                               <i class="bi bi-eye passwordIcon" id="passwordIcon"></i>
+                                @*<i class="bi bi-eye-slash passwordIcon" id="passwordIcon"></i>*@
+                            </span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn primary-bg btn-hover text-white w-100 btn-block mb-4">
+                        Sign in
+                    </button>
+                </div>
             }
             <div>
                 @Html.ActionLink("New User? Register Here", "Register", "User")
@@ -56,4 +59,5 @@
     .btn.primary-bg:hover {
         background-color: #4e42aa;
     }
+
 </style>

@@ -49,6 +49,23 @@ namespace CorporateBankingApp.Repositories
             }
         }
 
+
+        public bool EmailExists(string email)
+        {
+            return _session.Query<Client>().Any(c => c.Email == email);
+        }
+
+        public bool AccountNumberExists(string accountNumber)
+        {
+            return _session.Query<Client>().Any(c => c.AccountNumber == accountNumber);
+        }
+
+        // Check if IFSC code exists
+        public bool IFSCExists(string ifscCode)
+        {
+            return _session.Query<Client>().Any(c => c.ClientIFSC == ifscCode);
+        }
+
     }
 
 }

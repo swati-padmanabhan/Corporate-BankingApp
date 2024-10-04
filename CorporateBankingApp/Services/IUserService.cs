@@ -15,6 +15,12 @@ namespace CorporateBankingApp.Services
         void CreateNewClient(ClientDTO clientDTO, IList<HttpPostedFileBase> files);
 
         //void AdminRegistration(AdminDTO adminDTO);
+
+        bool EmailExists(string email);
+
+        bool AccountNumberExists(string accountNumber);
+
+        bool IFSCExists(string ifscCode);
     }
 
 }

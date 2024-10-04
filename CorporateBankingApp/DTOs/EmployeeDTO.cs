@@ -18,16 +18,16 @@ namespace CorporateBankingApp.DTOs
         [StringLength(20, ErrorMessage = "Last Name cannot exceed 20 characters")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        [Required(ErrorMessage = "email is required")]
+        [RegularExpression("^[a-z0-9_\\+-]+(\\.[a-z0-9_\\+-]+)*@[a-z0-9-]+(\\.[a-z0-9]+)*\\.([a-z]{2,4})$", ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Designation is required")]
         [StringLength(20, ErrorMessage = "Designation cannot exceed 20 characters")]
         public string Designation { get; set; }
 
-        [Required(ErrorMessage = "Phone is required")]
-        [Phone(ErrorMessage = "Invalid phone number")]
+        [Required(ErrorMessage = "Mobile is required")]
+        [RegularExpression(@"\d{10}", ErrorMessage = "Please enter 10 digit Phone No.")]
         public long Phone { get; set; }
 
         [Required(ErrorMessage = "Salary is required")]

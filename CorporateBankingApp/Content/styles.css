@@ -476,4 +476,8 @@ body {
 }
 
 
-
+.required-asterisk {
+    color: red; /* Color of the asterisk */
+    font-weight: bold; /* Makes it bold */
+    font-size: 1.5em; /* Adjust size as needed */
+}

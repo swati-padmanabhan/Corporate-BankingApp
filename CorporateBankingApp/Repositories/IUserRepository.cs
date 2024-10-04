@@ -13,6 +13,12 @@ namespace CorporateBankingApp.Repositories
         void CreateNewClient(Client client);
 
         //void AdminRegistration(Admin admin, Role role);
+
+        bool EmailExists(string email);
+
+        bool AccountNumberExists(string accountNumber);
+
+        bool IFSCExists(string ifscCode);
     }
 
 }

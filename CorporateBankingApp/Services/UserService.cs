@@ -49,8 +49,22 @@ namespace CorporateBankingApp.Services
             return _userRepository.GetUserByUsername(username);
         }
 
+        public bool EmailExists(string email)
+        {
+            return _userRepository.EmailExists(email);
+        }
 
-            public void CreateNewClient(ClientDTO clientDTO, IList<HttpPostedFileBase> files)
+        public bool AccountNumberExists(string accountNumber)
+        {
+            return _userRepository.AccountNumberExists(accountNumber);
+        }
+
+        public bool IFSCExists(string ifscCode)
+        {
+            return _userRepository.IFSCExists(ifscCode);
+        }
+
+        public void CreateNewClient(ClientDTO clientDTO, IList<HttpPostedFileBase> files)
             {
                 var client = new Client()
                 {

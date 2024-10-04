@@ -9,12 +9,11 @@ namespace CorporateBankingApp.DTOs
 {
     public class UserDTO
     {
-        [Required(ErrorMessage = "Username field is required.")]
-        [StringLength(50, ErrorMessage = "Username cannot exceed 50 characters.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please Provide Username")]
         [Display(Name = "Username")]
         public string UserName { get; set; }
         
-        [Required]
+        [Required(ErrorMessage = "Please Provide Password")]
         public string Password { get; set; }
     }
 }

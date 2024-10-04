@@ -1,64 +1,16 @@
+let beneficiariesData = [];
+let currentPage = 1;
+const pageSize = 2;
+
 function loadOutboundBeneficiaries() {
     $.ajax({
         url: "/Client/GetAllOutboundBeneficiaries",
         type: "GET",
         success: function (data) {
-            $("#beneficiaryTblBody").empty();
-            $("#warningNotice").hide(); // Hide the warning notice initially
-
-            if (data.length > 0) {
-                $.each(data, function (index, item) {
-                    var documentLinks = item.DocumentPaths.map(function (url) {
-                        var fileName = url.split('/').pop();
-                        return `<a href="#" class="document-link" data-url="${url}">${fileName}</a>`;
-                    }).join("<br/> ");
-
-                    var row = `<tr>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(item.BeneficiaryName)}&background=4e4187&color=ffffff" alt="" style="width: 40px; height: 40px" class="rounded-circle" />
-                                    <div class="ms-3">
-                                        <p class="fw-bold mb-1">${item.BeneficiaryName}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <p class="fw-normal mb-1">${item.AccountNumber}</p>
-                            </td>
-                            <td>${item.BankIFSC}</td>
-                            <td>
-                                <span class="badge ${item.BeneficiaryStatus === 'PENDING' ? 'bg-warning' : 'bg-success'} rounded-pill d-inline">${item.BeneficiaryStatus}</span>
-                            </td>
-                            <td>
-                                <span class="badge ${item.BeneficiaryType === 'INBOUND' ? 'primary-bg neutral-light-text' : 'bg-secondary'} rounded-pill d-inline">${item.BeneficiaryType}</span>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <input type="checkbox" id="toggle-${item.Id}" data-beneficiaryid="${item.Id}" class="toggle" ${item.IsActive ? "checked" : ""} />
-                                    <label for="toggle-${item.Id}" class="toggle-label"></label>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="open-document">
-                                    ${documentLinks}
-                                </div>
-                            </td>
-                            <td class="editbeneficiary-btn-cell">
-                                <i class="bi bi-pencil-square edit-icon" onclick="editBeneficiary('${item.Id}')" style="${item.IsActive ? '' : 'display:none;'}"></i>
-                            </td>
-                        </tr>`;
-
-                    $("#beneficiaryTblBody").append(row);
-                });
-                $(".toggle").change(function () {
-                    var beneficiaryId = $(this).data("beneficiaryid");
-                    var isActive = $(this).is(":checked");
-                    console.log(beneficiaryId, isActive)
-                    updateBeneficiaryStatus(beneficiaryId, isActive);
-                });
-            } else {
-                $("#warningNotice").show(); // Show warning notice if no beneficiaries
-            }
+            beneficiariesData = data;
+            console.log(beneficiariesData)
+            renderTable(currentPage);
+            setupPagination();
         },
         error: function (err) {
             $("#beneficiaryTblBody").empty();
@@ -67,7 +19,83 @@ function loadOutboundBeneficiaries() {
         }
     });
 }
+function renderTable(page) {
+    $("#beneficiaryTblBody").empty();
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    const paginatedData = beneficiariesData.slice(start, end);
+    console.log("xyz", paginatedData)
 
+    if (paginatedData.length > 0) {
+        $.each(paginatedData, function (index, item) {
+            var documentLinks = item.DocumentPaths.map(function (url) {
+                var fileName = url.split('/').pop();
+                return `<a href="#" class="document-link" data-url="${url}">${fileName}</a>`;
+            }).join("<br/> ");
+
+            var row = `<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(item.BeneficiaryName)}&background=4e4187&color=ffffff" alt="" style="width: 40px; height: 40px" class="rounded-circle" />
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">${item.BeneficiaryName}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <p class="fw-normal mb-1">${item.AccountNumber}</p>
+                    </td>
+                    <td>${item.BankIFSC}</td>
+                    <td>
+                        <span class="badge ${item.BeneficiaryStatus === 'PENDING' ? 'bg-warning' : 'bg-success'} rounded-pill d-inline">${item.BeneficiaryStatus}</span>
+                    </td>
+                    <td>
+                        <span class="badge ${item.BeneficiaryType === 'INBOUND' ? 'primary-bg neutral-light-text' : 'bg-secondary'} rounded-pill d-inline">${item.BeneficiaryType}</span>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" id="toggle-${item.Id}" data-beneficiaryid="${item.Id}" class="toggle" ${item.IsActive ? "checked" : ""} />
+                            <label for="toggle-${item.Id}" class="toggle-label"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="open-document">
+                            ${documentLinks}
+                        </div>
+                    </td>
+                    <td class="editbeneficiary-btn-cell">
+                        <i class="bi bi-pencil-square edit-icon" onclick="editBeneficiary('${item.Id}')" style="${item.IsActive ? '' : 'display:none;'}"></i>
+                    </td>
+                </tr>`;
+
+            $("#beneficiaryTblBody").append(row);
+            $(".toggle").change(function () {
+                var beneficiaryId = $(this).data("beneficiaryid");
+                var isActive = $(this).is(":checked");
+                console.log(beneficiaryId, isActive)
+                updateBeneficiaryStatus(beneficiaryId, isActive);
+            });
+        });
+    } else {
+        $("#warningNotice").show();
+    }
+}
+function setupPagination() {
+    const totalPages = Math.ceil(beneficiariesData.length / pageSize);
+    let paginationHtml = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+        paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+            <a class="page-link" href="#" onclick="loadPage(${i})">${i}</a>
+        </li>`;
+    }
+
+    $("#pagination").html(paginationHtml);
+}
+function loadPage(page) {
+    currentPage = page;
+    renderTable(currentPage);
+}
 function updateBeneficiaryStatus(beneficiaryId, isActive) {
     $.ajax({
         url: "/Client/UpdateBeneficiaryStatus",
@@ -105,7 +133,7 @@ function updateBeneficiaryStatus(beneficiaryId, isActive) {
 
 function addNewBeneficiary() {
     var formData = new FormData();
-
+    console.log("called")
     // Append normal input fields
     formData.append("BeneficiaryName", $("#newBeneficiaryName").val());
     formData.append("AccountNumber", $("#newAccountNumber").val());

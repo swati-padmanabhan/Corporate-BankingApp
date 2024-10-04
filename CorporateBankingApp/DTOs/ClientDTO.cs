@@ -34,6 +34,7 @@ namespace CorporateBankingApp.DTOs
 
         [Required]
         [Display(Name = "Contact Information")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Contact Information must be exactly 10 digits.")]
         public string ContactInformation { get; set; }
 
         [Required]
@@ -45,12 +46,11 @@ namespace CorporateBankingApp.DTOs
         public string ClientIFSC {  get; set; }
 
         [Required]
+        [Range(0, double.MaxValue, ErrorMessage = "Balance must be a positive value.")]
         public double Balance { get; set; }
 
-        [Required]
         public HttpPostedFileBase Document1 { get; set; }
 
-        [Required]
         public HttpPostedFileBase Document2 { get; set; }
 
         [Required]

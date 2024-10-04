@@ -17,7 +17,7 @@ namespace CorporateBankingApp.DTOs
         public string BeneficiaryName { get; set; }
 
         [Required(ErrorMessage = "Account Number is required.")]
-        [RegularExpression(@"^\d{10,12}$", ErrorMessage = "Account Number must be between 10 and 12 digits.")]
+        [RegularExpression(@"^\d{12}$", ErrorMessage = "Account Number must be exactly 12 digits.")]
         [Display(Name = "Account Number")]
         public string AccountNumber { get; set; }
 

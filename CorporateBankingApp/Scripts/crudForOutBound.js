@@ -8,7 +8,6 @@ function loadOutboundBeneficiaries() {
         type: "GET",
         success: function (data) {
             beneficiariesData = data;
-            console.log(beneficiariesData)
             renderTable(currentPage);
             setupPagination();
         },
@@ -24,7 +23,6 @@ function renderTable(page) {
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
     const paginatedData = beneficiariesData.slice(start, end);
-    console.log("xyz", paginatedData)
 
     if (paginatedData.length > 0) {
         $.each(paginatedData, function (index, item) {
@@ -72,7 +70,6 @@ function renderTable(page) {
             $(".toggle").change(function () {
                 var beneficiaryId = $(this).data("beneficiaryid");
                 var isActive = $(this).is(":checked");
-                console.log(beneficiaryId, isActive)
                 updateBeneficiaryStatus(beneficiaryId, isActive);
             });
         });
@@ -132,33 +129,77 @@ function updateBeneficiaryStatus(beneficiaryId, isActive) {
 //add new beneficiary
 
 function addNewBeneficiary() {
-    var formData = new FormData();
-    console.log("called")
-    // Append normal input fields
-    formData.append("BeneficiaryName", $("#newBeneficiaryName").val());
-    formData.append("AccountNumber", $("#newAccountNumber").val());
-    formData.append("BankIFSC", $("#newBankIFSC").val());
+    // Clear previous error messages
+    $(".error-message").remove();
 
-    // Append file inputs
+    // Validate fields
+    var isValid = true;
+
+    // Validate Beneficiary Name
+    var beneficiaryName = $("#newBeneficiaryName").val();
+    if (!beneficiaryName) {
+        isValid = false;
+        $("#newBeneficiaryName").after('<span class="error-message" style="color:red;">Beneficiary Name is required.</span>');
+    }
+
+    // Validate Account Number
+    var accountNumber = $("#newAccountNumber").val();
+    var accountNumberPattern = /^\d{12}$/;
+    if (!accountNumber || !accountNumberPattern.test(accountNumber)) {
+        isValid = false;
+        $("#newAccountNumber").after('<span class="error-message" style="color:red;">Account Number must be 12 digits.</span>');
+    }
+
+    // Validate Bank IFSC
+    var bankIFSC = $("#newBankIFSC").val();
+    var bankIFSCPattern = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+    if (!bankIFSC || !bankIFSCPattern.test(bankIFSC)) {
+        isValid = false;
+        $("#newBankIFSC").after('<span class="error-message" style="color:red;">Invalid Bank IFSC format.</span>');
+    }
+
+    // Validate File Inputs
     var addressProofFile = $("#BeneficiaryAddressProof")[0].files[0];
     var idProofFile = $("#BeneficiaryIdProof")[0].files[0];
+    if (!addressProofFile) {
+        isValid = false;
+        $("#BeneficiaryAddressProof").after('<span class="error-message" style="color:red;">Beneficiary Address Proof is required.</span>');
+    }
+    if (!idProofFile) {
+        isValid = false;
+        $("#BeneficiaryIdProof").after('<span class="error-message" style="color:red;">Beneficiary ID Proof is required.</span>');
+    }
 
+    // If any field is invalid, stop the submission
+    if (!isValid) {
+        return; // Stop further execution
+    }
 
-
+    // If all fields are valid, proceed with form submission
+    var formData = new FormData();
+    formData.append("BeneficiaryName", beneficiaryName);
+    formData.append("AccountNumber", accountNumber);
+    formData.append("BankIFSC", bankIFSC);
     formData.append("uploadedDocs1", idProofFile);
     formData.append("uploadedDocs2", addressProofFile);
+
+    console.log(formData);
 
     $.ajax({
         url: "/Client/AddNewBeneficiary",
         type: "POST",
         data: formData,
-        processData: false,  // Prevent jQuery from automatically transforming the data into a query string
-        contentType: false,  // Prevent jQuery from setting Content-Type header; the browser will set it correctly
+        processData: false,
+        contentType: false,
         success: function (response) {
-            alert("New Beneficiary added successfully");
-            loadOutboundBeneficiaries();
-            $("#addNewBeneficiary").hide();
-            $("#beneficiaryList").show();
+            if (response.success) {
+                alert("New Beneficiary added successfully");
+                loadOutboundBeneficiaries();
+                $("#addNewBeneficiary").hide();
+                $("#beneficiaryList").show();
+            } else {
+                alert("Error adding new Beneficiary: " + response.errors.join(", "));
+            }
         },
         error: function (err) {
             alert("Error adding new Beneficiary");
@@ -166,6 +207,7 @@ function addNewBeneficiary() {
         }
     });
 }
+
 
 function saveBeneficiaryChanges() {
     var formData = new FormData();

@@ -40,7 +40,10 @@
                     <div class="form-outline mb-4">
                         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label" })
                         <span class="required-asterisk">*</span>
-                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", id = "loginName" } })
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", id = "loginName" } })
+                        </div>
                         @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                     </div>
 
@@ -49,6 +52,7 @@
                         @Html.LabelFor(model => model.Password, new { @class = "form-label", @for = "loginPassword" })
                         <span class="required-asterisk">*</span>
                         <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
                             @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control password", id = "loginPassword" } })
                             <span class="input-group-text" id="toggleLoginPassword">
                                 <i class="bi bi-eye-slash passwordIcon" id="passwordIcon"></i>
@@ -56,18 +60,20 @@
                         </div>
                         @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                     </div>
-
-                    <div class="row mt-3 mb-3">
-                        <div class="col-sm-8 text-center">
-                            <div id="html_element" class=""></div> 
-                        </div>
-                    </div>
-
-                    <!-- Submit button -->
-                    <button type="submit" class="btn primary-bg btn-hover text-white w-100 btn-block mb-4">
-                        Sign in
-                    </button>
                 </div>
+
+
+                <div class="row mt-3 mb-3">
+                    <div class="col-sm-8 text-center">
+                        <div id="html_element" class=""></div>
+                    </div>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn primary-bg btn-hover text-white w-100 btn-block mb-4">
+                    Sign in
+                </button>
+
             }
             <div>
                 @Html.ActionLink("New User? Register Here", "Register", "User")

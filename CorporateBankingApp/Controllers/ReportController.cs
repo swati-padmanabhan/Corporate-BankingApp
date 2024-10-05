@@ -18,12 +18,39 @@ namespace CorporateBankingApp.Controllers
 {
     public class ReportController : Controller
     {
-        public ActionResult EmployeeReport()
+        //public ActionResult EmployeeReport()
+        //{
+        //    using (var session = NHibernateHelper.CreateSession())
+        //    {
+        //        var query = from e in session.Query<Employee>()
+        //                    from sd in e.SalaryDisbursements.DefaultIfEmpty() // Left join to get employees with or without salary disbursements
+        //                    select new EmployeeReportDTO
+        //                    {
+        //                        EmployeeId = e.Id,
+        //                        FirstName = e.FirstName,
+        //                        LastName = e.LastName,
+        //                        Email = e.Email,
+        //                        Designation = e.Designation,
+        //                        Salary = e.Salary,
+        //                        DisbursementDate = sd != null ? (DateTime?)sd.DisbursementDate : null,
+        //                        SalaryStatus = sd != null ? (CompanyStatus?)sd.SalaryStatus : null
+        //                    };
+
+        //        var employeeReports = query.ToList();
+        //        return View(employeeReports);
+        //    }
+        //}
+
+        public ActionResult EmployeeReport(int page = 1, int pageSize = 10)
         {
             using (var session = NHibernateHelper.CreateSession())
             {
+                // Get the total count of employees
+                var totalRecords = session.Query<Employee>().Count();
+
+                // Create the query with pagination
                 var query = from e in session.Query<Employee>()
-                            from sd in e.SalaryDisbursements.DefaultIfEmpty() // Left join to get employees with or without salary disbursements
+                            from sd in e.SalaryDisbursements.DefaultIfEmpty() // Left join
                             select new EmployeeReportDTO
                             {
                                 EmployeeId = e.Id,
@@ -36,10 +63,19 @@ namespace CorporateBankingApp.Controllers
                                 SalaryStatus = sd != null ? (CompanyStatus?)sd.SalaryStatus : null
                             };
 
-                var employeeReports = query.ToList();
+                // Paginate the results
+                var employeeReports = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                // Calculate total pages
+                var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+
                 return View(employeeReports);
             }
         }
+
 
 
         public ActionResult DownloadEmployeeReport()

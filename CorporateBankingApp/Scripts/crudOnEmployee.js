@@ -11,8 +11,8 @@ function loadEmployees() {
         type: "GET",
         success: function (data) {
             employeesData = data; // Store all employees data
+            renderEmployeeTable(currentEmployeePage); // Render the first page
             setupEmployeePagination(); // Setup pagination
-            renderEmployeeTable(); // Render the first page
         },
         error: function (err) {
             console.log("Error Retrieving Employees:", err);
@@ -20,11 +20,15 @@ function loadEmployees() {
     });
 }
 
-function renderEmployeeTable() {
+function renderEmployeeTable(page, data = employeesData) {
     $("#employeeTable").empty();
-    const start = (currentEmployeePage - 1) * employeePageSize;
+
+
+    // Paginate the filtered data
+    const start = (page - 1) * employeePageSize;
     const end = start + employeePageSize;
-    const paginatedData = employeesData.slice(start, end);
+    const paginatedData = data.slice(start, end);
+
 
     if (paginatedData.length > 0) {
         $.each(paginatedData, function (index, employee) {
@@ -68,13 +72,15 @@ function renderEmployeeTable() {
 }
 
 
-function setupEmployeePagination() {
-    const totalPages = Math.ceil(employeesData.length / employeePageSize);
+
+
+function setupEmployeePagination(size = employeesData.length) {
+    const totalPages = Math.ceil(size / employeePageSize);
     const paginationHtml = [];
 
     for (let i = 1; i <= totalPages; i++) {
-        paginationHtml.push(`<li class="page-item ${i === currentEmployeePage ? 'active' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+        paginationHtml.push(`<li class=" ${i === currentEmployeePage ? 'active' : ''}">
+            <a class="" href="#" onclick="loadEmployeePage(${i})">${i}</a>
         </li>`);
     }
 
@@ -82,9 +88,39 @@ function setupEmployeePagination() {
 
 }
 
+
+function searchEmployees() {
+    const searchTerm = $('#searchInput').val().toLowerCase(); // Get the search term
+    console.log(searchTerm)
+    const filteredData = employeesData.filter(employee => employee.Email.toLowerCase().includes(searchTerm))
+    console.log(filteredData)
+
+
+    // Reset to the first page after filtering
+    currentEmployeePage = 1;
+
+    // Render the filtered data
+    renderEmployeeTable(currentEmployeePage, filteredData);
+    setupEmployeePagination(filteredData.length);
+}
+
 function changePage(page) {
     currentEmployeePage = page;
+    setupEmployeePagination();
     renderEmployeeTable(); // Render the new page
+}
+
+function loadEmployeePage(page) {
+    currentEmployeePage = page;
+
+    // Only apply filters if there's a current filter set
+    if (currentFilters.status != null) {
+        //applyFilters(); // Reapply filters when changing page
+    } else {
+        // If no filters, simply render the full list
+        renderEmployeeTable(currentEmployeePage, employeesData);
+        setupEmployeePagination(employeesData.length);
+    }
 }
 
 // Function to attach event listeners for checkboxes

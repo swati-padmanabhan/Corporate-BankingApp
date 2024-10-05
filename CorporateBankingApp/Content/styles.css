@@ -90,6 +90,7 @@
 .neutral-dark-text {
     color: var(--neutral-dark) !important;
 }
+
 body {
     font-family: "Raleway", sans-serif;
     font-size: 1rem;
@@ -474,7 +475,37 @@ body {
     font-size: 1.5em; /* Adjust size as needed */
 }
 
-.btn.primary-bg:hover{
+.btn.primary-bg:hover {
     background-color: #3e346a;
 }
 
+/* Pagination styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .pagination li {
+       margin: 0 5px;
+    }
+
+    .pagination a {
+        text-decoration: none;
+        padding: 8px 12px;
+        color: #720e9e;
+        border: 1px solid #720e9e;
+        border-radius: 5px;
+    }
+
+    .pagination li.active a{
+        background-color: var(--primary-color); /* Set your desired background color */
+    }
+
+        .pagination li.active a {
+            color: white; /* Change text color for active link */
+        }
+
+    .pagination a:hover {
+        background-color: #e1d9f0;
+    }

@@ -653,6 +653,7 @@
     <Content Include="Scripts\jquery.jqGrid.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\report.js" />
     <Content Include="Scripts\salaryDisbursement.js" />
     <Content Include="Scripts\Script.js" />
     <Content Include="Web.config" />

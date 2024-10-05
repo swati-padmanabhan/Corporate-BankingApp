@@ -132,8 +132,8 @@ function setupBeneficiaryPagination(totalCount = beneficiariesData.length) {
     let paginationHtml = '';
 
     for (let i = 1; i <= totalPages; i++) {
-        paginationHtml += `<li class="page-item ${i === currentBeneficiaryPage ? 'active' : ''}">
-            <a class="page-link" href="#" onclick="loadPage(${i})">${i}</a>
+        paginationHtml += `<li class="${i === currentBeneficiaryPage ? 'active' : ''}">
+            <a class="" href="#" onclick="loadPage(${i})">${i}</a>
         </li>`;
     }
 

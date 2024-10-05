@@ -188,5 +188,178 @@ namespace CorporateBankingApp.Controllers
                 return File(workStream, "application/pdf", "EmployeeReport.pdf");
             }
         }
+
+        public ActionResult BeneficiaryReport()
+        {
+            using (var session = NHibernateHelper.CreateSession())
+            {
+                var beneficiaries = session.Query<Beneficiary>()
+                                           .FetchMany(b => b.Payments)
+                                           .ToList();
+
+                var viewModel = beneficiaries.SelectMany(b => b.Payments.Select(p => new BeneficiaryReportDTO
+                {
+                    BeneficiaryId = b.Id,
+                    BeneficiaryName = b.BeneficiaryName,
+                    AccountNumber = b.AccountNumber,
+                    BankIFSC = b.BankIFSC,
+                    BeneficiaryStatus = b.BeneficiaryStatus,
+                    BeneficiaryType = b.BeneficiaryType,
+
+
+                    // Payment details
+                    Amount = p.Amount,
+                    PaymentRequestDate = p.PaymentRequestDate,
+                    PaymentApprovalDate = p.PaymentApprovalDate,
+                    PaymentStatus = p.PaymentStatus
+                })).ToList();
+
+                return View(viewModel);
+            }
+        }
+
+        public ActionResult DownloadBeneficiaryReport()
+        {
+            using (var session = NHibernateHelper.CreateSession())
+            {
+                var beneficiaries = session.Query<Beneficiary>()
+                                           .FetchMany(b => b.Payments)
+                                           .ToList();
+
+                var viewModel = beneficiaries.SelectMany(b => b.Payments.Select(p => new BeneficiaryReportDTO
+                {
+                    BeneficiaryId = b.Id,
+                    BeneficiaryName = b.BeneficiaryName,
+                    AccountNumber = b.AccountNumber,
+                    BankIFSC = b.BankIFSC,
+                    BeneficiaryStatus = b.BeneficiaryStatus,
+                    BeneficiaryType = b.BeneficiaryType,
+
+                    // Payment details
+                    Amount = p.Amount,
+                    PaymentRequestDate = p.PaymentRequestDate,
+                    PaymentApprovalDate = p.PaymentApprovalDate,
+                    PaymentStatus = p.PaymentStatus
+                })).ToList();
+
+                // Generate PDF
+                iTextSharp.text.Document document = new iTextSharp.text.Document(PageSize.A4, 10f, 10f, 10f, 0f);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    PdfWriter.GetInstance(document, stream);
+                    document.Open();
+
+                    // Title of the PDF
+                    Paragraph title = new Paragraph("Beneficiary Report");
+                    title.Alignment = Element.ALIGN_CENTER;
+                    document.Add(title);
+                    document.Add(new Paragraph("\n")); // Line break
+
+                    // Create a table with the appropriate number of columns
+                    PdfPTable table = new PdfPTable(8); // Adjust the number of columns based on the fields in the report
+                    table.WidthPercentage = 100;
+
+                    // Adding table headers
+                    table.AddCell("Beneficiary Name");
+                    table.AddCell("Account Number");
+                    table.AddCell("Bank IFSC");
+                    table.AddCell("Beneficiary Status");
+                    table.AddCell("Beneficiary Type");
+                    table.AddCell("Amount");
+                    table.AddCell("Payment Request Date");
+                    table.AddCell("Payment Approval Date");
+                    table.AddCell("Payment Status");
+
+                    // Adding data rows
+                    foreach (var item in viewModel)
+                    {
+                        table.AddCell(item.BeneficiaryName);
+                        table.AddCell(item.AccountNumber);
+                        table.AddCell(item.BankIFSC);
+                        table.AddCell(item.BeneficiaryStatus.ToString());
+                        table.AddCell(item.BeneficiaryType.ToString());
+                        table.AddCell(item.Amount.ToString()); // Formats as currency
+                        table.AddCell(item.PaymentRequestDate?.ToString("dd/MM/yyyy") ?? "N/A");
+                        table.AddCell(item.PaymentApprovalDate?.ToString("dd/MM/yyyy") ?? "N/A");
+                        table.AddCell(item.PaymentStatus.ToString());
+                    }
+
+                    document.Add(table);
+                    document.Close();
+
+                    byte[] pdfBytes = stream.ToArray();
+                    return File(pdfBytes, "application/pdf", "BeneficiaryReport.pdf");
+                }
+            }
+        }
+
+        public ActionResult ClientList()
+        {
+            using (var session = NHibernateHelper.CreateSession())
+            {
+                var clients = session.Query<Client>()
+                                     .Select(c => new ClientReportDTO
+                                     {
+                                         Id = c.Id,
+                                         CompanyName = c.CompanyName // Assuming your Client model has a Name property
+                                     }).ToList();
+
+                return View(clients);
+            }
+        }
+
+
+        public ActionResult EmployeeReportByClient(Guid clientId)
+        {
+            using (var session = NHibernateHelper.CreateSession())
+            {
+                var query = from e in session.Query<Employee>()
+                            where e.Client.Id == clientId
+                            from sd in e.SalaryDisbursements.DefaultIfEmpty()
+                            select new EmployeeReportDTO
+                            {
+                                EmployeeId = e.Id,
+                                FirstName = e.FirstName,
+                                LastName = e.LastName,
+                                Email = e.Email,
+                                Designation = e.Designation,
+                                Salary = e.Salary,
+                                DisbursementDate = sd != null ? (DateTime?)sd.DisbursementDate : null,
+                                SalaryStatus = sd != null ? (CompanyStatus?)sd.SalaryStatus : null
+                            };
+
+                var employeeReports = query.ToList();
+                return View(employeeReports);
+            }
+        }
+
+        public ActionResult BeneficiaryReportByClient(Guid clientId)
+        {
+            using (var session = NHibernateHelper.CreateSession())
+            {
+                var query = from b in session.Query<Beneficiary>()
+                            where b.Client.Id == clientId
+                            from p in b.Payments.DefaultIfEmpty() // To handle beneficiaries with no payments
+                            select new BeneficiaryReportDTO
+                            {
+                                BeneficiaryId = b.Id,
+                                BeneficiaryName = b.BeneficiaryName,
+                                AccountNumber = b.AccountNumber,
+                                BankIFSC = b.BankIFSC,
+                                BeneficiaryStatus = b.BeneficiaryStatus,
+                                BeneficiaryType = b.BeneficiaryType,
+
+                                // Payment details
+                                Amount = p != null ? (double?)p.Amount : null, // Amount paid to beneficiary
+                                PaymentRequestDate = p != null ? (DateTime?)p.PaymentRequestDate : null,
+                                PaymentApprovalDate = p != null ? (DateTime?)p.PaymentApprovalDate : null,
+                                PaymentStatus = p != null ? (CompanyStatus?)p.PaymentStatus : null
+                            };
+
+                var beneficiaryReports = query.ToList();
+                return View(beneficiaryReports);
+            }
+        }
+
     }
 }

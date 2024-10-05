@@ -1,16 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using CorporateBankingApp.Data;
 using CorporateBankingApp.DTOs;
-using CorporateBankingApp.Models;
 using CorporateBankingApp.Services;
-using CorporateBankingApp.Utils;
-using Microsoft.AspNetCore.Http;
-using NHibernate.Hql.Ast;
-
 
 namespace CorporateBankingApp.Controllers
 {
@@ -33,10 +27,9 @@ namespace CorporateBankingApp.Controllers
         [AllowAnonymous]
         public ActionResult Login(UserDTO userDTO)
         {
-            // Check if the model state is valid
             if (!ModelState.IsValid)
             {
-                return View(userDTO); // Return the view with validation errors
+                return View(userDTO);
             }
 
             var loginResult = _userService.LoginActivity(userDTO);
@@ -46,20 +39,12 @@ namespace CorporateBankingApp.Controllers
                 FormsAuthentication.SetAuthCookie(userDTO.UserName, true);
                 Session["UserId"] = user.Id;
 
-                if (loginResult == "Admin")
-                {
-                    return RedirectToAction("Index", "Admin");
-                }
-                return RedirectToAction("Index", "Client");
+                return loginResult == "Admin" ? RedirectToAction("Index", "Admin") : RedirectToAction("Index", "Client");
             }
 
-            // Add a model error if login fails (optional)
             ModelState.AddModelError("", "Invalid username or password.");
             return View(userDTO);
         }
-
-
-
 
         [Authorize(Roles = "Admin, Client")]
         public ActionResult Logout()
@@ -67,9 +52,6 @@ namespace CorporateBankingApp.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
-
-
-
 
         [HttpGet]
         [AllowAnonymous]
@@ -84,83 +66,58 @@ namespace CorporateBankingApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // If the model is not valid, return to the view with the current model
                 return View(clientDTO);
             }
 
-            // Check if email already exists
+            // Check for email, username, account number, and IFSC existence
             if (_userService.EmailExists(clientDTO.Email))
-            {
                 ModelState.AddModelError("Email", "An account with this email already exists.");
-            }
-
-            // Check if username already exists
             if (_userService.GetUserByUsername(clientDTO.UserName) != null)
-            {
                 ModelState.AddModelError("UserName", "Username already exists. Please choose a different one.");
-            }
-
-            // Check for duplicate Account Number
             if (_userService.AccountNumberExists(clientDTO.AccountNumber))
-            {
                 ModelState.AddModelError("AccountNumber", "An account with this account number already exists.");
-            }
-
-            // Check for duplicate IFSC code
             if (_userService.IFSCExists(clientDTO.ClientIFSC))
-            {
                 ModelState.AddModelError("ClientIFSC", "An account with this IFSC code already exists.");
+
+            if (!ModelState.IsValid) return View(clientDTO);
+
+            var files = new List<HttpPostedFileBase>
+            {
+                Request.Files["uploadedFiles1"],
+                Request.Files["uploadedFiles2"]
+            };
+
+            foreach (var file in files)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    if (!IsValidFile(file))
+                    {
+                        ModelState.AddModelError("Document", "Document must be an image or PDF and cannot exceed 5MB.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Document", "Document is required.");
+                }
             }
 
-            if (!ModelState.IsValid)
-            {
-                return View(clientDTO);
-            }
+            if (!ModelState.IsValid) return View(clientDTO);
 
-            var files = new List<HttpPostedFileBase>();
-            var companyIdProof = Request.Files["uploadedFiles1"];
-            var addressProof = Request.Files["uploadedFiles2"];
-
-            // Check for Company ID Proof
-            if (companyIdProof != null && companyIdProof.ContentLength > 0)
-            {
-                files.Add(companyIdProof);
-            }
-            else
-            {
-                ModelState.AddModelError("Document1", "Company ID Proof is required.");
-            }
-
-            // Check for Address Proof
-            if (addressProof != null && addressProof.ContentLength > 0)
-            {
-                files.Add(addressProof);
-            }
-            else
-            {
-                ModelState.AddModelError("Document2", "Address Proof is required.");
-            }
-
-            // Check if there are any model errors before proceeding
-            if (!ModelState.IsValid)
-            {
-                return View(clientDTO); // Return to view with validation errors
-            }
-
-            // Assuming _userService.CreateNewClient can handle the IsActive property
             _userService.CreateNewClient(clientDTO, files);
-
             return RedirectToAction("RegistrationSuccess");
         }
 
-
-
+        private bool IsValidFile(HttpPostedFileBase file)
+        {
+            var validTypes = new[] { "image/jpeg", "image/png", "image/gif", "application/pdf" };
+            const int maxSize = 5 * 1024 * 1024; // 5MB
+            return validTypes.Contains(file.ContentType) && file.ContentLength <= maxSize;
+        }
 
         public ActionResult RegistrationSuccess()
         {
             return View();
         }
-
     }
 }
-

@@ -509,3 +509,9 @@ body {
     .pagination a:hover {
         background-color: #e1d9f0;
     }
+
+
+
+.ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-caption {
+    background-color: #e6f0ff;
+}

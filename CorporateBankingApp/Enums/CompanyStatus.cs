@@ -3,8 +3,8 @@
     public enum CompanyStatus
     {
         PENDING = 1,
-        APPROVED =2,
-        REJECTED=3
+        APPROVED = 2,
+        REJECTED = 3
     }
 
 }

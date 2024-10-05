@@ -6,58 +6,29 @@
 }
 
 <style>
-    .container {
-        margin-top: 30px;
-    }
-
-    /* Table styling */
-    table.table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        font-size: 16px;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-    }
-
-        /* Table header */
-        table.table thead th {
-            background-color: #720e9e;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        /* Table body rows */
-        table.table tbody tr {
-            border-bottom: 1px solid #dddddd;
-        }
-
-            table.table tbody tr:nth-child(even) {
-                background-color: #f3f3f3;
-            }
-
-            table.table tbody tr:hover {
-                background-color: #e1d9f0;
-            }
-
-        /* Table body cells */
-        table.table tbody td {
-            padding: 12px 15px;
-            text-align: center;
-            color: #333;
-        }
-
-   
+    /* Your existing CSS styles */
 </style>
 
 <div class="container">
-    <h2>Employee Report</h2>
+    <h2 class="text-center">Employee Report</h2>
+    <div class="my-4 float-start w-75">
+        <input type="text" id="searchInput" placeholder="Search users..." class="form-control" onkeyup="applySearch()" />
+    </div>
+    <div class="dropdown my-4 float-end">
+        <button class="btn rounded-3 wrapper" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-filter me-1"></i>
+            <span>Filter</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" onclick="filterByStatus('')">All</a></li>
+            <li><a class="dropdown-item" onclick="filterByStatus('PENDING')">Pending</a></li>
+            <li><a class="dropdown-item" onclick="filterByStatus('APPROVED')">Approved</a></li>
+            <li><a class="dropdown-item" onclick="filterByStatus('REJECTED')">Rejected</a></li>
+            <li><a class="dropdown-item" onclick="filterByStatus('No status')">No status</a></li>
+        </ul>
+    </div>
 
-    <table class="table primary-bg">
+    <table class="table primary-bg" id="employeeTable">
         <thead>
             <tr>
                 <th>First Name</th>
@@ -73,12 +44,12 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td data-label="First Name">@Html.DisplayFor(modelItem => item.FirstName)</td>
-                    <td data-label="Last Name">@Html.DisplayFor(modelItem => item.LastName)</td>
-                    <td data-label="Email">@Html.DisplayFor(modelItem => item.Email)</td>
-                    <td data-label="Designation">@Html.DisplayFor(modelItem => item.Designation)</td>
-                    <td data-label="Salary">@Html.DisplayFor(modelItem => item.Salary)</td>
-                    <td data-label="Disbursement Date">
+                    <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Designation)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Salary)</td>
+                    <td>
                         @if (item.DisbursementDate.HasValue)
                         {
                             @item.DisbursementDate.Value.ToString("dd/MM/yyyy")
@@ -88,7 +59,7 @@
                             <span>No disbursements</span>
                         }
                     </td>
-                    <td data-label="Salary Status">
+                    <td>
                         @if (item.SalaryStatus.HasValue)
                         {
                             @item.SalaryStatus.Value.ToString()
@@ -117,4 +88,68 @@
     <a href="@Url.Action("DownloadEmployeeReport", "Report")" class="btn primary-bg text-white">Download PDF</a>
 </div>
 
-<script src="~/Scripts/report.js"></script>
+<script>
+    // Store original data in a variable
+    const originalData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    let filteredData = originalData; // Data after search and filter
+
+    function renderTable(data) {
+        const tableBody = $("#employeeTable tbody");
+        tableBody.empty(); // Clear existing rows
+
+        if (data.length > 0) {
+            $.each(data, function (index, employee) {
+                const row = `<tr>
+                    <td>${employee.FirstName}</td>
+                    <td>${employee.LastName}</td>
+                    <td>${employee.Email}</td>
+                    <td>${employee.Designation}</td>
+                    <td>${employee.Salary}</td>
+                    <td>${employee.DisbursementDate ? new Date(employee.DisbursementDate).toLocaleDateString('en-GB') : 'No disbursements'}</td>
+                    <td>${employee.SalaryStatus ? employee.SalaryStatus : 'No status'}</td>
+                </tr>`;
+                tableBody.append(row);
+            });
+        } else {
+            tableBody.append(`<tr><td colspan='7' class="text-center">No employees found.</td></tr>`);
+        }
+    }
+
+    function applySearch() {
+        const searchValue = $("#searchInput").val().toLowerCase();
+        filteredData = originalData.filter(employee =>
+            employee.FirstName.toLowerCase().includes(searchValue) ||
+            employee.LastName.toLowerCase().includes(searchValue) ||
+            employee.Email.toLowerCase().includes(searchValue) ||
+            employee.Designation.toLowerCase().includes(searchValue)
+        );
+
+        renderTable(filteredData); // Render the filtered data
+    }
+
+    function filterByStatus(status) {
+        const searchValue = $("#searchInput").val().toLowerCase();
+        filteredData = originalData.filter(employee => {
+            const matchesSearch =
+                employee.FirstName.toLowerCase().includes(searchValue) ||
+                employee.LastName.toLowerCase().includes(searchValue) ||
+                employee.Email.toLowerCase().includes(searchValue) ||
+                employee.Designation.toLowerCase().includes(searchValue);
+
+            // Ensure the status comparison matches the displayed values
+            const matchesStatus = status ? employee.SalaryStatus === status : true;
+
+            return matchesSearch && matchesStatus; // Combine both filters
+        });
+
+        renderTable(filteredData); // Render the filtered data
+    }
+
+    $(document).ready(function () {
+        // Initial render for the full dataset
+        renderTable(originalData);
+
+        // Attach event listeners
+        $("#searchInput").on("keyup", applySearch);
+    });
+</script>

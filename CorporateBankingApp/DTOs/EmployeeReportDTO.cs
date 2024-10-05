@@ -17,5 +17,8 @@ namespace CorporateBankingApp.DTOs
 
         public DateTime? DisbursementDate { get; set; }
         public CompanyStatus? SalaryStatus { get; set; }
+
+        public string SalaryStatusString => SalaryStatus.HasValue ? SalaryStatus.Value.ToString() : "No status";
+
     }
 }

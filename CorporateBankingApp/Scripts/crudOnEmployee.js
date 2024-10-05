@@ -2,7 +2,7 @@ let employeesData = [];
 let currentEmployeePage = 1;
 const employeePageSize = 10; // Number of items per page
 
-
+let currentFilters = { status: null }
 
 // Function to load employees from the server
 function loadEmployees() {
@@ -48,11 +48,13 @@ function renderEmployeeTable(page, data = employeesData) {
                         ${employee.IsActive ? "checked" : ""} />
                 </td>
                 <td>
-                    <input type="checkbox" class="is-SalaryDisbursed-checkbox"
+                    <div class="form-check form-switch">
+   <input class="form-check-input is-SalaryDisbursed-checkbox" type="checkbox" role="switch" 
                         data-employeeid="${employee.Id}"
                         data-salary="${employee.Salary}"
                         ${employee.SalaryDisburseSelect ? "checked" : ""} 
                         style="${employee.IsActive ? '' : 'display:none'}" />
+                        </div>
                 </td>
                 <td>
                     <button onClick="editEmployee('${employee.Id}')" class="action-btn btn btn-secondary btn-sm" title="Edit" style="${employee.IsActive ? '' : 'display:none'}">
@@ -70,9 +72,6 @@ function renderEmployeeTable(page, data = employeesData) {
         $("#employeeTable").append(`<tr><td colspan='9' class="text-center">No employees found.</td></tr>`);
     }
 }
-
-
-
 
 function setupEmployeePagination(size = employeesData.length) {
     const totalPages = Math.ceil(size / employeePageSize);
@@ -138,6 +137,7 @@ function attachEventListeners() {
     $("#selectAllSalaryDisbursement").change(function () {
         var isChecked = $(this).is(":checked");
         $(".is-SalaryDisbursed-checkbox").prop("checked", isChecked).trigger("change");
+
         if (!isChecked) {
             updateTotalSalary(); // Reset total salary when unchecked
         }
@@ -162,7 +162,7 @@ function updateTotalSalary() {
             totalSalary += salary;
         }
     });
-    $("#salaryAmountInput").val(totalSalary.toFixed(2)); // Update the total salary
+    $("#salaryAmountInput").html(`<i class="bi bi-currency-rupee"></i> ${ totalSalary.toFixed(2) }`); // Update the total salary
 }
 
 // Function to handle salary disbursement
@@ -402,16 +402,16 @@ function editEmployee(employeeId) {
 // Event handler for save button on edit
 $("#btnEdit").click(function (event) {
     event.preventDefault(); // Prevent form submission
-        var data = {
-            Id: $("#editEmployeeId").val(),
-            FirstName: $("#newFirstName").val(),
-            LastName: $("#newLastName").val(),
-            Email: $("#newEmail").val(),
-            Phone: $("#newPhone").val(),
-            Designation: $("#newDesignation").val(),
-            Salary: $("#newSalary").val()
-        };
-        modifyRecord(data); // Call the function to modify the record
+    var data = {
+        Id: $("#editEmployeeId").val(),
+        FirstName: $("#newFirstName").val(),
+        LastName: $("#newLastName").val(),
+        Email: $("#newEmail").val(),
+        Phone: $("#newPhone").val(),
+        Designation: $("#newDesignation").val(),
+        Salary: $("#newSalary").val()
+    };
+    modifyRecord(data); // Call the function to modify the record
 });
 
 // CSV file upload

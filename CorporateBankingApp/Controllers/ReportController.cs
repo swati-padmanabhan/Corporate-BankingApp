@@ -41,16 +41,48 @@ namespace CorporateBankingApp.Controllers
         //    }
         //}
 
-        public ActionResult EmployeeReport(int page = 1, int pageSize = 10)
+        //public ActionResult EmployeeReport(int page = 1, int pageSize = 10)
+        //{
+        //    using (var session = NHibernateHelper.CreateSession())
+        //    {
+        //        // Get the total count of employees
+        //        var totalRecords = session.Query<Employee>().Count();
+
+        //        // Create the query with pagination
+        //        var query = from e in session.Query<Employee>()
+        //                    from sd in e.SalaryDisbursements.DefaultIfEmpty() // Left join
+        //                    select new EmployeeReportDTO
+        //                    {
+        //                        EmployeeId = e.Id,
+        //                        FirstName = e.FirstName,
+        //                        LastName = e.LastName,
+        //                        Email = e.Email,
+        //                        Designation = e.Designation,
+        //                        Salary = e.Salary,
+        //                        DisbursementDate = sd != null ? (DateTime?)sd.DisbursementDate : null,
+        //                        SalaryStatus = sd != null ? (CompanyStatus?)sd.SalaryStatus : null
+        //                    };
+
+        //        // Paginate the results
+        //        var employeeReports = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+        //        // Calculate total pages
+        //        var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+        //        ViewBag.CurrentPage = page;
+        //        ViewBag.TotalPages = totalPages;
+
+        //        return View(employeeReports);
+        //    }
+        //}
+
+
+        public ActionResult EmployeeReport(string searchEmail = "", int page = 1, int pageSize = 10)
         {
             using (var session = NHibernateHelper.CreateSession())
             {
-                // Get the total count of employees
-                var totalRecords = session.Query<Employee>().Count();
-
-                // Create the query with pagination
                 var query = from e in session.Query<Employee>()
-                            from sd in e.SalaryDisbursements.DefaultIfEmpty() // Left join
+                            from sd in e.SalaryDisbursements.DefaultIfEmpty()
                             select new EmployeeReportDTO
                             {
                                 EmployeeId = e.Id,
@@ -63,10 +95,13 @@ namespace CorporateBankingApp.Controllers
                                 SalaryStatus = sd != null ? (CompanyStatus?)sd.SalaryStatus : null
                             };
 
-                // Paginate the results
-                var employeeReports = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                if (!string.IsNullOrWhiteSpace(searchEmail))
+                {
+                    query = query.Where(e => e.Email.ToLower().Contains(searchEmail.ToLower()));
+                }
 
-                // Calculate total pages
+                var totalRecords = query.Count();
+                var employeeReports = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
 
                 ViewBag.CurrentPage = page;
@@ -75,6 +110,8 @@ namespace CorporateBankingApp.Controllers
                 return View(employeeReports);
             }
         }
+
+
 
 
 

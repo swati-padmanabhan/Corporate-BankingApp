@@ -306,14 +306,8 @@ namespace CorporateBankingApp.Controllers
 
             return Json(new
             {
-                employeeDTO.Id,
-                employeeDTO.FirstName,
-                employeeDTO.LastName,
-                employeeDTO.Email,
-                employeeDTO.Phone,
-                employeeDTO.Designation,
-                employeeDTO.Salary,
-                employeeDTO.IsActive
+                success = true,
+                message = "New Employee Added Successfully"
             });
         }
 

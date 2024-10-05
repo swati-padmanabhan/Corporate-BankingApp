@@ -1,6 +1,7 @@
 using CorporateBankingApp.Data;
 using CorporateBankingApp.Repositories;
 using CorporateBankingApp.Services;
+using Microsoft.Extensions.Configuration;
 using NHibernate;
 using System.Web.Mvc;
 using Unity;
@@ -13,13 +14,12 @@ namespace CorporateBankingApp
     {
         public static void RegisterComponents()
         {
-			var container = new UnityContainer();
+            var container = new UnityContainer();
 
-            // register all your components with the container here
-            // it is NOT necessary to register your controllers
-
+            // Register NHibernate session
             container.RegisterType<ISession>(new InjectionFactory(c => NHibernateHelper.CreateSession()));
 
+            // Register services and repositories
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserRepository, UserRepository>();
 
@@ -32,9 +32,6 @@ namespace CorporateBankingApp
             container.RegisterType<IClientService, ClientService>();
             container.RegisterType<IClientRepository, ClientRepository>();
 
-            container.RegisterType<IAdminService, AdminService>();
-            container.RegisterType<IAdminRepository, AdminRepository>();
-
             container.RegisterType<IBeneficiaryService, BeneficiaryService>();
             container.RegisterType<IBeneficiaryRepository, BeneficiaryRepository>();
 
@@ -42,8 +39,7 @@ namespace CorporateBankingApp
             container.RegisterType<IPaymentRepository, PaymentRepository>();
 
 
-            // e.g. container.RegisterType<ITestService, TestService>();
-
+            // Set the dependency resolver for MVC
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }
     }

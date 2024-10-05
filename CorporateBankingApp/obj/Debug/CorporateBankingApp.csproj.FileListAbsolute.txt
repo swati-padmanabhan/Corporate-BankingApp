@@ -580,3 +580,17 @@ C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\Corpora
 C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\itextsharp.dll
 C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\BouncyCastle.Cryptography.xml
 C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\itextsharp.xml
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Configuration.Abstractions.xml
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Http.dll
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Logging.dll
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Options.dll
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.DependencyInjection.xml
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Http.xml
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Logging.xml
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Logging.Abstractions.xml
+C:\Users\swati.padmanabhan\Desktop\capstone_setupay\Corporate-BankingApp\CorporateBankingApp\bin\Microsoft.Extensions.Options.xml

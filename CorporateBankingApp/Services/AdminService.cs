@@ -478,5 +478,23 @@ namespace CorporateBankingApp.Services
             }
         }
 
+        public EmployeeDTO GetEmployeeByDisbursementId(Guid disbursementId)
+        {
+            var salaryDisbursement = _adminRepository.GetSalaryDisbursementById(disbursementId);
+
+            if (salaryDisbursement == null || salaryDisbursement.Employee == null)
+            {
+                return null; // Handle this case in ApproveDisbursements
+            }
+
+            return new EmployeeDTO
+            {
+                FirstName = salaryDisbursement.Employee.FirstName,
+                LastName = salaryDisbursement.Employee.LastName,
+                Email = salaryDisbursement.Employee.Email,
+                Salary = salaryDisbursement.Employee.Salary
+            };
+        }
+
     }
 }

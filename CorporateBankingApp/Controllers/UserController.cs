@@ -1,16 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using CloudinaryDotNet.Actions;
 using CorporateBankingApp.DTOs;
 using CorporateBankingApp.Services;
+using Newtonsoft.Json;
 
 namespace CorporateBankingApp.Controllers
 {
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+
+        public string RecaptchaToken { get; set; }
 
         public UserController(IUserService userService)
         {
@@ -32,6 +37,24 @@ namespace CorporateBankingApp.Controllers
                 return View(userDTO);
             }
 
+            // Retrieve the reCAPTCHA token from the request
+            string recaptchaToken = Request.Form["g-recaptcha-response"];
+
+            // Check if the reCAPTCHA token is null or empty
+            if (string.IsNullOrEmpty(recaptchaToken))
+            {
+                ModelState.AddModelError("", "reCAPTCHA token is missing.");
+                return View(userDTO);
+            }
+
+            // Validate the reCAPTCHA token with your secret key
+            var isCaptchaValid = ValidateRecaptcha(recaptchaToken);
+            if (!isCaptchaValid)
+            {
+                ModelState.AddModelError("", "reCAPTCHA validation failed.");
+                return View(userDTO);
+            }
+
             var loginResult = _userService.LoginActivity(userDTO);
             if (loginResult != null)
             {
@@ -45,6 +68,16 @@ namespace CorporateBankingApp.Controllers
             ModelState.AddModelError("", "Invalid username or password.");
             return View(userDTO);
         }
+
+        private bool ValidateRecaptcha(string token)
+        {
+            var secretKey = "6LfQxFgqAAAAAM2yBKJXnU4wZf_c7MBrXJ1Vl0YD";
+            var client = new HttpClient();
+            var result = client.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={token}").Result;
+            dynamic jsonData = JsonConvert.DeserializeObject(result);
+            return jsonData.success;
+        }
+
 
         [Authorize(Roles = "Admin, Client")]
         public ActionResult Logout()

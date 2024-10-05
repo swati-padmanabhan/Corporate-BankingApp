@@ -2,8 +2,24 @@
 
 @{
     ViewBag.Title = "Login";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<script type="text/javascript">
+    var onloadCallback = function () {
+        grecaptcha.render('html_element', {
+            'sitekey': '6LfQxFgqAAAAAAXqKrbOOwDmPUQFjKbE987cLkKp'
+        });
+    };
+
+    function onSubmit(event) {
+        var token = grecaptcha.getResponse();
+        document.getElementById("recaptchaTokenInputId").value = token;
+    }
+    $(document).ready(function () {
+        $('#loginPassword').attr('type', 'password');
+    });
+</script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 
 <div class="container-fluid mt-150 w-50 mx-auto border rounded p-5">
     <div class="tab-content">
@@ -12,8 +28,9 @@
              id="pills-login"
              role="tabpanel"
              aria-labelledby="tab-login">
-            @using (Html.BeginForm())
+            @using (Html.BeginForm("Login", "User", FormMethod.Post, new { onsubmit = "onSubmit(event)" }))
             {
+                <input type="hidden" id="recaptchaTokenInputId" name="RecaptchaToken" />
                 @Html.AntiForgeryToken()
 
                 <div class="form-horizontal">
@@ -32,13 +49,18 @@
                         @Html.LabelFor(model => model.Password, new { @class = "form-label", @for = "loginPassword" })
                         <span class="required-asterisk">*</span>
                         <div class="input-group">
-                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control password", id = "loginPassword"} })
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control password", id = "loginPassword" } })
                             <span class="input-group-text" id="toggleLoginPassword">
-                               <i class="bi bi-eye passwordIcon" id="passwordIcon"></i>
-                                @*<i class="bi bi-eye-slash passwordIcon" id="passwordIcon"></i>*@
+                                <i class="bi bi-eye-slash passwordIcon" id="passwordIcon"></i>
                             </span>
                         </div>
                         @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="row mt-3 mb-3">
+                        <div class="col-sm-8 text-center">
+                            <div id="html_element" class=""></div> 
+                        </div>
                     </div>
 
                     <!-- Submit button -->
@@ -54,10 +76,13 @@
     </div>
 </div>
 
-
 <style>
     .btn.primary-bg:hover {
         background-color: #4e42aa;
     }
 
+    /* Centering the reCAPTCHA */
+    #html_element {
+        display: inline-block; /* Allows centering */
+    }
 </style>

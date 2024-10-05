@@ -40,5 +40,7 @@ namespace CorporateBankingApp.Services
         IEnumerable<PaymentDTO> GetPendingPaymentsByStatus(CompanyStatus status);
         void UpdatePaymentStatuses(List<Guid> paymentIds, CompanyStatus status);
 
+        EmployeeDTO GetEmployeeByDisbursementId(Guid disbursementId);
+
     }
 }

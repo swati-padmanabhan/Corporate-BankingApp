@@ -292,22 +292,42 @@ namespace CorporateBankingApp.Controllers
                     message = "No salary disbursement selected for approval."
                 });
             }
+
             bool success = true;
+
             foreach (var id in disbursementIds)
             {
                 bool approved = _adminService.ApproveSalaryDisbursement(id, true);
-                if (!approved)
+
+                if (approved)
+                {
+                    var employee = _adminService.GetEmployeeByDisbursementId(id);
+                    if (employee != null)
+                    {
+                        var payslip = new PayslipDTO
+                        {
+                            EmployeeName = $"{employee.FirstName} {employee.LastName}",
+                            Salary = employee.Salary,
+                            Month = DateTime.Now.ToString("MMMM"),
+                            //CompanyName = $"{}" // Set the company name accordingly
+                        };
+
+                        _emailService.SendPayslipEmail(employee.Email, payslip);
+                    }
+                }
+                else
                 {
                     success = false;
                     break;
                 }
             }
+
             if (success)
             {
                 return Json(new
                 {
                     success = true,
-                    message = "Salary disbursements approved successfully."
+                    message = "Salary disbursements approved and emails sent successfully."
                 });
             }
             else

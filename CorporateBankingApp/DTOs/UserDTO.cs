@@ -15,5 +15,6 @@ namespace CorporateBankingApp.DTOs
         
         [Required(ErrorMessage = "Please Provide Password")]
         public string Password { get; set; }
+
     }
 }

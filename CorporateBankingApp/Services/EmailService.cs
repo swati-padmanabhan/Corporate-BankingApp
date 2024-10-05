@@ -154,6 +154,22 @@ namespace CorporateBankingApp.Services
             _emailRepository.SendEmailNotification(clientEmail, title, body);
         }
 
+        public void SendPayslipEmail(string employeeEmail, PayslipDTO payslip)
+        {
+            var title = "Your Payslip for " + payslip.Month;
+            var messageContent = $@"
+        Dear {payslip.EmployeeName},<br/><br/>
+        We are pleased to provide you with your payslip for the month of <strong>{payslip.Month}</strong>.<br/><br/>
+        <strong>Salary Amount:</strong> {payslip.Salary:C}<br/>
+        <strong>Company:</strong> {payslip.CompanyName}<br/><br/>
+        Thank you,<br/>
+        Corporate Banking Application Team";
+
+            var body = GenerateEmailTemplate(title, messageContent);
+            _emailRepository.SendEmailNotification(employeeEmail, title, body);
+        }
+
+
 
     }
 }

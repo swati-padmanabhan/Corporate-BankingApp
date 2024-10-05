@@ -21,5 +21,7 @@ namespace CorporateBankingApp.Services
         //void SendSalaryDisbursementRejectionEmail(string clientEmail, EmployeeDTO employee, double salaryAmount, string month);
 
         void SendClientOnboardingStatusEmail(string toEmail, string subject, string body);
+
+        void SendPayslipEmail(string employeeEmail, PayslipDTO payslip);
     }
 }

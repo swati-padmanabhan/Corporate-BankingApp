@@ -211,13 +211,23 @@ namespace CorporateBankingApp.Controllers
 
 
         //*****************************************************payments*****************************************************
-        // GET: PaymentApprovals
         [Route("payment-approvals")]
-        public ActionResult PaymentApprovals()
+        public ActionResult PaymentApprovals(int page = 1, int pageSize = 2)
         {
             var pendingPayments = _adminService.GetPendingPaymentsByStatus(CompanyStatus.PENDING);
-            return View(pendingPayments);
+
+            var totalRecords = pendingPayments.Count();
+            var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            // Skip and take for pagination
+            var pagedPayments = pendingPayments.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            return View(pagedPayments);
         }
+
 
         [HttpPost]
         [Route("approve-payments")]

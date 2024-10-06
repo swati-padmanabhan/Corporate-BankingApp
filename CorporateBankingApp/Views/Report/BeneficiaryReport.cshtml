@@ -55,10 +55,10 @@
             color: #333;
         }
 </style>
+
 <table class="table">
     <thead>
         <tr>
-
             <th>Beneficiary Name</th>
             <th>Account Number</th>
             <th>Bank IFSC</th>
@@ -70,34 +70,31 @@
         </tr>
     </thead>
     <tbody>
-
-
         @foreach (var item in Model)
         {
             <tr>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.BeneficiaryName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AccountNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BankIFSC)
-                </td>
-
+                <td>@Html.DisplayFor(modelItem => item.BeneficiaryName)</td>
+                <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.BankIFSC)</td>
                 <td>@item.BeneficiaryStatus.ToString()</td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Amount)
-                </td>
-
+                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
                 <td>@item.PaymentRequestDate</td>
                 <td>@item.PaymentApprovalDate</td>
                 <td>@item.PaymentStatus</td>
-
             </tr>
         }
     </tbody>
-
 </table>
+
+<nav aria-label="Page navigation" class="py-3 px-2">
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="@(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" href="@Url.Action("BeneficiaryReport", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
+
 <a href="@Url.Action("DownloadBeneficiaryReport", "Report")" class="btn primary-bg text-white">Download PDF</a>

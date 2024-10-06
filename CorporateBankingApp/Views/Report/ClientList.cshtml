@@ -5,13 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <h2>Select a Client</h2>
 
 <table class="table">
     <thead>
         <tr>
             <th>Client Name</th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -26,9 +26,18 @@
                 <td>
                     <a href="@Url.Action("BeneficiaryReport", "Report", new { clientId = client.Id })">View Beneficiaries</a>
                 </td>
-
-
             </tr>
         }
     </tbody>
 </table>
+
+<nav aria-label="Page navigation" class="py-3 px-2">
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="@(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" href="@Url.Action("ClientList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

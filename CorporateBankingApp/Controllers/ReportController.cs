@@ -131,7 +131,7 @@ namespace CorporateBankingApp.Controllers
 
         // Route: GET /report/beneficiary-report
         [Route("beneficiary")]
-        public ActionResult BeneficiaryReport()
+        public ActionResult BeneficiaryReport(int page = 1, int pageSize = 5)
         {
             using (var session = NHibernateHelper.CreateSession())
             {
@@ -155,9 +155,23 @@ namespace CorporateBankingApp.Controllers
                     PaymentStatus = p.PaymentStatus
                 })).ToList();
 
-                return View(viewModel);
+                // Get total count and calculate total pages
+                var totalBeneficiaries = viewModel.Count();
+                var totalPages = (int)Math.Ceiling((double)totalBeneficiaries / pageSize);
+
+                // Paginate the results
+                var paginatedViewModel = viewModel.Skip((page - 1) * pageSize)
+                                                   .Take(pageSize)
+                                                   .ToList();
+
+                ViewBag.TotalPages = totalPages;
+                ViewBag.CurrentPage = page;
+                ViewBag.PageSize = pageSize;
+
+                return View(paginatedViewModel);
             }
         }
+
 
         // Route: GET /report/download-beneficiary-report
         [Route("download-beneficiary")]
@@ -238,24 +252,38 @@ namespace CorporateBankingApp.Controllers
 
         // Route: GET /report/client-list
         [Route("client-list")]
-        public ActionResult ClientList()
+        public ActionResult ClientList(int page = 1, int pageSize = 10)
         {
             using (var session = NHibernateHelper.CreateSession())
             {
-                var clients = session.Query<Client>()
-                                     .Select(c => new ClientReportDTO
-                                     {
-                                         Id = c.Id,
-                                         CompanyName = c.CompanyName // Assuming your Client model has a Name property
-                                     }).ToList();
+                var query = session.Query<Client>()
+                                   .Select(c => new ClientReportDTO
+                                   {
+                                       Id = c.Id,
+                                       CompanyName = c.CompanyName // Assuming your Client model has a CompanyName property
+                                   });
+
+                // Get the total count of clients
+                var totalClients = query.Count();
+                var totalPages = (int)Math.Ceiling((double)totalClients / pageSize);
+
+                // Get the paginated clients
+                var clients = query.Skip((page - 1) * pageSize)
+                                   .Take(pageSize)
+                                   .ToList();
+
+                ViewBag.TotalPages = totalPages;
+                ViewBag.CurrentPage = page;
+                ViewBag.PageSize = pageSize;
 
                 return View(clients);
             }
         }
 
+
         // Route: GET /report/employee-report-by-client/{clientId}
         [Route("employee-by-client/{clientId}")]
-        public ActionResult EmployeeReportByClient(Guid clientId)
+        public ActionResult EmployeeReportByClient(Guid clientId, int page = 1, int pageSize = 10)
         {
             using (var session = NHibernateHelper.CreateSession())
             {
@@ -274,10 +302,24 @@ namespace CorporateBankingApp.Controllers
                                 SalaryStatus = sd != null ? (CompanyStatus?)sd.SalaryStatus : null
                             };
 
-                var employeeReports = query.ToList();
+                // Get the total count of employees
+                var totalEmployees = query.Count();
+                var totalPages = (int)Math.Ceiling((double)totalEmployees / pageSize);
+
+                // Get the paginated employee reports
+                var employeeReports = query.Skip((page - 1) * pageSize)
+                                           .Take(pageSize)
+                                           .ToList();
+
+                ViewBag.TotalPages = totalPages;
+                ViewBag.CurrentPage = page;
+                ViewBag.ClientId = clientId; // Store the client ID for pagination links
+                ViewBag.PageSize = pageSize;
+
                 return View(employeeReports);
             }
         }
+
 
         // Route: GET /report/beneficiary-report-by-client/{clientId}
         [Route("beneficiary-by-client/{clientId}")]

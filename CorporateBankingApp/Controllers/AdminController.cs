@@ -15,6 +15,7 @@ using Razorpay.Api;
 namespace CorporateBankingApp.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [RoutePrefix("admin")]
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
@@ -27,7 +28,9 @@ namespace CorporateBankingApp.Controllers
             _emailService = emailService;
             _clientRepository = clientRepository;
         }
+
         // GET: Admin
+        [Route("")]
         public ActionResult Index()
         {
             var username = User.Identity.Name;
@@ -36,6 +39,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [AllowAnonymous]
+        [Route("registration")]
         public ActionResult AdminRegistration()
         {
             return View();
@@ -43,6 +47,7 @@ namespace CorporateBankingApp.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Route("registration")]
         public ActionResult AdminRegistration(AdminDTO adminDTO)
         {
             if (ModelState.IsValid)
@@ -53,12 +58,14 @@ namespace CorporateBankingApp.Controllers
             return View(adminDTO);
         }
 
+        [Route("client-approval")]
         public ActionResult ClientApproval()
         {
             var clients = _adminService.GetRegisteredClientsPendingApproval();
             return View(clients);
         }
 
+        [Route("client-details/{id}")]
         public ActionResult ViewClientDetails(Guid id)
         {
             var client = _adminService.GetClientById(id);
@@ -66,6 +73,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpPost]
+        [Route("approve-client")]
         // Action for accepting client
         public ActionResult ApproveClient(Guid clientId)
         {
@@ -78,6 +86,7 @@ namespace CorporateBankingApp.Controllers
 
         // Action for rejecting client
         [HttpPost]
+        [Route("reject-client")]
         public ActionResult RejectClient(Guid clientId, string rejectionReason)
         {
             // Logic to reject client
@@ -93,11 +102,13 @@ namespace CorporateBankingApp.Controllers
 
 
         // GET: ClientManagement
+        [Route("client-management")]
         public ActionResult ClientManagement()
         {
             return View();
         }
 
+        [Route("get-all-clients")]
         public ActionResult GetAllClients(int page, int rows, string sidx, string sord, bool _search, string searchField, string searchString, string searchOper)
         {
 
@@ -173,12 +184,14 @@ namespace CorporateBankingApp.Controllers
             return Json(jsonData, JsonRequestBehavior.AllowGet);
         }
 
+        [Route("update-client-details/{id}")]
         public ActionResult UpdateClientDetails(ClientDTO clientDTO, Guid id)
         {
             _adminService.UpdateClientDetails(clientDTO, id);
             return Json(new { success = true, message = "Client Details Updated Successfully." });
         }
 
+        [Route("delete-client-details/{id}")]
         public ActionResult DeleteClientDetails(Guid id)
         {
             _adminService.DeleteClientDetails(id);
@@ -188,6 +201,7 @@ namespace CorporateBankingApp.Controllers
 
         //*****************************************************payments*****************************************************
         // GET: PaymentApprovals
+        [Route("payment-approvals")]
         public ActionResult PaymentApprovals()
         {
             var pendingPayments = _adminService.GetPendingPaymentsByStatus(CompanyStatus.PENDING);
@@ -195,6 +209,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpPost]
+        [Route("approve-payments")]
         public JsonResult ApprovePayments(List<Guid> disbursementIds)
         {
             if (disbursementIds == null || !disbursementIds.Any())
@@ -215,6 +230,7 @@ namespace CorporateBankingApp.Controllers
 
         // Reject payments
         [HttpPost]
+        [Route("reject-payments")]
         public JsonResult RejectPayments(List<Guid> disbursementIds)
         {
             if (disbursementIds == null || !disbursementIds.Any())
@@ -242,11 +258,13 @@ namespace CorporateBankingApp.Controllers
 
         //*****************************************verify outbound clients*****************************************
         // GET: BeneficiaryManagement
+        [Route("beneficiary-management")]
         public ActionResult BeneficiaryManagement()
         {
             return View();
         }
 
+        [Route("get-beneficiary-for-verification")]
         public ActionResult GetOutboundBeneficiaryForVerification()
         {
             if (Session["UserId"] == null)
@@ -259,6 +277,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpPost]
+        [Route("update-beneficiary-status/{id:guid}/{status}")]
         public ActionResult UpdateOutboundBeneficiaryOnboardingStatus(Guid id, string status)
         {
             var result = _adminService.UpdateOutboundBeneficiaryOnboardingStatus(id, status);
@@ -274,6 +293,7 @@ namespace CorporateBankingApp.Controllers
 
 
         // GET: SalaryDisbursementApprovals
+        [Route("salary-disbursement")]
         public ActionResult SalaryDisbursementApprovals()
         {
             var pendingDisbursements = _adminService.ListPendingSalaryDisbursements();
@@ -282,6 +302,7 @@ namespace CorporateBankingApp.Controllers
 
 
         [HttpPost]
+        [Route("approve-disbursements")]
         public ActionResult ApproveDisbursements(List<Guid> disbursementIds)
         {
             if (disbursementIds == null || !disbursementIds.Any())
@@ -342,6 +363,7 @@ namespace CorporateBankingApp.Controllers
 
 
         [HttpPost]
+        [Route("reject-disbursements")]
         public ActionResult RejectDisbursements(List<Guid> disbursementIds)
         {
 
@@ -385,6 +407,7 @@ namespace CorporateBankingApp.Controllers
 
 
         // GET: ReportGeneration
+        [Route("report-generation")]
         public ActionResult ReportGeneration()
         {
             return View();

@@ -7,9 +7,9 @@ using System.Web.Mvc;
 using Payment = CorporateBankingApp.Models.Payment;
 using CorporateBankingApp.Utils;
 
-
 namespace CorporateBankingApp.Controllers
 {
+    [RoutePrefix("payment")] // Route prefix for all actions in this controller
     public class PaymentController : Controller
     {
         private readonly IClientService _clientService;
@@ -25,7 +25,9 @@ namespace CorporateBankingApp.Controllers
             _beneficiaryService = beneficiaryService;
         }
 
+        // Route: POST /payment/initiate
         [HttpPost]
+        [Route("initiate")]
         public ActionResult InitiatePayment(Guid beneficiaryId, double amount)
         {
             try
@@ -68,7 +70,9 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
+        // Route: POST /payment/verify
         [HttpPost]
+        [Route("verify")]
         public ActionResult PaymentVerification(string razorpay_payment_id, string razorpay_order_id, string razorpay_signature)
         {
             try
@@ -81,7 +85,7 @@ namespace CorporateBankingApp.Controllers
                 };
 
                 RazorpayClient client = new RazorpayClient(key, secret);
-                //Utils.verifyPaymentSignature(attributes);
+                //Utils.verifyPaymentSignature(attributes); // Uncomment to verify the signature
 
                 // Update payment status in the database
                 _paymentService.UpdatePaymentStatus(razorpay_order_id, CompanyStatus.PENDING);

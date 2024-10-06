@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 
 namespace CorporateBankingApp.Controllers
 {
+    [RoutePrefix("user")] // Add a route prefix for all actions in this controller
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -23,6 +24,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [AllowAnonymous]
+        [Route("login")] // Update the route for Login action
         public ActionResult Login()
         {
             return View();
@@ -30,6 +32,7 @@ namespace CorporateBankingApp.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Route("login")] // Update the route for Login POST action
         public ActionResult Login(UserDTO userDTO)
         {
             if (!ModelState.IsValid)
@@ -78,8 +81,8 @@ namespace CorporateBankingApp.Controllers
             return jsonData.success;
         }
 
-
         [Authorize(Roles = "Admin, Client")]
+        [Route("logout")] // Update the route for Logout action
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
@@ -88,6 +91,7 @@ namespace CorporateBankingApp.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("register")] // Update the route for Register action
         public ActionResult Register()
         {
             return View();
@@ -95,6 +99,7 @@ namespace CorporateBankingApp.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Route("register")] // Update the route for Register POST action
         public ActionResult Register(ClientDTO clientDTO)
         {
             if (!ModelState.IsValid)
@@ -148,6 +153,7 @@ namespace CorporateBankingApp.Controllers
             return validTypes.Contains(file.ContentType) && file.ContentLength <= maxSize;
         }
 
+        [Route("registration-success")] // Update the route for RegistrationSuccess action
         public ActionResult RegistrationSuccess()
         {
             return View();

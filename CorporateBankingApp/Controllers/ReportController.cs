@@ -11,72 +11,14 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 
 namespace CorporateBankingApp.Controllers
 {
+    [RoutePrefix("report")] // Route prefix for all actions in this controller
     public class ReportController : Controller
     {
-        //public ActionResult EmployeeReport()
-        //{
-        //    using (var session = NHibernateHelper.CreateSession())
-        //    {
-        //        var query = from e in session.Query<Employee>()
-        //                    from sd in e.SalaryDisbursements.DefaultIfEmpty() // Left join to get employees with or without salary disbursements
-        //                    select new EmployeeReportDTO
-        //                    {
-        //                        EmployeeId = e.Id,
-        //                        FirstName = e.FirstName,
-        //                        LastName = e.LastName,
-        //                        Email = e.Email,
-        //                        Designation = e.Designation,
-        //                        Salary = e.Salary,
-        //                        DisbursementDate = sd != null ? (DateTime?)sd.DisbursementDate : null,
-        //                        SalaryStatus = sd != null ? (CompanyStatus?)sd.SalaryStatus : null
-        //                    };
-
-        //        var employeeReports = query.ToList();
-        //        return View(employeeReports);
-        //    }
-        //}
-
-        //public ActionResult EmployeeReport(int page = 1, int pageSize = 10)
-        //{
-        //    using (var session = NHibernateHelper.CreateSession())
-        //    {
-        //        // Get the total count of employees
-        //        var totalRecords = session.Query<Employee>().Count();
-
-        //        // Create the query with pagination
-        //        var query = from e in session.Query<Employee>()
-        //                    from sd in e.SalaryDisbursements.DefaultIfEmpty() // Left join
-        //                    select new EmployeeReportDTO
-        //                    {
-        //                        EmployeeId = e.Id,
-        //                        FirstName = e.FirstName,
-        //                        LastName = e.LastName,
-        //                        Email = e.Email,
-        //                        Designation = e.Designation,
-        //                        Salary = e.Salary,
-        //                        DisbursementDate = sd != null ? (DateTime?)sd.DisbursementDate : null,
-        //                        SalaryStatus = sd != null ? (CompanyStatus?)sd.SalaryStatus : null
-        //                    };
-
-        //        // Paginate the results
-        //        var employeeReports = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-        //        // Calculate total pages
-        //        var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
-
-        //        ViewBag.CurrentPage = page;
-        //        ViewBag.TotalPages = totalPages;
-
-        //        return View(employeeReports);
-        //    }
-        //}
-
-
+        // Route: GET /report/employee-report
+        [Route("employee")]
         public ActionResult EmployeeReport(string searchEmail = "", int page = 1, int pageSize = 10)
         {
             using (var session = NHibernateHelper.CreateSession())
@@ -111,10 +53,8 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
-
-
-
-
+        // Route: GET /report/download-employee-report
+        [Route("download-employee")]
         public ActionResult DownloadEmployeeReport()
         {
             using (var session = NHibernateHelper.CreateSession())
@@ -189,6 +129,8 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
+        // Route: GET /report/beneficiary-report
+        [Route("beneficiary")]
         public ActionResult BeneficiaryReport()
         {
             using (var session = NHibernateHelper.CreateSession())
@@ -206,7 +148,6 @@ namespace CorporateBankingApp.Controllers
                     BeneficiaryStatus = b.BeneficiaryStatus,
                     BeneficiaryType = b.BeneficiaryType,
 
-
                     // Payment details
                     Amount = p.Amount,
                     PaymentRequestDate = p.PaymentRequestDate,
@@ -218,6 +159,8 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
+        // Route: GET /report/download-beneficiary-report
+        [Route("download-beneficiary")]
         public ActionResult DownloadBeneficiaryReport()
         {
             using (var session = NHibernateHelper.CreateSession())
@@ -293,6 +236,8 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
+        // Route: GET /report/client-list
+        [Route("client-list")]
         public ActionResult ClientList()
         {
             using (var session = NHibernateHelper.CreateSession())
@@ -308,7 +253,8 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
-
+        // Route: GET /report/employee-report-by-client/{clientId}
+        [Route("employee-by-client/{clientId}")]
         public ActionResult EmployeeReportByClient(Guid clientId)
         {
             using (var session = NHibernateHelper.CreateSession())
@@ -333,6 +279,8 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
+        // Route: GET /report/beneficiary-report-by-client/{clientId}
+        [Route("beneficiary-by-client/{clientId}")]
         public ActionResult BeneficiaryReportByClient(Guid clientId)
         {
             using (var session = NHibernateHelper.CreateSession())
@@ -360,6 +308,5 @@ namespace CorporateBankingApp.Controllers
                 return View(beneficiaryReports);
             }
         }
-
     }
 }

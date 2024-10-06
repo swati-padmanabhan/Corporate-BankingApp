@@ -16,6 +16,7 @@ using System.Web.Mvc;
 namespace CorporateBankingApp.Controllers
 {
     [Authorize(Roles = "Client")]
+    [RoutePrefix("client")]
     public class ClientController : Controller
     {
         private readonly IClientService _clientService;
@@ -30,17 +31,18 @@ namespace CorporateBankingApp.Controllers
         }
 
         // GET: Client
+        [Route("")]
         public ActionResult Index()
         {
             ViewBag.Username = User.Identity.Name;
             return View();
         }
 
+        [Route("user-profile")]
         public ActionResult UserProfile()
         {
             Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
-
             if (client == null)
             {
                 return HttpNotFound();
@@ -62,7 +64,7 @@ namespace CorporateBankingApp.Controllers
             return View(clientDto);
         }
 
-        // Edit Client Registration Details
+        [Route("edit-registration")]
         public ActionResult EditClientRegistrationDetails()
         {
             if (Session["UserId"] == null)
@@ -92,6 +94,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpPost]
+        [Route("edit-registration")]
         public ActionResult EditClientRegistrationDetails(ClientDTO clientDTO)
         {
             if (Session["UserId"] == null)
@@ -121,6 +124,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpPost]
+        [Route("update-balance")]
         public ActionResult UpdateBalance(double newBalance)
         {
             Guid clientId = (Guid)Session["UserId"];
@@ -137,8 +141,10 @@ namespace CorporateBankingApp.Controllers
         }
 
         // Manage Beneficiaries
+        [Route("manage-beneficiaries")]
         public ActionResult ManageBeneficiaries() => View();
 
+        [Route("get-all-beneficiaries")]
         public ActionResult GetAllOutboundBeneficiaries()
         {
             if (Session["UserId"] == null)
@@ -152,6 +158,7 @@ namespace CorporateBankingApp.Controllers
             return Json(beneficiaries, JsonRequestBehavior.AllowGet);
         }
 
+        [Route("inbound-beneficiaries")]
         public ActionResult InboundBeneficiaries()
         {
             using (var session = NHibernateHelper.CreateSession())
@@ -164,6 +171,8 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("update-beneficiary-status/{id}/{isActive}")]
         public ActionResult UpdateBeneficiaryStatus(Guid id, bool isActive)
         {
             Guid clientId = (Guid)Session["UserId"];
@@ -171,6 +180,8 @@ namespace CorporateBankingApp.Controllers
             return Json(new { success = true });
         }
 
+        [HttpPost]
+        [Route("add-new-beneficiary")]
         public ActionResult AddNewBeneficiary(BeneficiaryDTO beneficiaryDTO)
         {
             if (Session["UserId"] == null)
@@ -195,6 +206,8 @@ namespace CorporateBankingApp.Controllers
             return Json(new { success = true });
         }
 
+        [HttpGet]
+        [Route("get-beneficiary-by-id/{id}")]
         public ActionResult GetBeneficiaryById(Guid id)
         {
             if (Session["UserId"] == null)
@@ -221,6 +234,8 @@ namespace CorporateBankingApp.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [Route("edit-beneficiary")]
         public ActionResult EditBeneficiary(BeneficiaryDTO beneficiaryDTO)
         {
             if (Session["UserId"] == null)
@@ -246,8 +261,10 @@ namespace CorporateBankingApp.Controllers
         }
 
         // Manage Employees
+        [Route("manage-employees")]
         public ActionResult ManageEmployees() => View();
 
+        [Route("get-all-employees")]
         public ActionResult GetAllEmployees()
         {
             if (Session["UserId"] == null)
@@ -272,6 +289,9 @@ namespace CorporateBankingApp.Controllers
 
             return Json(employeeDtos, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        [Route("add-employee")]
         public ActionResult Add(EmployeeDTO employeeDTO)
         {
             if (Session["UserId"] == null)
@@ -286,10 +306,8 @@ namespace CorporateBankingApp.Controllers
                 return new HttpStatusCodeResult(400, "Client not found");
             }
 
-            // Check if the model state is valid
             if (!ModelState.IsValid)
             {
-                // Get validation errors
                 var errors = ModelState.Values.SelectMany(v => v.Errors)
                                                .Select(e => e.ErrorMessage)
                                                .ToList();
@@ -311,7 +329,8 @@ namespace CorporateBankingApp.Controllers
             });
         }
 
-
+        [HttpGet]
+        [Route("get-employee-by-id/{id}")]
         public ActionResult GetEmployeeById(Guid id)
         {
             var employee = _clientService.GetEmployeeById(id);
@@ -337,6 +356,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpPost]
+        [Route("edit-employee")]
         public ActionResult Edit(EmployeeDTO employeeDTO)
         {
             if (Session["UserId"] == null)
@@ -356,6 +376,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpPost]
+        [Route("update-employee-status/{id}/{isActive}")]
         public ActionResult UpdateEmployeeStatus(Guid id, bool isActive)
         {
             Guid clientId = (Guid)Session["UserId"];
@@ -365,6 +386,7 @@ namespace CorporateBankingApp.Controllers
 
         // Upload CSV
         [HttpPost]
+        [Route("upload-csv")]
         public ActionResult UploadCsv()
         {
             var csvFile = Request.Files["csvFile"];
@@ -397,6 +419,7 @@ namespace CorporateBankingApp.Controllers
 
         // Salary Disbursement
         [HttpPost]
+        [Route("process-salary-disbursements")]
         public ActionResult ProcessSalaryDisbursements(List<Guid> employeeIds, bool isBatch)
         {
             if (employeeIds == null || !employeeIds.Any())
@@ -436,6 +459,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         // Payments
+        [Route("make-payment-requests")]
         public ActionResult MakePaymentRequests()
         {
             if (Session["UserId"] == null)
@@ -460,6 +484,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpGet]
+        [Route("get-beneficiary-list-for-payment")]
         public ActionResult GetBeneficiaryListForPayment()
         {
             if (Session["UserId"] == null)
@@ -485,9 +510,11 @@ namespace CorporateBankingApp.Controllers
         }
 
         // Upload Documents
+        [Route("upload-documents")]
         public ActionResult UploadDocuments() => View();
 
         // Generate Reports
+        [Route("generate-reports")]
         public ActionResult GenerateReports() => View();
     }
 }

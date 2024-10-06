@@ -476,6 +476,22 @@ namespace CorporateBankingApp.Services
             foreach (var paymentId in paymentIds)
             {
                 _adminRepository.UpdatePaymentStatus(paymentId, status);
+
+                //fetching the payment details
+                var payment = _adminRepository.GetPaymentById(paymentId);
+
+                if (payment != null)
+                {
+                    var client = _clientRepository.GetClientById(payment.ClientId);
+                    if (client != null)
+                    {
+                        var subject = status == CompanyStatus.APPROVED ? "Payment Approved" : "Payment Rejected";
+                        var body = $"Dear {client.UserName}, your payment of {payment.Amount:C} has been {status.ToString().ToLower()}.";
+                        _emailService.SendClientOnboardingStatusEmail(client.Email, subject, body);
+
+                    }
+                }
+
             }
         }
 

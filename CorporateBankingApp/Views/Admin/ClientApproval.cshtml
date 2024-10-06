@@ -9,8 +9,7 @@
     <div class="table-responsive">
         <h2 class="my-3 fs-2">Client Approval</h2>
 
-        <table id="data-table"
-               class="table table-bordered table-centered mb-0 align-middle">
+        <table id="data-table" class="table table-bordered table-centered mb-0 align-middle">
             <thead class="table-light">
                 <tr>
                     <th>Username</th>
@@ -20,29 +19,19 @@
                 </tr>
                 <tr id="search-row">
                     <th>
-                        <input type="text"
-                               class="form-control search-input"
-                               placeholder="Search Username"
-                               onkeyup="filterTable(0)" />
+                        <input type="text" class="form-control search-input" placeholder="Search Username" onkeyup="filterTable(0)" />
                     </th>
                     <th>
-                        <input type="text"
-                               class="form-control search-input"
-                               placeholder="Search Email"
-                               onkeyup="filterTable(1)" />
+                        <input type="text" class="form-control search-input" placeholder="Search Email" onkeyup="filterTable(1)" />
                     </th>
                     <th>
-                        <input type="text"
-                               class="form-control search-input"
-                               placeholder="Search Company Name"
-                               onkeyup="filterTable(2)" />
+                        <input type="text" class="form-control search-input" placeholder="Search Company Name" onkeyup="filterTable(2)" />
                     </th>
                 </tr>
             </thead>
             <tbody class="text-center">
                 @foreach (var client in Model)
                 {
-
                     <tr>
                         <td>
                             <p class="my-auto">@client.UserName</p>
@@ -50,23 +39,24 @@
                         <td>@client.Email</td>
                         <td>@client.CompanyName</td>
                         <td>
-                            @Html.ActionLink("View Client", "ViewClientDetails", new
-                            {
-                                id =
-                            client.Id
-                            }, new { @class = "btn btn-sm btn-primary" })
+                            @Html.ActionLink("View Client", "ViewClientDetails", new { id = client.Id }, new { @class = "btn btn-sm btn-primary" })
                         </td>
                     </tr>
-
                 }
             </tbody>
         </table>
+
+        <nav aria-label="Page navigation" class="py-3 px-2">
+            <ul class="pagination">
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="@(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("ClientApproval", new { page = i, pageSize = 2 })">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
     </div>
 </div>
 
-<script src="~/Scripts/clientOnboarding.js"></script>
-<script>
-    $(document).ready(() => {
-        loadClientsForVerification();
-    })
-</script>
+

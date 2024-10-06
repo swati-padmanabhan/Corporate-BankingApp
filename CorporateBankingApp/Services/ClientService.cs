@@ -94,45 +94,48 @@ namespace CorporateBankingApp.Services
 
         public void EditClientRegistration(Client client, IList<HttpPostedFileBase> uploadedFiles)
         {
-            string folderPath = HttpContext.Current.Server.MapPath("~/Content/Documents/ClientRegistration/") + client.UserName;
+            string folderPath = HttpContext.Current.Server.MapPath($"~/Content/Documents/ClientRegistration/{client.UserName}");
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
 
             string[] documentTypes = { "Company Id Proof", "Address Proof" };
+
             for (int i = 0; i < uploadedFiles.Count; i++)
             {
                 var file = uploadedFiles[i];
-                string fileName = Path.GetFileName(file.FileName);
-                string filePath = Path.Combine(folderPath, fileName);
-                file.SaveAs(filePath);
-                string relativeFilePath = $"~/Content/Documents/ClientRegistration/{client.UserName}/{fileName}";
+                if (file != null && file.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(file.FileName);
+                    string filePath = Path.Combine(folderPath, fileName);
+                    file.SaveAs(filePath);
+                    string relativeFilePath = $"~/Content/Documents/ClientRegistration/{client.UserName}/{fileName}";
 
-                var existingDocument = client.Documents.FirstOrDefault(d => d.DocumentType == documentTypes[i]);
-                if (existingDocument != null)
-                {
-                    // Update existing document
-                    existingDocument.FilePath = relativeFilePath;
-                    existingDocument.UploadDate = DateTime.Now;
-                }
-                else
-                {
-                    // Add new document
-                    var document = new Document
+                    var existingDocument = client.Documents.FirstOrDefault(d => d.DocumentType == documentTypes[i]);
+                    if (existingDocument != null)
                     {
-                        DocumentType = documentTypes[i],
-                        FilePath = relativeFilePath,
-                        UploadDate = DateTime.Now,
-                        Client = client
-                    };
-                    client.Documents.Add(document);
+                        existingDocument.FilePath = relativeFilePath;
+                        existingDocument.UploadDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        var document = new Document
+                        {
+                            DocumentType = documentTypes[i],
+                            FilePath = relativeFilePath,
+                            UploadDate = DateTime.Now,
+                            Client = client
+                        };
+                        client.Documents.Add(document);
+                    }
                 }
             }
 
-            // Save client changes
             _clientRepository.EditClientRegistration(client);
         }
+
+
 
 
         //*******************************************Employee*******************************************

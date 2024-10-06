@@ -18,6 +18,8 @@ namespace CorporateBankingApp.DTOs
 
         public string EmployeeLastName { get; set; }
 
+        public double Amount { get; set; }
+
         public double Salary {  get; set; }
 
         public DateTime DisbursementDate { get; set; }

@@ -59,11 +59,22 @@ namespace CorporateBankingApp.Controllers
         }
 
         [Route("client-approval")]
-        public ActionResult ClientApproval()
+        public ActionResult ClientApproval(int page = 1, int pageSize = 2)
         {
             var clients = _adminService.GetRegisteredClientsPendingApproval();
-            return View(clients);
+
+            var totalRecords = clients.Count();
+            var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            // Skip and take to paginate the list
+            var pagedClients = clients.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            return View(pagedClients);
         }
+
 
         [Route("client-details/{id}")]
         public ActionResult ViewClientDetails(Guid id)
@@ -293,12 +304,35 @@ namespace CorporateBankingApp.Controllers
 
 
         // GET: SalaryDisbursementApprovals
+        
         [Route("salary-disbursement")]
-        public ActionResult SalaryDisbursementApprovals()
+        public ActionResult SalaryDisbursementApprovals(int page = 1, int pageSize = 5)
         {
-            var pendingDisbursements = _adminService.ListPendingSalaryDisbursements();
-            return View(pendingDisbursements);
+            using (var session = NHibernateHelper.CreateSession())
+            {
+                var query = from sd in session.Query<SalaryDisbursement>()
+                            select new SalaryDisbursementDTO
+                            {
+                                SalaryDisbursementId = sd.Id,
+                                CompanyName = sd.Employee.Client.UserName,
+                                EmployeeFirstName = sd.Employee.FirstName,
+                                EmployeeLastName = sd.Employee.LastName,
+                                Salary = sd.Employee.Salary,
+                                DisbursementDate = sd.DisbursementDate
+                            };
+
+                var totalRecords = query.Count();
+                var salaryDisbursements = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+
+                return View(salaryDisbursements);
+            }
         }
+
+
 
 
         [HttpPost]

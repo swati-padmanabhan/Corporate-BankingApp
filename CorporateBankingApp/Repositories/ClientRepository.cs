@@ -37,7 +37,7 @@ namespace CorporateBankingApp.Repositories
         {
             using (var transaction = _session.BeginTransaction())
             {
-                _session.Update(client);
+                _session.SaveOrUpdate(client);
                 transaction.Commit();
             }
         }
@@ -144,9 +144,8 @@ namespace CorporateBankingApp.Repositories
         //payments
         public List<Beneficiary> GetBeneficiaryList(Guid clientId)
         {
-            var beneficiaries = _session.Query<Beneficiary>().Where(b =>
-            (b.Client.Id == clientId && b.BeneficiaryStatus == CompanyStatus.APPROVED && b.BeneficiaryType == BeneficiaryType.OUTBOUND && b.IsActive == true)
-            || (b.BeneficiaryStatus == CompanyStatus.APPROVED && b.BeneficiaryType == BeneficiaryType.INBOUND && b.IsActive == true)).ToList();
+            var client = GetClientById(clientId);
+            var beneficiaries = _session.Query<Beneficiary>().Where(b => b.Client.Id == clientId && b.BeneficiaryStatus == CompanyStatus.APPROVED && b.IsActive == true).ToList();
             return beneficiaries;
         }
     }

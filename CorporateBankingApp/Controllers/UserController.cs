@@ -136,11 +136,14 @@ namespace CorporateBankingApp.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
+
             Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
+
             var clientDTO = new ClientDTO
             {
-                //UserName = client.UserName,
+                Id = client.Id,
+                UserName = client.UserName, // Ensure UserName is included for updates
                 Email = client.Email,
                 CompanyName = client.CompanyName,
                 Location = client.Location,
@@ -155,6 +158,7 @@ namespace CorporateBankingApp.Controllers
                     UploadDate = d.UploadDate
                 }).ToList()
             };
+
             return View(clientDTO);
         }
 
@@ -167,9 +171,15 @@ namespace CorporateBankingApp.Controllers
                 return RedirectToAction("Login", "User");
             }
 
-            Guid clientId = (Guid)Session["UserId"];
+            if (!ModelState.IsValid) // Validate the model
+            {
+                return View(clientDTO);
+            }
 
+            Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
+
+            // Update the client's properties
             client.Email = clientDTO.Email;
             client.CompanyName = clientDTO.CompanyName;
             client.Location = clientDTO.Location;
@@ -177,26 +187,21 @@ namespace CorporateBankingApp.Controllers
             client.AccountNumber = clientDTO.AccountNumber;
             client.ClientIFSC = clientDTO.ClientIFSC;
             client.Balance = clientDTO.Balance;
-            client.OnBoardingStatus = CompanyStatus.PENDING;
-            var uploadedFiles = new List<HttpPostedFileBase>();
 
-            var companyIdProof = Request.Files["uploadedFiles1"];
-            var addressProof = Request.Files["uploadedFiles2"];
-
-            if (companyIdProof != null && companyIdProof.ContentLength > 0)
-            {
-                uploadedFiles.Add(companyIdProof);
-            }
-
-            if (addressProof != null && addressProof.ContentLength > 0)
-            {
-                uploadedFiles.Add(addressProof);
-            }
+            // Handle file uploads
+            var uploadedFiles = new List<HttpPostedFileBase>
+    {
+        Request.Files["uploadedFiles1"],
+        Request.Files["uploadedFiles2"]
+    }.Where(file => file != null && file.ContentLength > 0).ToList();
 
             _clientService.EditClientRegistration(client, uploadedFiles);
 
-            return RedirectToAction("Login", "User");
+            return RedirectToAction("Success", "User"); // Redirect after successful update
         }
+
+
+
 
 
 

@@ -35,6 +35,8 @@ namespace CorporateBankingApp.Repositories
 
         void UpdatePaymentStatus(Guid paymentId, CompanyStatus status);
 
+        Payment GetPaymentById(Guid id);
+
         void UpdateBeneficiary(Beneficiary beneficiary);
 
         List<Beneficiary> GetPendingBeneficiaries();

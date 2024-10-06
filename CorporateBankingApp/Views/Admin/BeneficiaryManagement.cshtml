@@ -29,6 +29,7 @@
         <table class="table align-middle accent-dark-b mb-0" id="beneficiaryVerificationTable">
             <thead>
                 <tr>
+                    <th>@Html.DisplayNameFor(model => model.ClientName)</th>
                     <th>@Html.DisplayNameFor(model => model.BeneficiaryName)</th>
                     <th>@Html.DisplayNameFor(model => model.AccountNumber)</th>
                     <th>@Html.DisplayNameFor(model => model.BankIFSC)</th>
@@ -72,6 +73,9 @@
                 }
             </tbody>
         </table>
+        <nav aria-label="Page navigation" class="py-3 px-2">
+            <ul class="pagination" id="beneficiaryManagementPagination"></ul>
+        </nav>
     </div>
 </div>
 

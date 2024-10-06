@@ -511,7 +511,6 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpGet]
-        [Route("get-beneficiary-list-for-payment")]
         public ActionResult GetBeneficiaryListForPayment()
         {
             if (Session["UserId"] == null)
@@ -529,12 +528,13 @@ namespace CorporateBankingApp.Controllers
 
             var paymentBeneficiaryDTO = new BeneficiaryPaymentDTO
             {
-                Amount = 0,
+                Amount = 0,  // Default amount
                 Beneficiaries = beneficiaryList
             };
 
             return Json(new { success = true, data = paymentBeneficiaryDTO }, JsonRequestBehavior.AllowGet);
         }
+
 
         // Upload Documents
         [Route("upload-documents")]

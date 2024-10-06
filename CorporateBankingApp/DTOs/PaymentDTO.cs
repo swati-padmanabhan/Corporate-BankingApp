@@ -11,13 +11,17 @@ namespace CorporateBankingApp.DTOs
     {
         public Guid PaymentId { get; set; }
 
+        public string ClientName { get; set; }
+
+        public string Username { get; set; }
+
         public string CompanyName { get; set; } 
 
         public string AccountNumber { get; set; }
 
         public Beneficiary Beneficiary { get; set; }
 
-        public string BeneficiaryType { get; set; }
+        public BeneficiaryType BeneficiaryType { get; set; }
 
         public string BeneficiaryName { get; set; }
 

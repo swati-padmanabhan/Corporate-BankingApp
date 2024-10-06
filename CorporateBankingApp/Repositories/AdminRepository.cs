@@ -93,8 +93,8 @@ namespace CorporateBankingApp.Repositories
         public SalaryDisbursement GetSalaryDisbursementById(Guid id)
         {
             return _session.Query<SalaryDisbursement>()
-                           .Fetch(sd => sd.Employee) 
-                           .ThenFetch(e => e.Client) 
+                           .Fetch(sd => sd.Employee)
+                           .ThenFetch(e => e.Client)
                            .FirstOrDefault(sd => sd.Id == id);
         }
 
@@ -197,14 +197,16 @@ namespace CorporateBankingApp.Repositories
         //verify payments
         public IEnumerable<PaymentDTO> GetPendingPaymentsByStatus(CompanyStatus status)
         {
+
             return _session.Query<Payment>()
                 .Where(x => x.PaymentStatus == status)
+                .OrderByDescending(x => x.PaymentRequestDate)
                 .Select(x => new PaymentDTO
                 {
                     PaymentId = x.Id,
                     CompanyName = x.Beneficiary.BeneficiaryName,
                     AccountNumber = x.Beneficiary.AccountNumber,
-                    BeneficiaryType = x.Beneficiary.BeneficiaryType.ToString().ToUpper(),
+                    BeneficiaryType = x.Beneficiary.BeneficiaryType,
                     Amount = x.Amount,
                     PaymentRequestDate = x.PaymentRequestDate
                 })

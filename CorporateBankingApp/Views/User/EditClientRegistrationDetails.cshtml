@@ -8,7 +8,6 @@
 <div class="container-xl px-4 mt-4">
     <div class="row">
         <div class="col-xl-4">
-            <!-- Client Overview card -->
             <div class="card mb-4">
                 <div class="card-header">Client Overview</div>
                 <div class="card-body">
@@ -24,115 +23,87 @@
         </div>
 
         <div class="col-xl-8">
-            <!-- Account details card -->
             <div class="card mb-4">
                 <div class="card-header">Account Details</div>
                 <div class="card-body">
                     @using (Html.BeginForm("EditClientRegistrationDetails", "User", FormMethod.Post, new { enctype = "multipart/form-data", id = "editClientForm" }))
                     {
                         @Html.AntiForgeryToken()
-                        <div class="form-horizontal">
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            @Html.HiddenFor(model => model.Id)
+                        @Html.HiddenFor(model => model.Id)
 
-                            <!-- Email -->
-                            <div class="mb-3">
-                                @Html.LabelFor(model => model.Email, new { @class = "small mb-1" })
-                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id = "email" } })
-                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                                <span id="emailError" class="text-danger"></span>
-                            </div>
-
-                            <!-- Company Name -->
-                            <div class="mb-3">
-                                @Html.LabelFor(model => model.CompanyName, new { @class = "small mb-1" })
-                                @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control", @id = "companyName" } })
-                                @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
-                                <span id="companyNameError" class="text-danger"></span>
-                            </div>
-
-                            <!-- Location -->
-                            <div class="mb-3">
-                                @Html.LabelFor(model => model.Location, new { @class = "small mb-1" })
-                                @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control", @id = "location" } })
-                                @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
-                                <span id="locationError" class="text-danger"></span>
-                            </div>
-
-                            <!-- Contact Information -->
-                            <div class="mb-3">
-                                @Html.LabelFor(model => model.ContactInformation, new { @class = "small mb-1" })
-                                @Html.EditorFor(model => model.ContactInformation, new { htmlAttributes = new { @class = "form-control", @id = "contactInformation" } })
-                                @Html.ValidationMessageFor(model => model.ContactInformation, "", new { @class = "text-danger" })
-                                <span id="contactInformationError" class="text-danger"></span>
-                            </div>
-
-                            <!-- Account Number -->
-                            <div class="mb-3">
-                                @Html.LabelFor(model => model.AccountNumber, new { @class = "small mb-1" })
-                                @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control", @id = "accountNumber" } })
-                                @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
-                                <span id="accountNumberError" class="text-danger"></span>
-                            </div>
-
-                            <!-- Client IFSC -->
-                            <div class="mb-3">
-                                @Html.LabelFor(model => model.ClientIFSC, new { @class = "small mb-1" })
-                                @Html.EditorFor(model => model.ClientIFSC, new { htmlAttributes = new { @class = "form-control", @id = "clientIFSC" } })
-                                @Html.ValidationMessageFor(model => model.ClientIFSC, "", new { @class = "text-danger" })
-                                <span id="clientIFSCError" class="text-danger"></span>
-                            </div>
-
-                            <!-- Balance -->
-                            <div class="mb-3">
-                                @Html.LabelFor(model => model.Balance, new { @class = "small mb-1" })
-                                @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control", @id = "balance" } })
-                                @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
-                                <span id="balanceError" class="text-danger"></span>
-                            </div>
-
-                            <!-- Document Uploads -->
-                            <div class="form-group row mb-3">
-                                <div class="col-md-6">
-                                    @Html.Label("Company ID Proof", htmlAttributes: new { @class = "control-label" })
-                                    <span class="text-danger">*</span>
-                                    <!-- Display existing document -->
-                                    @if (Model.Documents != null && Model.Documents.Any(d => d.DocumentType == "Company Id Proof"))
-                                    {
-                                        <p>
-                                            Current Document: <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#documentModal" onclick="showDocument('@Url.Content(Model.Documents.First(d => d.DocumentType == "Company Id Proof").FilePath)')">View</a>
-                                        </p>
-                                    }
-                                    <!-- Option to upload a new document -->
-                                    <input type="file" name="uploadedFiles1" class="form-control" />
-                                    @Html.ValidationMessageFor(model => model.Document1, "", new { @class = "text-danger" })
-                                </div>
-                                <div class="col-md-6">
-                                    @Html.Label("Address Proof", htmlAttributes: new { @class = "control-label" })
-                                    <span class="text-danger">*</span>
-                                    <!-- Display existing document -->
-                                    @if (Model.Documents != null && Model.Documents.Any(d => d.DocumentType == "Address Proof"))
-                                    {
-                                        <p>
-                                            Current Document: <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#documentModal" onclick="showDocument('@Url.Content(Model.Documents.First(d => d.DocumentType == "Address Proof").FilePath)')">View</a>
-                                        </p>
-                                    }
-                                    <!-- Option to upload a new document -->
-                                    <input type="file" name="uploadedFiles2" class="form-control" />
-                                    @Html.ValidationMessageFor(model => model.Document2, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <!-- Save changes button with icon -->
-                            <button class="btn btn-primary" type="submit" onclick="return validateForm()">
-                                <i class="fas fa-save"></i> Save Changes
-                            </button>
+                        <!-- Email -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Email, new { @class = "small mb-1" })
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                         </div>
+
+                        <!-- Company Name -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.CompanyName, new { @class = "small mb-1" })
+                            @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Location, new { @class = "small mb-1" })
+                            @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.ContactInformation, new { @class = "small mb-1" })
+                            @Html.EditorFor(model => model.ContactInformation, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ContactInformation, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Account Number -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.AccountNumber, new { @class = "small mb-1" })
+                            @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Client IFSC -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.ClientIFSC, new { @class = "small mb-1" })
+                            @Html.EditorFor(model => model.ClientIFSC, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ClientIFSC, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Balance -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Balance, new { @class = "small mb-1" })
+                            @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Document Uploads -->
+                        <div class="form-group row mb-3">
+                            <div class="col-md-6">
+                                @Html.Label("Company ID Proof", htmlAttributes: new { @class = "control-label" })
+                                <input type="file" name="uploadedFiles1" class="form-control" />
+                                @Html.ValidationMessage("Document1", "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.Label("Address Proof", htmlAttributes: new { @class = "control-label" })
+                                <input type="file" name="uploadedFiles2" class="form-control" />
+                                @Html.ValidationMessage("Document2", "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
                     }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">

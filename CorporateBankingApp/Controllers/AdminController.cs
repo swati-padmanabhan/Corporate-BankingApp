@@ -274,9 +274,6 @@ namespace CorporateBankingApp.Controllers
         }
 
 
-
-
-
         //*****************************************verify outbound clients*****************************************
         // GET: BeneficiaryManagement
         [Route("beneficiary-management")]

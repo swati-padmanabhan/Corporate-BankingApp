@@ -194,24 +194,27 @@ namespace CorporateBankingApp.Repositories
             }
         }
 
-        //verify payments
         public IEnumerable<PaymentDTO> GetPendingPaymentsByStatus(CompanyStatus status)
         {
-
             return _session.Query<Payment>()
+                .Fetch(x => x.Beneficiary)          // Ensure Beneficiary is loaded
+                .ThenFetch(b => b.Client)           // Ensure Client is loaded
                 .Where(x => x.PaymentStatus == status)
                 .OrderByDescending(x => x.PaymentRequestDate)
                 .Select(x => new PaymentDTO
                 {
                     PaymentId = x.Id,
-                    CompanyName = x.Beneficiary.BeneficiaryName,
-                    AccountNumber = x.Beneficiary.AccountNumber,
-                    BeneficiaryType = x.Beneficiary.BeneficiaryType,
-                    Amount = x.Amount,
-                    PaymentRequestDate = x.PaymentRequestDate
+                    Username = x.Beneficiary.Client.UserName,  // Fetch Client's UserName via Beneficiary
+                    CompanyName = x.Beneficiary.BeneficiaryName, // CompanyName from Beneficiary
+                    AccountNumber = x.Beneficiary.AccountNumber, // AccountNumber from Beneficiary
+                    BeneficiaryType = x.Beneficiary.BeneficiaryType, // BeneficiaryType from Beneficiary
+                    Amount = x.Amount,  // Amount from Payment
+                    PaymentRequestDate = x.PaymentRequestDate  // Request Date from Payment
                 })
                 .ToList();
         }
+
+
 
         public void UpdatePaymentStatus(Guid paymentId, CompanyStatus status)
         {

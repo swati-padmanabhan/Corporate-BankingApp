@@ -803,7 +803,7 @@
     <Content Include="Views\User\RegistrationSuccess.cshtml" />
     <Content Include="Views\Admin\SalaryDisbursementApprovals.cshtml" />
     <Content Include="Views\Client\UserProfile.cshtml" />
-    <Content Include="Views\Client\EditClientRegistrationDetails.cshtml" />
+    <Content Include="Views\User\EditClientRegistrationDetails.cshtml" />
     <Content Include="Views\Client\ManageBeneficiaries.cshtml" />
     <Content Include="Views\Client\_EditBeneficiaryPartial.cshtml" />
     <Content Include="Views\Client\_AddBeneficiaryPartial.cshtml" />

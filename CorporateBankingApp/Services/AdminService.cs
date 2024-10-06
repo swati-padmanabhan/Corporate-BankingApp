@@ -337,6 +337,7 @@ namespace CorporateBankingApp.Services
                 BeneficiaryName = b.BeneficiaryName,
                 AccountNumber = b.AccountNumber,
                 BankIFSC = b.BankIFSC,
+                ClientName = b.Client.UserName,
                 BeneficiaryType = b.BeneficiaryType.ToString().ToUpper(),
                 DocumentPaths = b.Documents.Select(d => urlHelper.Content(d.FilePath)).ToList()
             }).ToList();

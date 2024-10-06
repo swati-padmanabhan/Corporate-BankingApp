@@ -41,5 +41,8 @@ namespace CorporateBankingApp.DTOs
         public HttpPostedFileBase BeneficiaryIdProof { get; set; }
 
         public List<string> DocumentPaths { get; set; }
+
+        [Display(Name = "Client Name")]
+        public string ClientName { get; set; }
     }
 }

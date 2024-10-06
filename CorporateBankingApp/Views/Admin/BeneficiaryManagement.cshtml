@@ -5,10 +5,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="text-center my-4 pt-3">Beneficiary Management</h2>
+<div class="container-fluid" id="beneficiaryVerificationList">
+    <h2 class="text-center my-4 pt-3 primary-text">Beneficiary Management</h2>
 
-<div class="container py-5" id="beneficiaryToBeVerifiedList">
-    <!-- Updated Table for Consistency -->
+    <div class="my-4 float-start w-75">
+        <input type="text" id="searchInput" placeholder="Search beneficiaries..." class="form-control" onkeyup="searchBeneficiaries()" />
+    </div>
+
+    <div class="dropdown my-4 float-end">
+        <button class="btn rounded-3 wrapper" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-filter me-1"></i>
+            <span>Filter</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" onclick="filterAll()">All</a></li>
+            <li><a class="dropdown-item" onclick="filterByStatus('INBOUND')">Inbound</a></li>
+            <li><a class="dropdown-item" onclick="filterByStatus('OUTBOUND')">Outbound</a></li>
+        </ul>
+    </div>
+
+
     <div class="table-responsive">
         <table class="table align-middle accent-dark-b mb-0" id="beneficiaryVerificationTable">
             <thead>
@@ -22,7 +38,6 @@
                 </tr>
             </thead>
             <tbody id="beneficiaryToBeVerifiedTblBody">
-                <!-- Data comes from AJAX -->
                 @if (Model != null && Model.Any())
                 {
                     foreach (var beneficiary in Model)
@@ -39,9 +54,12 @@
                                 </button>
                             </td>
                             <td>
-                                <!-- Ensure btn-success and btn-danger are styled correctly -->
-                                <button class="btn btn-sm btn-success">Approve</button>
-                                <button class="btn btn-sm btn-danger">Reject</button>
+                                <button class="btn btn-sm btn-success" onclick="approveBeneficiary('@beneficiary.Id')">
+                                    <i class="bi bi-check"></i> Approve
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="rejectBeneficiary('@beneficiary.Id')">
+                                    <i class="bi bi-x"></i> Reject
+                                </button>
                             </td>
                         </tr>
                     }
@@ -61,11 +79,9 @@
 <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header text-bg-primary" style="display: flex; justify-content: space-between; align-items: center;">
-                <h5 class="modal-title px-3" id="documentModalLabel" style="margin: 0;">Beneficiary Document</h5>
-                <button type="button" class="close border-0 text-bg-primary btn-lg" data-dismiss="modal" aria-label="Close" style="font-size: 2rem; line-height: 1;">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="modal-header primary-bg">
+                <h5 class="modal-title" id="documentModalLabel">Beneficiary Document</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <iframe id="documentFrame" width="100%" height="500px" frameborder="0"></iframe>

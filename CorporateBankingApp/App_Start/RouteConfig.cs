@@ -33,6 +33,11 @@ namespace CorporateBankingApp
                 url: "user/registration-success",
                 defaults: new { controller = "User", action = "RegistrationSuccess" }
             );
+            routes.MapRoute(
+                name: "EditClientRegistrationDetails",
+                url: "user/edit-registration",
+                defaults: new { controller = "User", action = "EditClientRegistrationDetails" }
+            );
 
             // Routes for ClientController
             routes.MapRoute(
@@ -47,11 +52,7 @@ namespace CorporateBankingApp
                 defaults: new { controller = "Client", action = "UserProfile" }
             );
 
-            routes.MapRoute(
-                name: "EditClientRegistrationDetails",
-                url: "client/edit-registration",
-                defaults: new { controller = "Client", action = "EditClientRegistrationDetails" }
-            );
+
 
             routes.MapRoute(
                 name: "UpdateBalance",

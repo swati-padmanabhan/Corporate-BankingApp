@@ -9,92 +9,82 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => model.Id, new { id = "editBeneficiaryId" })
 
-            <div class="form-horizontal">
-                @* Common Fields *@
-                <div class="form-group">
-                    @Html.LabelFor(model => model.BeneficiaryName, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                    <span class="required-asterisk">*</span>
-                    <div class="col-md-8">
-                        @Html.EditorFor(model => model.BeneficiaryName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Beneficiary Name", id = "editBeneficiaryName" } })
-                        @Html.ValidationMessageFor(model => model.BeneficiaryName, "", new { @class = "text-danger" })
+                <div class="form-horizontal">
+                    @* Common Fields *@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BeneficiaryName, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        <span class="required-asterisk">*</span>
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.BeneficiaryName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Beneficiary Name", id = "editBeneficiaryName" } })
+                            @Html.ValidationMessageFor(model => model.BeneficiaryName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        <span class="required-asterisk">*</span>
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Account Number", id = "editAccountNumber" } })
+                            @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BankIFSC, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        <span class="required-asterisk">*</span>
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.BankIFSC, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Bank IFSC", id = "editBankIFSC" } })
+                            @Html.ValidationMessageFor(model => model.BankIFSC, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @* File Inputs *@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BeneficiaryIdProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        <span class="required-asterisk">*</span>
+                        <div class="col-md-8">
+                            <input type="file" name="newIdProof" class="form-control mb-4" id="newIdProof" onchange="validateFile(this, 'Id Proof', 'idProofError')" />
+                            <span id="idProofError" class="text-danger"></span>
+                            @Html.ValidationMessageFor(model => model.BeneficiaryIdProof, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BeneficiaryAddressProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        <span class="required-asterisk">*</span>
+                        <div class="col-md-8">
+                            <input type="file" name="newAddressProof" class="form-control mb-4" id="newAddressProof" onchange="validateFile(this, 'Address Proof', 'addressProofError')" />
+                            <span id="addressProofError" class="text-danger"></span>
+                            @Html.ValidationMessageFor(model => model.BeneficiaryAddressProof, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-12 text-center">
+                            <input type="button" value="Save Changes" class="btn primary-bg text-white edit-save" onclick="saveBeneficiaryChanges()" />
+                        </div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                    <span class="required-asterisk">*</span>
-                    <div class="col-md-8">
-                        @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Account Number", id = "editAccountNumber" } })
-                        @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.BankIFSC, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                    <span class="required-asterisk">*</span>
-                    <div class="col-md-8">
-                        @Html.EditorFor(model => model.BankIFSC, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Bank IFSC", id = "editBankIFSC" } })
-                        @Html.ValidationMessageFor(model => model.BankIFSC, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                @* File Inputs *@
-                <div class="form-group">
-                    @Html.LabelFor(model => model.BeneficiaryIdProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                    <span class="required-asterisk">*</span>
-                    <div class="col-md-8">
-                        <input type="file" name="newIdProof" class="form-control mb-4" id="newIdProof" />
-                        <div id="newIdProofError" class="text-danger"></div> <!-- Error message container -->
-                        @Html.ValidationMessageFor(model => model.BeneficiaryIdProof, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.BeneficiaryAddressProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                    <span class="required-asterisk">*</span>
-                    <div class="col-md-8">
-                        <input type="file" name="newAddressProof" class="form-control mb-4" id="newAddressProof" />
-                        <div id="newAddressProofError" class="text-danger"></div> <!-- Error message container -->
-                        @Html.ValidationMessageFor(model => model.BeneficiaryAddressProof, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
-                <div class="form-group row">
-                    <div class="col-md-12 text-center">
-                        <input type="button" value="Save Changes" class="btn primary-bg text-white edit-save" onclick="saveBeneficiaryChanges()" />
-                    </div>
-                </div>
-            </div>
             </div>
         </div>
     </div>
 }
 
 <script>
-    $(document).ready(function () {
-        const fileInputs = document.querySelectorAll('input[type="file"]');
+    function validateFile(input, docType, errorElementId) {
+        const file = input.files[0];
+        const validExtensions = /(\.jpg|\.jpeg|\.png|\.pdf)$/i;
+        const errorElement = document.getElementById(errorElementId);
+        errorElement.textContent = ''; // Clear previous error message
 
-        fileInputs.forEach(input => {
-            input.addEventListener('change', function () {
-                const file = this.files[0]; // Get the first selected file
-                const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
-                const maxSize = 3 * 1024 * 1024; // 3 MB
-
-                const errorDivId = this.id === 'newIdProof' ? 'newIdProofError' : 'newAddressProofError';
-                const errorDiv = document.getElementById(errorDivId);
-                if (errorDiv) errorDiv.textContent = ''; // Clear previous error messages
-
-                if (file) {
-                    if (!validTypes.includes(file.type)) {
-                        errorDiv.textContent = "Invalid file type. Only images and PDFs are allowed.";
-                        this.value = ''; // Clear the input
-                    } else if (file.size > maxSize) {
-                        errorDiv.textContent = "File size exceeds 3MB. Please upload a smaller file.";
-                        this.value = ''; // Clear the input
-                    }
-                }
-            });
-        });
-    });
+        if (file) {
+            if (file.size > 3 * 1024 * 1024) { // Check if file size is greater than 3MB
+                errorElement.textContent = `${docType} must be less than 3MB.`;
+                input.value = ''; // Clear the input
+            } else if (!validExtensions.exec(file.name)) { // Check for valid file type
+                errorElement.textContent = `Invalid file type for ${docType}. Only images and PDFs are allowed.`;
+                input.value = ''; // Clear the input
+            }
+        }
+    }
 </script>

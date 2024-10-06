@@ -64,65 +64,6 @@ namespace CorporateBankingApp.Controllers
             return View(clientDto);
         }
 
-        [Route("edit-registration")]
-        public ActionResult EditClientRegistrationDetails()
-        {
-            if (Session["UserId"] == null)
-            {
-                return RedirectToAction("Login", "User");
-            }
-
-            Guid clientId = (Guid)Session["UserId"];
-            var client = _clientService.GetClientById(clientId);
-            var clientDTO = new ClientDTO
-            {
-                Email = client.Email,
-                CompanyName = client.CompanyName,
-                Location = client.Location,
-                ContactInformation = client.ContactInformation,
-                AccountNumber = client.AccountNumber,
-                ClientIFSC = client.ClientIFSC,
-                Balance = client.Balance,
-                Documents = client.Documents.Select(d => new DocumentDTO
-                {
-                    DocumentType = d.DocumentType,
-                    FilePath = d.FilePath,
-                    UploadDate = d.UploadDate
-                }).ToList()
-            };
-            return View(clientDTO);
-        }
-
-        [HttpPost]
-        [Route("edit-registration")]
-        public ActionResult EditClientRegistrationDetails(ClientDTO clientDTO)
-        {
-            if (Session["UserId"] == null)
-            {
-                return RedirectToAction("Login", "User");
-            }
-
-            Guid clientId = (Guid)Session["UserId"];
-            var client = _clientService.GetClientById(clientId);
-            client.Email = clientDTO.Email;
-            client.CompanyName = clientDTO.CompanyName;
-            client.Location = clientDTO.Location;
-            client.ContactInformation = clientDTO.ContactInformation;
-            client.AccountNumber = clientDTO.AccountNumber;
-            client.ClientIFSC = clientDTO.ClientIFSC;
-            client.Balance = clientDTO.Balance;
-            client.OnBoardingStatus = CompanyStatus.PENDING;
-
-            var uploadedFiles = new List<HttpPostedFileBase>
-            {
-                Request.Files["uploadedFiles1"],
-                Request.Files["uploadedFiles2"]
-            }.Where(file => file != null && file.ContentLength > 0).ToList();
-
-            _clientService.EditClientRegistration(client, uploadedFiles);
-            return RedirectToAction("Index");
-        }
-
         [HttpPost]
         [Route("update-balance")]
         public ActionResult UpdateBalance(double newBalance)
@@ -196,15 +137,54 @@ namespace CorporateBankingApp.Controllers
                 return new HttpStatusCodeResult(400, "Client not found");
             }
 
-            var uploadedFiles = new List<HttpPostedFileBase>
-            {
-                Request.Files["uploadedDocs1"],
-                Request.Files["uploadedDocs2"]
-            }.Where(file => file != null && file.ContentLength > 0).ToList();
+            // Retrieve uploaded files
+            var addressProof = Request.Files["uploadedDocs1"];
+            var idProof = Request.Files["uploadedDocs2"];
 
-            _beneficiaryService.AddNewBeneficiary(beneficiaryDTO, client, uploadedFiles);
-            return Json(new { success = true });
+            // Validate Address proof
+            if (addressProof != null && addressProof.ContentLength > 0)
+            {
+                if (!IsValidFile(addressProof))
+                {
+                    ModelState.AddModelError("BeneficiaryAddressProof", "Address Proof must be an image or PDF and cannot exceed 3MB.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("BeneficiaryAddressProof", "Address Proof is required.");
+            }
+
+            // Validate ID proof
+            if (idProof != null && idProof.ContentLength > 0)
+            {
+                if (!IsValidFile(idProof))
+                {
+                    ModelState.AddModelError("BeneficiaryIdProof", "ID Proof must be an image or PDF and cannot exceed 3MB.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("BeneficiaryIdProof", "ID Proof is required.");
+            }
+
+            // If there are any model errors, return them
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+            }
+
+            // Proceed to add new beneficiary
+            _beneficiaryService.AddNewBeneficiary(beneficiaryDTO, client, new List<HttpPostedFileBase> { addressProof, idProof });
+            return Json(new { success = true, message = "Beneficiary added successfully." });
         }
+
+        private bool IsValidFile(HttpPostedFileBase file)
+        {
+            var validTypes = new[] { "image/jpeg", "image/png", "image/gif", "application/pdf" };
+            const int maxSize = 3 * 1024 * 1024; // 3MB
+            return validTypes.Contains(file.ContentType) && file.ContentLength <= maxSize;
+        }
+
 
         [HttpGet]
         [Route("get-beneficiary-by-id/{id}")]
@@ -234,8 +214,33 @@ namespace CorporateBankingApp.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        //[HttpPost]
+        //[Route("edit-beneficiary")]
+        //public ActionResult EditBeneficiary(BeneficiaryDTO beneficiaryDTO)
+        //{
+        //    if (Session["UserId"] == null)
+        //    {
+        //        return new HttpStatusCodeResult(401, "Unauthorized");
+        //    }
+
+        //    Guid clientId = (Guid)Session["UserId"];
+        //    var client = _clientService.GetClientById(clientId);
+        //    if (client == null)
+        //    {
+        //        return new HttpStatusCodeResult(400, "Client not found");
+        //    }
+
+        //    var uploadedFiles = new List<HttpPostedFileBase>
+        //    {
+        //        Request.Files["newIdProof"],
+        //        Request.Files["newAddressProof"]
+        //    }.Where(file => file != null && file.ContentLength > 0).ToList();
+
+        //    _beneficiaryService.UpdateBeneficiary(beneficiaryDTO, client, uploadedFiles);
+        //    return Json(new { success = true, message = "Beneficiary updated successfully" });
+        //}
+
         [HttpPost]
-        [AllowAnonymous]
         [Route("edit-beneficiary")]
         public ActionResult EditBeneficiary(BeneficiaryDTO beneficiaryDTO)
         {
@@ -251,53 +256,33 @@ namespace CorporateBankingApp.Controllers
                 return new HttpStatusCodeResult(400, "Client not found");
             }
 
-            // Retrieve uploaded files
-            var newIdProof = Request.Files["newIdProof"];
-            var newAddressProof = Request.Files["newAddressProof"];
+            var uploadedFiles = new List<HttpPostedFileBase>
+    {
+        Request.Files["newIdProof"],
+        Request.Files["newAddressProof"]
+    }.Where(file => file != null && file.ContentLength > 0).ToList();
 
-            // Validate ID proof
-            if (newIdProof != null && newIdProof.ContentLength > 0)
+            foreach (var file in uploadedFiles)
             {
-                if (!IsValidFile(newIdProof))
+                // Validate file size
+                if (file.ContentLength > 3 * 1024 * 1024) // 3MB
                 {
-                    ModelState.AddModelError("BeneficiaryIdProof", "ID Proof must be an image or PDF and cannot exceed 3MB.");
+                    return Json(new { success = false, message = "File size must be less than 3MB." });
+                }
+
+                // Validate file type
+                var validExtensions = new[] { ".jpg", ".jpeg", ".png", ".pdf" };
+                var fileExtension = Path.GetExtension(file.FileName).ToLower();
+                if (!validExtensions.Contains(fileExtension))
+                {
+                    return Json(new { success = false, message = "Invalid file type. Only images and PDFs are allowed." });
                 }
             }
-            else
-            {
-                ModelState.AddModelError("BeneficiaryIdProof", "ID Proof is required.");
-            }
 
-            // Validate Address proof
-            if (newAddressProof != null && newAddressProof.ContentLength > 0)
-            {
-                if (!IsValidFile(newAddressProof))
-                {
-                    ModelState.AddModelError("BeneficiaryAddressProof", "Address Proof must be an image or PDF and cannot exceed 3MB.");
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("BeneficiaryAddressProof", "Address Proof is required.");
-            }
-
-            // If there are any model errors, return them
-            if (!ModelState.IsValid)
-            {
-                return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
-            }
-
-            // Proceed to update beneficiary
-            _beneficiaryService.UpdateBeneficiary(beneficiaryDTO, client, new List<HttpPostedFileBase> { newIdProof, newAddressProof });
+            _beneficiaryService.UpdateBeneficiary(beneficiaryDTO, client, uploadedFiles);
             return Json(new { success = true, message = "Beneficiary updated successfully" });
         }
 
-        private bool IsValidFile(HttpPostedFileBase file)
-        {
-            var validTypes = new[] { "image/jpeg", "image/png", "image/gif", "application/pdf" };
-            const int maxSize = 3 * 1024 * 1024; // 3MB
-            return validTypes.Contains(file.ContentType) && file.ContentLength <= maxSize;
-        }
 
 
 

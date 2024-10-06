@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
@@ -6,6 +7,8 @@ using System.Web.Mvc;
 using System.Web.Security;
 using CloudinaryDotNet.Actions;
 using CorporateBankingApp.DTOs;
+using CorporateBankingApp.Enums;
+using CorporateBankingApp.Models;
 using CorporateBankingApp.Services;
 using Newtonsoft.Json;
 
@@ -15,12 +18,14 @@ namespace CorporateBankingApp.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IClientService _clientService;
 
         public string RecaptchaToken { get; set; }
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IClientService clientService)
         {
             _userService = userService;
+            _clientService = clientService;
         }
 
         [AllowAnonymous]
@@ -32,7 +37,7 @@ namespace CorporateBankingApp.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("login")] // Update the route for Login POST action
+        [Route("login")]
         public ActionResult Login(UserDTO userDTO)
         {
             if (!ModelState.IsValid)
@@ -40,17 +45,13 @@ namespace CorporateBankingApp.Controllers
                 return View(userDTO);
             }
 
-            // Retrieve the reCAPTCHA token from the request
             string recaptchaToken = Request.Form["g-recaptcha-response"];
-
-            // Check if the reCAPTCHA token is null or empty
             if (string.IsNullOrEmpty(recaptchaToken))
             {
                 ModelState.AddModelError("", "reCAPTCHA token is missing.");
                 return View(userDTO);
             }
 
-            // Validate the reCAPTCHA token with your secret key
             var isCaptchaValid = ValidateRecaptcha(recaptchaToken);
             if (!isCaptchaValid)
             {
@@ -61,16 +62,62 @@ namespace CorporateBankingApp.Controllers
             var loginResult = _userService.LoginActivity(userDTO);
             if (loginResult != null)
             {
-                var user = _userService.GetUserByUsername(userDTO.UserName);
-                FormsAuthentication.SetAuthCookie(userDTO.UserName, true);
-                Session["UserId"] = user.Id;
+                if (loginResult == "Admin") // Replace with your actual admin check
+                {
+                    var adminUser = _userService.GetUserByUsername(userDTO.UserName) as Admin;
+                    FormsAuthentication.SetAuthCookie(userDTO.UserName, true);
+                    Session["UserId"] = adminUser.Id;
+                    return RedirectToAction("Index", "Admin");
+                }
 
-                return loginResult == "Admin" ? RedirectToAction("Index", "Admin") : RedirectToAction("Index", "Client");
+                var user = _userService.GetUserByUsername(userDTO.UserName) as Client;
+
+
+                if (user != null)
+                {
+
+                    switch (user.OnBoardingStatus)
+                    {
+                        case CompanyStatus.PENDING:
+                            ModelState.AddModelError("", "Your application is still under process. Please wait for approval.");
+                            return View(userDTO);
+
+                        case CompanyStatus.REJECTED:
+                            ModelState.AddModelError("", "Your application has been rejected. Please fill out the form below to reapply.");
+                            var clientDTO = new ClientDTO
+                            {
+                                Id = user.Id,
+                                UserName = user.UserName,
+                                Email = user.Email,
+                                CompanyName = user.CompanyName,
+                                Location = user.Location,
+                                ContactInformation = user.ContactInformation,
+                                AccountNumber = user.AccountNumber,
+                                ClientIFSC = user.ClientIFSC,
+                                Balance = user.Balance,
+                                Documents = user.Documents.Select(d => new DocumentDTO
+                                {
+                                    DocumentType = d.DocumentType,
+                                    FilePath = d.FilePath
+                                }).ToList()
+                            };
+                            return View("EditClientRegistrationDetails", clientDTO);
+
+                        case CompanyStatus.APPROVED:
+                            FormsAuthentication.SetAuthCookie(userDTO.UserName, true);
+                            Session["UserId"] = user.Id;
+                            return RedirectToAction("Index", "Client");
+                    }
+                }
             }
 
             ModelState.AddModelError("", "Invalid username or password.");
             return View(userDTO);
         }
+
+
+
+
 
         private bool ValidateRecaptcha(string token)
         {
@@ -80,6 +127,78 @@ namespace CorporateBankingApp.Controllers
             dynamic jsonData = JsonConvert.DeserializeObject(result);
             return jsonData.success;
         }
+
+
+        [Route("edit-registration")]
+        public ActionResult EditClientRegistrationDetails()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            Guid clientId = (Guid)Session["UserId"];
+            var client = _clientService.GetClientById(clientId);
+            var clientDTO = new ClientDTO
+            {
+                //UserName = client.UserName,
+                Email = client.Email,
+                CompanyName = client.CompanyName,
+                Location = client.Location,
+                ContactInformation = client.ContactInformation,
+                AccountNumber = client.AccountNumber,
+                ClientIFSC = client.ClientIFSC,
+                Balance = client.Balance,
+                Documents = client.Documents.Select(d => new DocumentDTO
+                {
+                    DocumentType = d.DocumentType,
+                    FilePath = d.FilePath,
+                    UploadDate = d.UploadDate
+                }).ToList()
+            };
+            return View(clientDTO);
+        }
+
+        [HttpPost]
+        [Route("edit-registration")]
+        public ActionResult EditClientRegistrationDetails(ClientDTO clientDTO)
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            Guid clientId = (Guid)Session["UserId"];
+
+            var client = _clientService.GetClientById(clientId);
+            client.Email = clientDTO.Email;
+            client.CompanyName = clientDTO.CompanyName;
+            client.Location = clientDTO.Location;
+            client.ContactInformation = clientDTO.ContactInformation;
+            client.AccountNumber = clientDTO.AccountNumber;
+            client.ClientIFSC = clientDTO.ClientIFSC;
+            client.Balance = clientDTO.Balance;
+            client.OnBoardingStatus = CompanyStatus.PENDING;
+            var uploadedFiles = new List<HttpPostedFileBase>();
+
+            var companyIdProof = Request.Files["uploadedFiles1"];
+            var addressProof = Request.Files["uploadedFiles2"];
+
+            if (companyIdProof != null && companyIdProof.ContentLength > 0)
+            {
+                uploadedFiles.Add(companyIdProof);
+            }
+
+            if (addressProof != null && addressProof.ContentLength > 0)
+            {
+                uploadedFiles.Add(addressProof);
+            }
+
+            _clientService.EditClientRegistration(client, uploadedFiles);
+
+            return RedirectToAction("Login", "User");
+        }
+
+
 
         [Authorize(Roles = "Admin, Client")]
         [Route("logout")] // Update the route for Logout action

@@ -235,6 +235,7 @@ namespace CorporateBankingApp.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("edit-beneficiary")]
         public ActionResult EditBeneficiary(BeneficiaryDTO beneficiaryDTO)
         {
@@ -250,15 +251,54 @@ namespace CorporateBankingApp.Controllers
                 return new HttpStatusCodeResult(400, "Client not found");
             }
 
-            var uploadedFiles = new List<HttpPostedFileBase>
-            {
-                Request.Files["newIdProof"],
-                Request.Files["newAddressProof"]
-            }.Where(file => file != null && file.ContentLength > 0).ToList();
+            // Retrieve uploaded files
+            var newIdProof = Request.Files["newIdProof"];
+            var newAddressProof = Request.Files["newAddressProof"];
 
-            _beneficiaryService.UpdateBeneficiary(beneficiaryDTO, client, uploadedFiles);
+            // Validate ID proof
+            if (newIdProof != null && newIdProof.ContentLength > 0)
+            {
+                if (!IsValidFile(newIdProof))
+                {
+                    ModelState.AddModelError("BeneficiaryIdProof", "ID Proof must be an image or PDF and cannot exceed 3MB.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("BeneficiaryIdProof", "ID Proof is required.");
+            }
+
+            // Validate Address proof
+            if (newAddressProof != null && newAddressProof.ContentLength > 0)
+            {
+                if (!IsValidFile(newAddressProof))
+                {
+                    ModelState.AddModelError("BeneficiaryAddressProof", "Address Proof must be an image or PDF and cannot exceed 3MB.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("BeneficiaryAddressProof", "Address Proof is required.");
+            }
+
+            // If there are any model errors, return them
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+            }
+
+            // Proceed to update beneficiary
+            _beneficiaryService.UpdateBeneficiary(beneficiaryDTO, client, new List<HttpPostedFileBase> { newIdProof, newAddressProof });
             return Json(new { success = true, message = "Beneficiary updated successfully" });
         }
+
+        private bool IsValidFile(HttpPostedFileBase file)
+        {
+            var validTypes = new[] { "image/jpeg", "image/png", "image/gif", "application/pdf" };
+            const int maxSize = 3 * 1024 * 1024; // 3MB
+            return validTypes.Contains(file.ContentType) && file.ContentLength <= maxSize;
+        }
+
 
 
 

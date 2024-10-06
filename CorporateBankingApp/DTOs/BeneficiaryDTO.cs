@@ -34,11 +34,9 @@ namespace CorporateBankingApp.DTOs
         [Display(Name = "Beneficiary Status")]
         public string BeneficiaryStatus { get; set; }
 
-        [Required(ErrorMessage = "Beneficiary Address Proof is required.")]
         [Display(Name = "Beneficiary Address Proof")]
         public HttpPostedFileBase BeneficiaryAddressProof { get; set; }
 
-        [Required(ErrorMessage = "Beneficiary ID Proof is required.")]
         [Display(Name = "Beneficiary Id Proof")]
         public HttpPostedFileBase BeneficiaryIdProof { get; set; }
 

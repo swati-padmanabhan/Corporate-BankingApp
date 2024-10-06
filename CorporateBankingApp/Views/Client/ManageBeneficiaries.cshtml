@@ -44,7 +44,7 @@
             <tbody id="beneficiaryTblBody"></tbody>
         </table>
 
-        <nav aria-label="Page navigation" class="py-3 px-2" >
+        <nav aria-label="Page navigation" class="py-3 px-2">
             <ul class="pagination" id="beneficiaryPagination"></ul>
         </nav>
     </div>
@@ -54,7 +54,7 @@
 <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header text-bg-primary">
+            <div class="modal-header primary-bg">
                 <h5 class="modal-title" id="documentModalLabel">Beneficiary Document</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -64,6 +64,7 @@
         </div>
     </div>
 </div>
+
 
 <div id="addNewBeneficiary" style="display:none" class="container">
     @Html.Partial("_AddBeneficiaryPartial")
@@ -88,4 +89,8 @@
         var isActive = $(this).is(":checked");
         updateBeneficiaryStatus(beneficiaryId, isActive);
     });
+
+    function viewDocument(url) {
+        $('#documentFrame').attr('src', url);
+    }
 </script>

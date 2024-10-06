@@ -149,7 +149,7 @@ namespace CorporateBankingApp.Controllers
         private bool IsValidFile(HttpPostedFileBase file)
         {
             var validTypes = new[] { "image/jpeg", "image/png", "image/gif", "application/pdf" };
-            const int maxSize = 5 * 1024 * 1024; // 5MB
+            const int maxSize = 3 * 1024 * 1024; // 3MB
             return validTypes.Contains(file.ContentType) && file.ContentLength <= maxSize;
         }
 

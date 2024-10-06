@@ -260,6 +260,8 @@ namespace CorporateBankingApp.Controllers
             return Json(new { success = true, message = "Beneficiary updated successfully" });
         }
 
+
+
         // Manage Employees
         [Route("manage-employees")]
         public ActionResult ManageEmployees() => View();

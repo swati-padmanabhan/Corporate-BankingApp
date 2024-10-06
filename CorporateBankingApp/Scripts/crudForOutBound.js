@@ -127,6 +127,13 @@ function renderTable(page, data = beneficiariesData) {
         $("#warningNotice").show();
     }
 }
+
+$(document).on("click", ".document-link", function (e) {
+    e.preventDefault(); // Prevent the default link behavior
+    var url = $(this).data("url"); // Get the URL from the data attribute
+    $("#documentFrame").attr("src", url); // Set the src of the iframe
+    $("#documentModal").modal("show"); // Show the modal
+});
 function setupBeneficiaryPagination(totalCount = beneficiariesData.length) {
     const totalPages = Math.ceil(totalCount / beneficiaryPageSize);
     let paginationHtml = '';

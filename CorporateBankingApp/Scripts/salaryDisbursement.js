@@ -1,7 +1,8 @@
+var selectedIds = [];
+
 $(document).ready(function () {
     // Get selected checkboxes
     function getSelectedDisbursements() {
-        var selectedIds = [];
         $(".salary-checkbox:checked").each(function () {
             selectedIds.push($(this).val());
         });

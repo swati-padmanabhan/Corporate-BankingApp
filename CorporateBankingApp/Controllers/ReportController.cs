@@ -19,7 +19,7 @@ namespace CorporateBankingApp.Controllers
     {
         // Route: GET /report/employee-report
         [Route("employee")]
-        public ActionResult EmployeeReport(string searchEmail = "", int page = 1, int pageSize = 10)
+        public ActionResult EmployeeReport(string searchEmail = "", DateTime? fromDate = null, DateTime? toDate = null, int page = 1, int pageSize = 10)
         {
             using (var session = NHibernateHelper.CreateSession())
             {
@@ -37,18 +37,44 @@ namespace CorporateBankingApp.Controllers
                                 SalaryStatus = sd != null ? (CompanyStatus?)sd.SalaryStatus : null
                             };
 
+                // Apply the search by email if provided
                 if (!string.IsNullOrWhiteSpace(searchEmail))
                 {
                     query = query.Where(e => e.Email.ToLower().Contains(searchEmail.ToLower()));
                 }
 
+                // Apply the date range filter if both from and to dates are provided
+                if (fromDate.HasValue && toDate.HasValue)
+                {
+                    query = query.Where(e => e.DisbursementDate.HasValue &&
+                                             e.DisbursementDate.Value >= fromDate.Value &&
+                                             e.DisbursementDate.Value <= toDate.Value);
+                }
+                else if (fromDate.HasValue) // Apply only the "from" date filter
+                {
+                    query = query.Where(e => e.DisbursementDate.HasValue &&
+                                             e.DisbursementDate.Value >= fromDate.Value);
+                }
+                else if (toDate.HasValue) // Apply only the "to" date filter
+                {
+                    query = query.Where(e => e.DisbursementDate.HasValue &&
+                                             e.DisbursementDate.Value <= toDate.Value);
+                }
+
+                // Get total records after filtering
                 var totalRecords = query.Count();
+
+                // Apply pagination
                 var employeeReports = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                // Calculate total pages
                 var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
 
+                // Pass pagination info to the view
                 ViewBag.CurrentPage = page;
                 ViewBag.TotalPages = totalPages;
 
+                // Return the filtered and paginated employee reports to the view
                 return View(employeeReports);
             }
         }

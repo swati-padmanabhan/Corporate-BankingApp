@@ -36,20 +36,20 @@
                 <h1 class="navbar-brand"><a href="@Url.Action("Index", "Home")" class="text-decoration-none text-white">SetuPay</a></h1>
             }
 
-        <div class="">
-            @if (User.IsInRole("Client"))
-            {
-                <a href="@Url.Action("Index", "Admin")" class="text-decoration-none text-white">
-                    <h2 class="mb-0 ml-2">Client Dashboard</h2>
-                </a>
-            }
-            else if (User.IsInRole("Admin"))
-            {
-                <a href="@Url.Action("Index", "Admin")" class="text-decoration-none text-white">
-                    <h2 class="mb-0 ml-2">Admin Dashboard</h2>
-                </a>
-            }
-        </div>
+            <div class="">
+                @if (User.IsInRole("Client"))
+                {
+                    <a href="@Url.Action("Index", "Admin")" class="text-decoration-none text-white">
+                        <h2 class="mb-0 ml-2">Client Dashboard</h2>
+                    </a>
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    <a href="@Url.Action("Index", "Admin")" class="text-decoration-none text-white">
+                        <h2 class="mb-0 ml-2">Admin Dashboard</h2>
+                    </a>
+                }
+            </div>
 
             <div class="mx-3">
                 @if (User.IsInRole("Client"))

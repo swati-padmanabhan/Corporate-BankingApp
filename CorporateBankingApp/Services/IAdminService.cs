@@ -14,7 +14,7 @@ namespace CorporateBankingApp.Services
     {
         void RegisterAdmin(AdminDTO adminDTO);
 
-        List<ClientDTO> GetRegisteredClientsPendingApproval();  
+        List<ClientDTO> GetRegisteredClientsPendingApproval(UrlHelper urlHelper);
         ClientDTO GetClientById(Guid id);
         void ApproveClient(Guid id);
         void RejectClient(Guid id);

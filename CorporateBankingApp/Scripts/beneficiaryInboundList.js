@@ -1,6 +1,5 @@
 var selectedIds = [];
 
-// Function to load inbound beneficiaries
 function loadInboundBeneficiaries() {
     $.ajax({
         url: "/Client/GetAllInboundBeneficiaries",
@@ -12,13 +11,21 @@ function loadInboundBeneficiaries() {
                 window.history.back(); // Go back to the previous page
             } else {
                 $.each(data, function (index, item) {
+                    var statusBadgeClass = item.BeneficiaryStatus === 'PENDING' ? 'bg-warning' : 'bg-success';
                     var row = `<tr>
-<td><input type="checkbox" class="inbound-checkbox" data-beneficiaryid="${item.Id}" /></td>
-<td>${item.CompanyName}</td>
-<td>${item.AccountNumber}</td>
-<td>${item.ClientIFSC}</td>
-<td>${item.BeneficiaryStatus}</td>
-</tr>`;
+                        <td>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input inbound-checkbox" id="check-${item.Id}" data-beneficiaryid="${item.Id}" />
+                                <label class="form-check-label" for="check-${item.Id}"></label>
+                            </div>
+                        </td>
+                        <td>${item.CompanyName}</td>
+                        <td>${item.AccountNumber}</td>
+                        <td>${item.ClientIFSC}</td>
+                        <td>
+                            <span class="badge ${statusBadgeClass} rounded-pill d-inline">${item.BeneficiaryStatus}</span>
+                        </td>
+                    </tr>`;
                     $("#inboundBeneficiaryTblBody").append(row);
                 });
 
@@ -35,7 +42,7 @@ function loadInboundBeneficiaries() {
 
 // Attach change events to checkboxes
 function attachCheckboxChangeEvents() {
-    $(".inbound-checkbox").change(function () {
+    $("#inboundBeneficiaryTblBody").on("change", ".inbound-checkbox", function () {
         var inboundId = $(this).data('beneficiaryid');
         if ($(this).is(":checked")) {
             if (!selectedIds.includes(inboundId)) {
@@ -61,6 +68,7 @@ function attachCheckboxChangeEvents() {
         console.log("Selected Inbounds: ", selectedIds);
     });
 }
+
 // Approve selected disbursements
 $('#addInboundSelected').click(function () {
     console.log(selectedIds); // Display selected IDs in console
@@ -86,8 +94,4 @@ $('#addInboundSelected').click(function () {
             alert("An error occurred while adding the beneficiary: " + error);
         }
     });
-});
-
-$(document).ready(() => {
-    loadInboundBeneficiaries();
 });

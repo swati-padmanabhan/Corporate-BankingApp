@@ -822,6 +822,7 @@
     <Content Include="Views\Admin\ReportGeneration.cshtml" />
     <Content Include="Views\Client\InboundBeneficiaries.cshtml" />
     <Content Include="Views\Client\ViewAllInboundBeneficiaries.cshtml" />
+    <Content Include="Views\User\EditRegistrationSuccess.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

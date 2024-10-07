@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CorporateBankingApp.Data;
 using CorporateBankingApp.DTOs;
 using CorporateBankingApp.Models;
@@ -19,7 +18,6 @@ namespace CorporateBankingApp.Repositories
 
         public User LoginActivity(User user)
         {
-            //var currentUser = _session.Query<User>().FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
             var currentUser = _session.Query<User>().FirstOrDefault(u => u.UserName == user.UserName);
             if (currentUser != null && PasswordHashing.VerifyPassword(user.Password, currentUser.Password))
             {
@@ -30,7 +28,7 @@ namespace CorporateBankingApp.Repositories
 
         public User GetUserByUsername(string username)
         {
-            return _session.Query<User>().FirstOrDefault(u =>u.UserName == username);
+            return _session.Query<User>().FirstOrDefault(u => u.UserName == username);
         }
 
         public void CreateNewClient(Client client)
@@ -49,7 +47,6 @@ namespace CorporateBankingApp.Repositories
             }
         }
 
-
         public bool EmailExists(string email)
         {
             return _session.Query<Client>().Any(c => c.Email == email);
@@ -60,12 +57,9 @@ namespace CorporateBankingApp.Repositories
             return _session.Query<Client>().Any(c => c.AccountNumber == accountNumber);
         }
 
-        // Check if IFSC code exists
         public bool IFSCExists(string ifscCode)
         {
             return _session.Query<Client>().Any(c => c.ClientIFSC == ifscCode);
         }
-
     }
-
 }

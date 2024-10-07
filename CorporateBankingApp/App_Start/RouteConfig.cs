@@ -29,9 +29,9 @@ namespace CorporateBankingApp
             );
 
             routes.MapRoute(
-                name: "UserRegistrationSuccess",
-                url: "user/registration-success",
-                defaults: new { controller = "User", action = "RegistrationSuccess" }
+                name: "EditRegistrationSuccess",
+                url: "edit-registration-success",
+                defaults: new { controller = "User", action = "EditRegistrationSuccess" }
             );
             routes.MapRoute(
                 name: "EditClientRegistrationDetails",

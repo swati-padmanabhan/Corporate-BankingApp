@@ -62,7 +62,7 @@ namespace CorporateBankingApp.Controllers
             var loginResult = _userService.LoginActivity(userDTO);
             if (loginResult != null)
             {
-                if (loginResult == "Admin") // Replace with your actual admin check
+                if (loginResult == "Admin")
                 {
                     var adminUser = _userService.GetUserByUsername(userDTO.UserName) as Admin;
                     FormsAuthentication.SetAuthCookie(userDTO.UserName, true);
@@ -72,15 +72,15 @@ namespace CorporateBankingApp.Controllers
 
                 var user = _userService.GetUserByUsername(userDTO.UserName) as Client;
 
-
                 if (user != null)
                 {
-
                     switch (user.OnBoardingStatus)
                     {
                         case CompanyStatus.PENDING:
                             ModelState.AddModelError("", "Your application is still under process. Please wait for approval.");
-                            return View(userDTO);
+                            FormsAuthentication.SetAuthCookie(userDTO.UserName, true);
+                            Session["UserId"] = user.Id;
+                            return View(userDTO); // Do not redirect to the dashboard
 
                         case CompanyStatus.REJECTED:
                             ModelState.AddModelError("", "Your application has been rejected. Please fill out the form below to reapply.");
@@ -101,12 +101,14 @@ namespace CorporateBankingApp.Controllers
                                     FilePath = d.FilePath
                                 }).ToList()
                             };
-                            return View("EditClientRegistrationDetails", clientDTO);
+                            FormsAuthentication.SetAuthCookie(userDTO.UserName, true);
+                            Session["UserId"] = user.Id;
+                            return View("EditClientRegistrationDetails", clientDTO); // Do not redirect to the dashboard
 
                         case CompanyStatus.APPROVED:
                             FormsAuthentication.SetAuthCookie(userDTO.UserName, true);
                             Session["UserId"] = user.Id;
-                            return RedirectToAction("Index", "Client");
+                            return RedirectToAction("Index", "Client"); // Allow access to the dashboard
                     }
                 }
             }
@@ -114,10 +116,6 @@ namespace CorporateBankingApp.Controllers
             ModelState.AddModelError("", "Invalid username or password.");
             return View(userDTO);
         }
-
-
-
-
 
         private bool ValidateRecaptcha(string token)
         {
@@ -127,7 +125,6 @@ namespace CorporateBankingApp.Controllers
             dynamic jsonData = JsonConvert.DeserializeObject(result);
             return jsonData.success;
         }
-
 
         [Route("edit-registration")]
         public ActionResult EditClientRegistrationDetails()
@@ -140,10 +137,15 @@ namespace CorporateBankingApp.Controllers
             Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
 
+            // Check if the client's onboarding status is PENDING or REJECTED
+            if (client.OnBoardingStatus == CompanyStatus.PENDING || client.OnBoardingStatus == CompanyStatus.REJECTED)
+            {
+                // Redirect to login or another appropriate action
+                return RedirectToAction("Login", "User");
+            }
+
             var clientDTO = new ClientDTO
             {
-                Id = client.Id,
-                UserName = client.UserName, // Ensure UserName is included for updates
                 Email = client.Email,
                 CompanyName = client.CompanyName,
                 Location = client.Location,
@@ -158,7 +160,6 @@ namespace CorporateBankingApp.Controllers
                     UploadDate = d.UploadDate
                 }).ToList()
             };
-
             return View(clientDTO);
         }
 
@@ -171,15 +172,10 @@ namespace CorporateBankingApp.Controllers
                 return RedirectToAction("Login", "User");
             }
 
-            if (!ModelState.IsValid) // Validate the model
-            {
-                return View(clientDTO);
-            }
-
             Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
 
-            // Update the client's properties
+            // Update client details
             client.Email = clientDTO.Email;
             client.CompanyName = clientDTO.CompanyName;
             client.Location = clientDTO.Location;
@@ -188,19 +184,29 @@ namespace CorporateBankingApp.Controllers
             client.ClientIFSC = clientDTO.ClientIFSC;
             client.Balance = clientDTO.Balance;
 
-            // Handle file uploads
+            // Set onboarding status to PENDING for admin approval
+            client.OnBoardingStatus = CompanyStatus.PENDING;
+
+            // Handle uploaded files
             var uploadedFiles = new List<HttpPostedFileBase>
     {
         Request.Files["uploadedFiles1"],
         Request.Files["uploadedFiles2"]
     }.Where(file => file != null && file.ContentLength > 0).ToList();
 
+            // Save the edited client registration details
             _clientService.EditClientRegistration(client, uploadedFiles);
 
-            return RedirectToAction("Login", "User"); // Redirect after successful update
+            // Redirect to success or login page after edit
+            return RedirectToAction("EditRegistrationSuccess"); // You might want to redirect to a success page
         }
 
 
+        [Route("edit-registration-success")]
+        public ActionResult EditRegistrationSuccess()
+        {
+            return View();
+        }
 
 
 
@@ -223,31 +229,45 @@ namespace CorporateBankingApp.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("register")] // Update the route for Register POST action
+        [Route("register")]
         public ActionResult Register(ClientDTO clientDTO)
         {
+            // Validate model state
             if (!ModelState.IsValid)
             {
                 return View(clientDTO);
             }
 
-            // Check for email, username, account number, and IFSC existence
+            // Check for existing email, username, account number, and IFSC code
             if (_userService.EmailExists(clientDTO.Email))
-                ModelState.AddModelError("Email", "An account with this email already exists.");
-            if (_userService.GetUserByUsername(clientDTO.UserName) != null)
-                ModelState.AddModelError("UserName", "Username already exists. Please choose a different one.");
-            if (_userService.AccountNumberExists(clientDTO.AccountNumber))
-                ModelState.AddModelError("AccountNumber", "An account with this account number already exists.");
-            if (_userService.IFSCExists(clientDTO.ClientIFSC))
-                ModelState.AddModelError("ClientIFSC", "An account with this IFSC code already exists.");
-
-            if (!ModelState.IsValid) return View(clientDTO);
-
-            var files = new List<HttpPostedFileBase>
             {
-                Request.Files["uploadedFiles1"],
-                Request.Files["uploadedFiles2"]
-            };
+                ModelState.AddModelError("Email", "An account with this email already exists.");
+            }
+            if (_userService.GetUserByUsername(clientDTO.UserName) != null)
+            {
+                ModelState.AddModelError("UserName", "Username already exists. Please choose a different one.");
+            }
+            if (_userService.AccountNumberExists(clientDTO.AccountNumber))
+            {
+                ModelState.AddModelError("AccountNumber", "An account with this account number already exists.");
+            }
+            if (_userService.IFSCExists(clientDTO.ClientIFSC))
+            {
+                ModelState.AddModelError("ClientIFSC", "An account with this IFSC code already exists.");
+            }
+
+            // Check if any validation errors were added
+            if (!ModelState.IsValid)
+            {
+                return View(clientDTO);
+            }
+
+            // Validate uploaded files
+            var files = new List<HttpPostedFileBase>
+    {
+        Request.Files["uploadedFiles1"],
+        Request.Files["uploadedFiles2"]
+    };
 
             foreach (var file in files)
             {
@@ -255,17 +275,22 @@ namespace CorporateBankingApp.Controllers
                 {
                     if (!IsValidFile(file))
                     {
-                        ModelState.AddModelError("Document", "Document must be an image or PDF and cannot exceed 5MB.");
+                        ModelState.AddModelError("Document", "Documents must be images or PDFs and cannot exceed 3MB.");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("Document", "Document is required.");
+                    ModelState.AddModelError("Document", "Documents are required.");
                 }
             }
 
-            if (!ModelState.IsValid) return View(clientDTO);
+            // Check if any file validation errors were added
+            if (!ModelState.IsValid)
+            {
+                return View(clientDTO);
+            }
 
+            // Proceed to create new client
             _userService.CreateNewClient(clientDTO, files);
             return RedirectToAction("RegistrationSuccess");
         }
@@ -276,6 +301,7 @@ namespace CorporateBankingApp.Controllers
             const int maxSize = 3 * 1024 * 1024; // 3MB
             return validTypes.Contains(file.ContentType) && file.ContentLength <= maxSize;
         }
+
 
         [Route("registration-success")] // Update the route for RegistrationSuccess action
         public ActionResult RegistrationSuccess()

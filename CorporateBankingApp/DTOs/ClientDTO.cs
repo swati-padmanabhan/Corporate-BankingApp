@@ -46,7 +46,9 @@ namespace CorporateBankingApp.DTOs
         [RegularExpression(@"^\d{12}$", ErrorMessage = "Account number must be exactly 12 digits.")]
         public string AccountNumber { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "IFSC Code is required.")]
+        [RegularExpression(@"^[A-Z]{4}[0][A-Z0-9]{6}$", ErrorMessage = "IFSC must be in the format 'ABCD0123456'.")]
+        [StringLength(11, ErrorMessage = "IFSC must be 11 characters long.")]
         public string ClientIFSC { get; set; }
 
         [Required]

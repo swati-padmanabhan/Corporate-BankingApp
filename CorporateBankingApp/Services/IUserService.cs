@@ -9,18 +9,13 @@ namespace CorporateBankingApp.Services
 {
     public interface IUserService
     {
-       string LoginActivity(UserDTO userDTO);
-       User GetUserByUsername(string username);
-
-        void CreateNewClient(ClientDTO clientDTO, IList<HttpPostedFileBase> files);
-
-        //void AdminRegistration(AdminDTO adminDTO);
-
+        string LoginActivity(UserDTO userDTO);
+        User GetUserByUsername(string username);
         bool EmailExists(string email);
-
         bool AccountNumberExists(string accountNumber);
-
         bool IFSCExists(string ifscCode);
+        void CreateNewClient(ClientDTO clientDTO, IList<HttpPostedFileBase> files);
     }
+
 
 }

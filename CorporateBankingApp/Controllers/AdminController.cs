@@ -61,7 +61,9 @@ namespace CorporateBankingApp.Controllers
         [Route("client-approval")]
         public ActionResult ClientApproval(int page = 1, int pageSize = 2)
         {
-            var clients = _adminService.GetRegisteredClientsPendingApproval();
+
+            var urlHelper = new UrlHelper(Request.RequestContext); // Create UrlHelper here
+            var clients = _adminService.GetClientsForVerification(urlHelper);
 
             var totalRecords = clients.Count();
             var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
@@ -108,8 +110,6 @@ namespace CorporateBankingApp.Controllers
 
             return RedirectToAction("ClientApproval");
         }
-
-
 
 
         // GET: ClientManagement

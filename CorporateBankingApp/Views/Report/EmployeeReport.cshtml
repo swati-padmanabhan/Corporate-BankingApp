@@ -11,9 +11,28 @@
 
 <div class="container">
     <h2 class="text-center">Employee Report</h2>
+    <div class="row my-4">
+        <div class="row mb-3">
+            <div class="col">
+                <label for="fromDate">From Date:</label>
+                <input type="date" id="fromDate" class="form-control" />
+            </div>
+            <div class="col">
+                <label for="toDate">To Date:</label>
+                <input type="date" id="toDate" class="form-control" />
+            </div>
+            <div class="col">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary w-100" onclick="applyDateFilter()">Filter by Date</button>
+            </div>
+        </div>
+
+
+    </div>
     <div class="my-4 float-start w-75">
         <input type="text" id="searchInput" placeholder="Search users..." class="form-control" onkeyup="applySearch()" />
     </div>
+
     <div class="dropdown my-4 float-end">
         <button class="btn rounded-3 wrapper" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-filter me-1"></i>
@@ -100,14 +119,14 @@
         if (data.length > 0) {
             $.each(data, function (index, employee) {
                 const row = `<tr>
-                    <td>${employee.FirstName}</td>
-                    <td>${employee.LastName}</td>
-                    <td>${employee.Email}</td>
-                    <td>${employee.Designation}</td>
-                    <td>${employee.Salary}</td>
-                    <td>${employee.DisbursementDate ? new Date(employee.DisbursementDate).toLocaleDateString('en-GB') : 'No disbursements'}</td>
-                    <td>${employee.SalaryStatus ? employee.SalaryStatus : 'No status'}</td>
-                </tr>`;
+<td>${employee.FirstName}</td>
+<td>${employee.LastName}</td>
+<td>${employee.Email}</td>
+<td>${employee.Designation}</td>
+<td>${employee.Salary}</td>
+<td>${employee.DisbursementDate ? new Date(employee.DisbursementDate).toLocaleDateString('en-GB') : 'No disbursements'}</td>
+<td>${employee.SalaryStatus ? employee.SalaryStatus : 'No status'}</td>
+</tr>`;
                 tableBody.append(row);
             });
         } else {
@@ -144,6 +163,21 @@
 
         renderTable(filteredData); // Render the filtered data
     }
+    function applyDateFilter() {
+    const fromDate = $('#fromDate').val();
+    const toDate = $('#toDate').val();
+    const searchEmail = $('#searchInput').val();
+
+    // Ensure both dates are provided if you require both
+    if (!fromDate || !toDate) {
+        alert('Please select both From and To dates.');
+        return;
+    }
+
+    // Redirect to the action with query string parameters for filtering
+    window.location.href = `@Url.Action("EmployeeReport")?searchEmail=${searchEmail}&fromDate=${fromDate}&toDate=${toDate}`;
+}
+
 
     $(document).ready(function () {
         // Initial render for the full dataset

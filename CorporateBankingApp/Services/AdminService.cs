@@ -37,19 +37,20 @@ namespace CorporateBankingApp.Services
             _adminRepository.CreateAdmin(admin);
         }
 
-        public List<ClientDTO> GetRegisteredClientsPendingApproval()
+        public List<ClientDTO> GetRegisteredClientsPendingApproval(UrlHelper urlHelper)
         {
-            var clients = _adminRepository.GetAllClients()
-                .Where(c => c.OnBoardingStatus == CompanyStatus.PENDING && c.IsActive).ToList();
-            return clients.Select(c => new ClientDTO
+            var clients = _adminRepository.GetPendingClients();
+            var clientDtos = clients.Select(c => new ClientDTO
             {
                 Id = c.Id,
                 UserName = c.UserName,
                 Email = c.Email,
                 CompanyName = c.CompanyName,
+                ContactInformation = c.ContactInformation,
                 Location = c.Location,
-                ContactInformation = c.ContactInformation
+                DocumentLocation = c.Documents.Select(d => urlHelper.Content(d.FilePath)).ToList()
             }).ToList();
+            return clientDtos;
         }
 
         public ClientDTO GetClientById(Guid id)
@@ -82,6 +83,7 @@ namespace CorporateBankingApp.Services
         {
             var client = _adminRepository.GetClientById(id);
             client.IsActive = false; // Set inactive if rejected
+            client.OnBoardingStatus = CompanyStatus.PENDING;
             _adminRepository.UpdateClientDetails(client);
         }
 

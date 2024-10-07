@@ -15,5 +15,7 @@ namespace CorporateBankingApp.Repositories
         void AddNewBeneficiary(Beneficiary beneficiary);
         Beneficiary GetBeneficiaryById(Guid id);
         void UpdateBeneficiary(Beneficiary beneficiary);
+
+        List<Client> GetAllInboundBeneficiaries(Guid clientId); 
     }
 }

@@ -1,3 +1,4 @@
+using CorporateBankingApp.Enums;
 using NHibernate.Mapping;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,9 @@ namespace CorporateBankingApp.DTOs
         public string Location { get; set; }
 
         [Required]
+        public bool IsActive { get; set; }
+
+        [Required]
         [Display(Name = "Contact Information")]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Contact Information must be exactly 10 digits.")]
         public string ContactInformation { get; set; }
@@ -43,7 +47,12 @@ namespace CorporateBankingApp.DTOs
         public string AccountNumber { get; set; }
 
         [Required]
-        public string ClientIFSC {  get; set; }
+        public string ClientIFSC { get; set; }
+
+        [Required]
+        public CompanyStatus OnboardingStatus { get; set; }
+
+        public string BeneficiaryStatus { get; set; }
 
         [Required]
         [Range(0, double.MaxValue, ErrorMessage = "Balance must be a positive value.")]

@@ -197,7 +197,7 @@ namespace CorporateBankingApp.Controllers
 
             _clientService.EditClientRegistration(client, uploadedFiles);
 
-            return RedirectToAction("Success", "User"); // Redirect after successful update
+            return RedirectToAction("Login", "User"); // Redirect after successful update
         }
 
 

@@ -3,28 +3,82 @@
   "WorkspaceRootPath": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\scripts\\beneficiaryinboundlist.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\scripts\\beneficiaryinboundlist.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\views\\client\\viewallinboundbeneficiaries.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\views\\client\\viewallinboundbeneficiaries.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\views\\client\\managebeneficiaries.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\views\\client\\managebeneficiaries.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/DELL1605/BankDb/True/SqlTable/dbo.Beneficiaries.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/DELL1605/BankDb/True/SqlTable/dbo.Clients.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\corporatebankingapp\\controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\services\\beneficiaryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\services\\beneficiaryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\services\\ibeneficiaryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\services\\ibeneficiaryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\dtos\\clientdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\dtos\\clientdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\repositories\\ibeneficiaryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\repositories\\ibeneficiaryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\repositories\\beneficiaryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\repositories\\beneficiaryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\corporatebankingapp\\views\\admin\\beneficiarymanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\views\\admin\\beneficiarymanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\scripts\\beneficiaryverification.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\scripts\\beneficiaryverification.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\views\\user\\editclientregistrationdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\views\\user\\editclientregistrationdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\repositories\\clientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\repositories\\clientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\views\\admin\\paymentapprovals.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\views\\admin\\paymentapprovals.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\repositories\\adminrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\repositories\\adminrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\corporatebankingapp\\services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\dtos\\paymentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\corporatebankingapp\\dtos\\paymentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\dtos\\paymentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\corporatebankingapp\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|c:\\users\\swati.padmanabhan\\desktop\\capstone_setupay\\corporate-bankingapp\\corporatebankingapp\\controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{32A997AD-6FB5-4A23-BAE3-C6DEC11B81F7}|CorporateBankingApp\\CorporateBankingApp.csproj|solutionrelative:corporatebankingapp\\controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,71 +88,151 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "PaymentDTO.cs",
-              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\DTOs\\PaymentDTO.cs",
-              "RelativeDocumentMoniker": "CorporateBankingApp\\DTOs\\PaymentDTO.cs",
-              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\DTOs\\PaymentDTO.cs",
-              "RelativeToolTip": "CorporateBankingApp\\DTOs\\PaymentDTO.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAYwA4AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-06T20:16:17.971Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AdminController.cs",
-              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Controllers\\AdminController.cs",
-              "RelativeDocumentMoniker": "CorporateBankingApp\\Controllers\\AdminController.cs",
-              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Controllers\\AdminController.cs",
-              "RelativeToolTip": "CorporateBankingApp\\Controllers\\AdminController.cs",
-              "ViewState": "AQIAABUBAAAAAAAAAAAYwA0BAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-06T20:13:25.798Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AdminRepository.cs",
-              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Repositories\\AdminRepository.cs",
-              "RelativeDocumentMoniker": "CorporateBankingApp\\Repositories\\AdminRepository.cs",
-              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Repositories\\AdminRepository.cs",
-              "RelativeToolTip": "CorporateBankingApp\\Repositories\\AdminRepository.cs",
-              "ViewState": "AQIAAMEAAAAAAAAAAAAYwNcAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-06T20:11:41.282Z",
+              "DocumentIndex": 0,
+              "Title": "beneficiaryInboundList.js",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Scripts\\beneficiaryInboundList.js",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Scripts\\beneficiaryInboundList.js",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Scripts\\beneficiaryInboundList.js",
+              "RelativeToolTip": "CorporateBankingApp\\Scripts\\beneficiaryInboundList.js",
+              "ViewState": "AQIAAE8AAAAAAAAAAAAYwF0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-10-07T06:39:09.742Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "AdminService.cs",
-              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Services\\AdminService.cs",
-              "RelativeDocumentMoniker": "CorporateBankingApp\\Services\\AdminService.cs",
-              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Services\\AdminService.cs",
-              "RelativeToolTip": "CorporateBankingApp\\Services\\AdminService.cs",
-              "ViewState": "AQIAAEcBAAAAAAAAAAAYwFABAAA0AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-06T20:11:00.412Z",
+              "Title": "ManageBeneficiaries.cshtml",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\Client\\ManageBeneficiaries.cshtml",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Views\\Client\\ManageBeneficiaries.cshtml",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\Client\\ManageBeneficiaries.cshtml",
+              "RelativeToolTip": "CorporateBankingApp\\Views\\Client\\ManageBeneficiaries.cshtml",
+              "ViewState": "AQIAAFEAAAAAAAAAAAAAAAwAAAAoAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-07T06:33:55.287Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PaymentApprovals.cshtml",
-              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\Admin\\PaymentApprovals.cshtml",
-              "RelativeDocumentMoniker": "CorporateBankingApp\\Views\\Admin\\PaymentApprovals.cshtml",
-              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\Admin\\PaymentApprovals.cshtml",
-              "RelativeToolTip": "CorporateBankingApp\\Views\\Admin\\PaymentApprovals.cshtml",
-              "ViewState": "AQIAAK0AAAAAAAAAAAAYwM4AAAAAAAAA",
+              "DocumentIndex": 1,
+              "Title": "ViewAllInboundBeneficiaries.cshtml",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\Client\\ViewAllInboundBeneficiaries.cshtml",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Views\\Client\\ViewAllInboundBeneficiaries.cshtml",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\Client\\ViewAllInboundBeneficiaries.cshtml",
+              "RelativeToolTip": "CorporateBankingApp\\Views\\Client\\ViewAllInboundBeneficiaries.cshtml",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAEUAAAAGAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-06T19:47:07.005Z",
+              "WhenOpened": "2024-10-07T06:33:28.552Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BeneficiaryService.cs",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Services\\BeneficiaryService.cs",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Services\\BeneficiaryService.cs",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Services\\BeneficiaryService.cs",
+              "RelativeToolTip": "CorporateBankingApp\\Services\\BeneficiaryService.cs",
+              "ViewState": "AQIAAJ4AAAAAAAAAAAAAABQAAAAxAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-07T06:30:39.259Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IBeneficiaryService.cs",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Services\\IBeneficiaryService.cs",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Services\\IBeneficiaryService.cs",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Services\\IBeneficiaryService.cs",
+              "RelativeToolTip": "CorporateBankingApp\\Services\\IBeneficiaryService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAA7AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-07T06:30:25.199Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{fbcae063-e2c0-4ab1-a516-996ea3dafb72}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "dbo.Beneficiaries [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/DELL1605/BankDb/True/SqlTable/dbo.Beneficiaries.sql",
+              "ToolTip": "dbo.Beneficiaries [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-10-07T06:24:59.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "dbo.Clients [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/DELL1605/BankDb/True/SqlTable/dbo.Clients.sql",
+              "ToolTip": "dbo.Clients [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-10-07T05:34:44.971Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ClientDTO.cs",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\DTOs\\ClientDTO.cs",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\DTOs\\ClientDTO.cs",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\DTOs\\ClientDTO.cs",
+              "RelativeToolTip": "CorporateBankingApp\\DTOs\\ClientDTO.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAcwDoAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-07T06:29:45.833Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "BeneficiaryRepository.cs",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Repositories\\BeneficiaryRepository.cs",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Repositories\\BeneficiaryRepository.cs",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Repositories\\BeneficiaryRepository.cs",
+              "RelativeToolTip": "CorporateBankingApp\\Repositories\\BeneficiaryRepository.cs",
+              "ViewState": "AQIAADQAAAAAAAAAAAAcwFQAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-07T06:29:14.216Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IBeneficiaryRepository.cs",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Repositories\\IBeneficiaryRepository.cs",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Repositories\\IBeneficiaryRepository.cs",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Repositories\\IBeneficiaryRepository.cs",
+              "RelativeToolTip": "CorporateBankingApp\\Repositories\\IBeneficiaryRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-07T06:28:57.807Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "beneficiaryVerification.js",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Scripts\\beneficiaryVerification.js",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Scripts\\beneficiaryVerification.js",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Scripts\\beneficiaryVerification.js",
+              "RelativeToolTip": "CorporateBankingApp\\Scripts\\beneficiaryVerification.js",
+              "ViewState": "AQIAAHkAAAAAAAAAAAAqwHwAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-10-07T06:18:14.851Z",
               "EditorCaption": ""
             },
             {
@@ -109,18 +243,111 @@
               "RelativeDocumentMoniker": "CorporateBankingApp\\Controllers\\ClientController.cs",
               "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Controllers\\ClientController.cs",
               "RelativeToolTip": "CorporateBankingApp\\Controllers\\ClientController.cs",
-              "ViewState": "AQIAAAkCAAAAAAAAAAAYwBwCAAA4AAAA",
+              "ViewState": "AQIAABMBAAAAAAAAAAAcwB8BAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-06T19:40:05.618Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "EditClientRegistrationDetails.cshtml",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\User\\EditClientRegistrationDetails.cshtml",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Views\\User\\EditClientRegistrationDetails.cshtml",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\User\\EditClientRegistrationDetails.cshtml",
+              "RelativeToolTip": "CorporateBankingApp\\Views\\User\\EditClientRegistrationDetails.cshtml",
+              "ViewState": "AQIAAFUAAAAAAAAAAAAAAF4AAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-07T05:44:35.202Z",
+              "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{fbcae063-e2c0-4ab1-a516-996ea3dafb72}"
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "ClientRepository.cs",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Repositories\\ClientRepository.cs",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Repositories\\ClientRepository.cs",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Repositories\\ClientRepository.cs",
+              "RelativeToolTip": "CorporateBankingApp\\Repositories\\ClientRepository.cs",
+              "ViewState": "AQIAABsAAAAAAAAAAAAAACcAAAAoAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-07T05:31:20.592Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Controllers\\UserController.cs",
+              "RelativeToolTip": "CorporateBankingApp\\Controllers\\UserController.cs",
+              "ViewState": "AQIAALQAAAAAAAAAAAAcwLUAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-07T05:18:46.31Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "BeneficiaryManagement.cshtml",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\Admin\\BeneficiaryManagement.cshtml",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Views\\Admin\\BeneficiaryManagement.cshtml",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\Admin\\BeneficiaryManagement.cshtml",
+              "RelativeToolTip": "CorporateBankingApp\\Views\\Admin\\BeneficiaryManagement.cshtml",
+              "ViewState": "AQIAAD0AAAAAAAAAAAAAAEUAAAB/AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T20:50:01.806Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "AdminService.cs",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Services\\AdminService.cs",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Services\\AdminService.cs",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Services\\AdminService.cs",
+              "RelativeToolTip": "CorporateBankingApp\\Services\\AdminService.cs",
+              "ViewState": "AQIAAEcBAAAAAAAAAAAYwFABAAA0AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T20:11:00.412Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "PaymentApprovals.cshtml",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\Admin\\PaymentApprovals.cshtml",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Views\\Admin\\PaymentApprovals.cshtml",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Views\\Admin\\PaymentApprovals.cshtml",
+              "RelativeToolTip": "CorporateBankingApp\\Views\\Admin\\PaymentApprovals.cshtml",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAA4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T19:47:07.005Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "CorporateBankingApp\\Controllers\\AdminController.cs",
+              "ViewState": "AQIAABUBAAAAAAAAAAAYwA0BAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T20:13:25.798Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "PaymentDTO.cs",
+              "DocumentMoniker": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\DTOs\\PaymentDTO.cs",
+              "RelativeDocumentMoniker": "CorporateBankingApp\\DTOs\\PaymentDTO.cs",
+              "ToolTip": "C:\\Users\\swati.padmanabhan\\Desktop\\capstone_setupay\\Corporate-BankingApp\\CorporateBankingApp\\DTOs\\PaymentDTO.cs",
+              "RelativeToolTip": "CorporateBankingApp\\DTOs\\PaymentDTO.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAYwA4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T20:16:17.971Z"
             }
           ]
         },

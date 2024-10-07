@@ -14,7 +14,7 @@
                     <h5 class="card-title">@Model.CompanyName</h5>
                     <p class="card-text">Email: @Model.Email</p>
                     <p class="card-text">Location: @Model.Location</p>
-                    <p class="card-text">Balance: $@Model.Balance</p>
+                    <p class="card-text">Balance: @Model.Balance</p>
                     <div class="alert alert-warning">
                         <strong>Notice:</strong> Please ensure all documents are up to date to avoid service disruptions.
                     </div>
@@ -35,49 +35,42 @@
                         <div class="mb-3">
                             @Html.LabelFor(model => model.Email, new { @class = "small mb-1" })
                             @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Company Name -->
                         <div class="mb-3">
                             @Html.LabelFor(model => model.CompanyName, new { @class = "small mb-1" })
                             @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Location -->
                         <div class="mb-3">
                             @Html.LabelFor(model => model.Location, new { @class = "small mb-1" })
                             @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Contact Information -->
                         <div class="mb-3">
                             @Html.LabelFor(model => model.ContactInformation, new { @class = "small mb-1" })
                             @Html.EditorFor(model => model.ContactInformation, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.ContactInformation, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Account Number -->
                         <div class="mb-3">
                             @Html.LabelFor(model => model.AccountNumber, new { @class = "small mb-1" })
                             @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Client IFSC -->
                         <div class="mb-3">
                             @Html.LabelFor(model => model.ClientIFSC, new { @class = "small mb-1" })
                             @Html.EditorFor(model => model.ClientIFSC, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.ClientIFSC, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Balance -->
                         <div class="mb-3">
                             @Html.LabelFor(model => model.Balance, new { @class = "small mb-1" })
                             @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
                         </div>
 
                         <!-- Document Uploads -->
@@ -85,12 +78,10 @@
                             <div class="col-md-6">
                                 @Html.Label("Company ID Proof", htmlAttributes: new { @class = "control-label" })
                                 <input type="file" name="uploadedFiles1" class="form-control" />
-                                @Html.ValidationMessage("Document1", "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-6">
                                 @Html.Label("Address Proof", htmlAttributes: new { @class = "control-label" })
                                 <input type="file" name="uploadedFiles2" class="form-control" />
-                                @Html.ValidationMessage("Document2", "", new { @class = "text-danger" })
                             </div>
                         </div>
 
@@ -103,7 +94,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -122,105 +112,6 @@
 <script src="~/Scripts/Script.js"></script>
 
 <script>
-    function validateFile(input, docType, errorElementId) {
-        const file = input.files[0];
-        const validExtensions = /(\.jpg|\.jpeg|\.png|\.pdf)$/i;
-        const errorElement = document.getElementById(errorElementId);
-        errorElement.textContent = ''; // Clear previous error message
-
-        if (file) {
-            if (file.size > 3 * 1024 * 1024) { // Check if file size is greater than 3MB
-                errorElement.textContent = `${docType} must be less than 3MB.`;
-                input.value = ''; // Clear the input
-            } else if (!validExtensions.exec(file.name)) { // Check for valid file type
-                errorElement.textContent = `Invalid file type for ${docType}. Only images and PDFs are allowed.`;
-                input.value = ''; // Clear the input
-            }
-        }
-    }
-
-    function validateForm() {
-        let isValid = true;
-
-        // Clear previous error messages
-        document.querySelectorAll('.text-danger').forEach(element => element.textContent = '');
-
-        // Email validation
-        const email = document.getElementById('email').value;
-        if (!email) {
-            document.getElementById('emailError').textContent = "Email is required.";
-            isValid = false;
-        } else if (!/^[^\s]+[^\s]+\.[^\s]+$/.test(email)) {
-            document.getElementById('emailError').textContent = "Invalid email format.";
-            isValid = false;
-        }
-
-        // Company Name validation
-        const companyName = document.getElementById('companyName').value;
-        if (!companyName) {
-            document.getElementById('companyNameError').textContent = "Company Name is required.";
-            isValid = false;
-        }
-
-        // Location validation
-        const location = document.getElementById('location').value;
-        if (!location) {
-            document.getElementById('locationError').textContent = "Location is required.";
-            isValid = false;
-        }
-
-        // Contact Information validation
-        const contactInformation = document.getElementById('contactInformation').value;
-        if (!contactInformation || !/^\d{10}$/.test(contactInformation)) {
-            document.getElementById('contactInformationError').textContent = "Contact Information must be exactly 10 digits.";
-            isValid = false;
-        }
-
-        // Account Number validation
-        const accountNumber = document.getElementById('accountNumber').value;
-        if (!accountNumber) {
-            document.getElementById('accountNumberError').textContent = "Account Number is required.";
-            isValid = false;
-        } else if (!/^\d{12}$/.test(accountNumber)) {
-            document.getElementById('accountNumberError').textContent = "Account Number must be exactly 12 digits.";
-            isValid = false;
-        }
-
-        // Client IFSC validation
-        const bankIFSC = document.getElementById('clientIFSC').value;
-        const bankIFSCPattern = /^[A-Z]{4}0[A-Z0-9]{6}$/;
-        if (!bankIFSC || !bankIFSCPattern.test(bankIFSC)) {
-            document.getElementById('clientIFSCError').textContent = "Invalid Bank IFSC format.";
-            isValid = false;
-        }
-
-        // Balance validation
-        const balance = document.getElementById('balance').value;
-        if (!balance) {
-            document.getElementById('balanceError').textContent = "Balance is required.";
-            isValid = false;
-        } else if (isNaN(balance) || balance < 0) {
-            document.getElementById('balanceError').textContent = "Balance must be a non-negative number.";
-            isValid = false;
-        }
-
-        // Document validation
-        const uploadedFiles1 = document.getElementById('uploadedFiles1').files.length;
-        const uploadedFiles2 = document.getElementById('uploadedFiles2').files.length;
-
-        if (uploadedFiles1 === 0) {
-            document.getElementById('document1Error').textContent = "Company ID Proof is required.";
-            isValid = false;
-        }
-
-        if (uploadedFiles2 === 0) {
-            document.getElementById('document2Error').textContent = "Address Proof is required.";
-            isValid = false;
-        }
-
-        return isValid;
-    }
-
     function showDocument(filePath) {
         document.getElementById('documentFrame').src = filePath;
     }

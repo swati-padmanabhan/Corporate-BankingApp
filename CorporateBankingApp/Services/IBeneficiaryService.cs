@@ -21,5 +21,8 @@ namespace CorporateBankingApp.Services
         Beneficiary GetBeneficiaryById(Guid id);
 
         void UpdateBeneficiary(BeneficiaryDTO beneficiaryDTO, Client client, IList<HttpPostedFileBase> uploadedFiles);
+
+        List<ClientDTO> GetAllInboundBeneficiaries(Guid clientId);
+        void AddInboundBeneficiary(Guid clientId, Guid id);
     }
 }

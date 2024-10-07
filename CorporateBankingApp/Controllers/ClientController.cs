@@ -284,6 +284,71 @@ namespace CorporateBankingApp.Controllers
         }
 
 
+        public ActionResult ViewAllInboundBeneficiaries()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            Guid clientId = (Guid)Session["UserId"];
+            var client = _clientService.GetClientById(clientId);
+            //for checking onboarding status
+            ViewBag.Client = client;
+            return View();
+        }
+
+        public ActionResult GetAllInboundBeneficiaries()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            Guid clientId = (Guid)Session["UserId"];
+            var beneficiaries = _beneficiaryService.GetAllInboundBeneficiaries(clientId);
+            return Json(beneficiaries, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddInboundBeneficiary(List<Guid> beneficiaryIds)
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            Guid clientId = (Guid)Session["UserId"];
+            if (beneficiaryIds == null || !beneficiaryIds.Any())
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "No beneficiaries selected for addition."
+                });
+            }
+            bool success = true;
+            foreach (var id in beneficiaryIds)
+            {
+                //_clientService.AddInboundBeneficiary(id);   
+                _beneficiaryService.AddInboundBeneficiary(clientId, id);
+                success = true;
+                //break;
+            }
+            if (success)
+            {
+                return Json(new
+                {
+                    success = true,
+                    message = "Inbound Beneficiary/s added successfully."
+                });
+            }
+            else
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Failed to add Inbound Beneficiary/s."
+                });
+            }
+        }
+
 
 
 

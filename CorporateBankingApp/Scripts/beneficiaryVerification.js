@@ -2,14 +2,17 @@ let currentFilters = {
     status: null,
     page: 1,
     pageSize: 5,
+    searchQuery: "", // Add searchQuery to the currentFilters
 };
+
 let allBeneficiaries = [];
 
 function loadBeneficiaryForVerification() {
     let url = "/Admin/GetOutboundBeneficiaryForVerification";
 
-    if (currentFilters.status) {
-        url += `?status=${currentFilters.status}`; // Add the status filter to the URL if applicable
+    // Append search query to the URL
+    if (currentFilters.searchQuery) {
+        url += (url.includes('?') ? "&" : "?") + `search=${encodeURIComponent(currentFilters.searchQuery)}`;
     }
 
     $.ajax({
@@ -25,9 +28,7 @@ function loadBeneficiaryForVerification() {
             $("#beneficiaryToBeVerifiedTblBody").empty();
             var errorMessage = `<tr><td colspan="7" class="text-center">No beneficiaries waiting to be verified</td></tr>`;
             $("#beneficiaryToBeVerifiedTblBody").append(errorMessage);
-            alert(
-                "Error occurred while loading beneficiaries for verification."
-            );
+            alert("Error occurred while loading beneficiaries for verification.");
         },
     });
 }
@@ -35,7 +36,13 @@ function loadBeneficiaryForVerification() {
 function renderBeneficiaryManagementTable() {
     const start = (currentFilters.page - 1) * currentFilters.pageSize;
     const end = start + currentFilters.pageSize;
-    const paginatedData = allBeneficiaries.slice(start, end);
+
+    // Filter by search query
+    const filteredBeneficiaries = allBeneficiaries.filter(beneficiary =>
+        beneficiary.ClientName.toLowerCase().includes(currentFilters.searchQuery.toLowerCase())
+    );
+
+    const paginatedData = filteredBeneficiaries.slice(start, end);
 
     $("#beneficiaryToBeVerifiedTblBody").empty();
 
@@ -44,7 +51,6 @@ function renderBeneficiaryManagementTable() {
         $("#beneficiaryToBeVerifiedTblBody").append(noBeneficiariesMessage);
     } else {
         $.each(paginatedData, function (index, item) {
-            // Create a list of document links
             var documents = item.DocumentPaths.map(function (docPath) {
                 var fileName = docPath.split("/").pop(); // Extract file name from path
                 return `<a href="#" class="open-document" data-filepath="${docPath}" target="_blank">${fileName}</a><br>`;
@@ -56,18 +62,15 @@ function renderBeneficiaryManagementTable() {
                         <td>${item.AccountNumber}</td>
                         <td>${item.BankIFSC}</td>
                         <td>
-                        <span class="badge ${item.BeneficiaryType === "INBOUND"
-                    ? "primary-bg neutral-light-text"
-                    : "bg-secondary"
-                } rounded-pill d-inline">${item.BeneficiaryType}</span>
+                        <span class="badge ${item.BeneficiaryType === "INBOUND" ? "primary-bg neutral-light-text" : "bg-secondary"} rounded-pill d-inline">${item.BeneficiaryType}</span>
                         </td>
                         <td>${documents}</td>
-                        <td><div class="d-flex">
-                            <button onclick="approveBeneficiary('${item.Id
-                }', 'APPROVED')" class="btn btn-success mx-3"> <i class="bi bi-check"></i>Approve</button>
-                            <button onclick="rejectBeneficiary('${item.Id
-                }', 'REJECTED')" class="btn btn-danger"> <i class="bi bi-x"></i>Reject</button>
-                        </div></td>
+                        <td>
+                            <div class="d-flex">
+                                <button onclick="approveBeneficiary('${item.Id}', 'APPROVED')" class="btn btn-success mx-3"> <i class="bi bi-check"></i>Approve</button>
+                                <button onclick="rejectBeneficiary('${item.Id}', 'REJECTED')" class="btn btn-danger"> <i class="bi bi-x"></i>Reject</button>
+                            </div>
+                        </td>
                     </tr>`;
             $("#beneficiaryToBeVerifiedTblBody").append(row);
         });
@@ -76,11 +79,7 @@ function renderBeneficiaryManagementTable() {
         $(".open-document").click(function (e) {
             e.preventDefault();
             var filePath = $(this).data("filepath");
-
-            // Load the document in the iframe
             $("#documentFrame").attr("src", filePath);
-
-            // Show the modal
             $("#documentModal").modal("show");
         });
     }
@@ -88,15 +87,15 @@ function renderBeneficiaryManagementTable() {
 
 function renderBeneficiaryManagementPagination() {
     const totalPages = Math.ceil(
-        allBeneficiaries.length / currentFilters.pageSize
+        allBeneficiaries.filter(beneficiary =>
+            beneficiary.ClientName.toLowerCase().includes(currentFilters.searchQuery.toLowerCase())
+        ).length / currentFilters.pageSize
     );
     const paginationControls = $("#beneficiaryManagementPagination");
     paginationControls.empty(); // Clear existing pagination buttons
 
     for (let i = 1; i <= totalPages; i++) {
-        const button = `<li class="${i === currentFilters.page ? "active" : ""
-            }"><a href="#" onclick="changeBeneficiaryManagementPage(${i})">${i}</a>
-            </li>`;
+        const button = `<li class="${i === currentFilters.page ? "active" : ""}"><a href="#" onclick="changeBeneficiaryManagementPage(${i})">${i}</a></li>`;
         paginationControls.append(button);
     }
 }
@@ -107,19 +106,7 @@ function changeBeneficiaryManagementPage(page) {
     renderBeneficiaryManagementTable(); // Render beneficiaries for the selected page
 }
 
-// Function to filter by status
-function filterByStatus(status) {
-    currentFilters.status = status; // Set the current filter
-    loadBeneficiaryForVerification(); // Load beneficiaries with the applied filter
-}
-
-// Function to reset filters
-function filterAll() {
-    currentFilters.status = null; // Reset the status filter
-    loadBeneficiaryForVerification(); // Load all beneficiaries
-}
-
-//document modal closing button
+// Document modal closing button
 $('.close').on('click', function () {
     $('#documentModal').modal('hide');
 });
@@ -132,6 +119,7 @@ function approveBeneficiary(beneficiaryId) {
 function rejectBeneficiary(beneficiaryId) {
     updateBeneficiaryStatus(beneficiaryId, 'REJECTED');
 }
+
 // Combined function for approving or rejecting client
 function updateBeneficiaryStatus(beneficiaryId, status) {
     $.ajax({
@@ -148,5 +136,8 @@ function updateBeneficiaryStatus(beneficiaryId, status) {
     });
 }
 
-
-
+// Search function
+function searchBeneficiaries() {
+    currentFilters.searchQuery = $('#searchInput').val().trim(); // Get the search input value
+    loadBeneficiaryForVerification(); // Reload beneficiaries with the search filter
+}

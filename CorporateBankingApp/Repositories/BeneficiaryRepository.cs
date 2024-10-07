@@ -65,5 +65,24 @@ namespace CorporateBankingApp.Repositories
 
         }
 
+        public List<Client> GetAllInboundBeneficiaries(Guid clientId)
+        {
+            var existingBeneficiaries = _session.Query<Beneficiary>()
+                .Select(b => b.BeneficiaryName) // Get only the BeneficiaryName for comparison
+                .ToList();
+
+            // Fetch all clients that are approved and not the current client
+            var existingClients = _session.Query<Client>()
+                .Where(c => c.Id != clientId && c.OnBoardingStatus == CompanyStatus.APPROVED)
+                .ToList();
+
+            // Filter clients who are not in the beneficiary list
+            var clientsNotInBeneficiaries = existingClients
+                .Where(c => !existingBeneficiaries.Contains(c.UserName))
+                .ToList();
+
+            return clientsNotInBeneficiaries;
+        }
+
     }
 }

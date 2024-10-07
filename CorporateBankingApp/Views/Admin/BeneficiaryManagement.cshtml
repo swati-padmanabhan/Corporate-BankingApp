@@ -12,19 +12,6 @@
         <input type="text" id="searchInput" placeholder="Search beneficiaries..." class="form-control" onkeyup="searchBeneficiaries()" />
     </div>
 
-    <div class="dropdown my-4 float-end">
-        <button class="btn rounded-3 wrapper" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-filter me-1"></i>
-            <span>Filter</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" onclick="filterAll()">All</a></li>
-            <li><a class="dropdown-item" onclick="filterByStatus('INBOUND')">Inbound</a></li>
-            <li><a class="dropdown-item" onclick="filterByStatus('OUTBOUND')">Outbound</a></li>
-        </ul>
-    </div>
-
-
     <div class="table-responsive">
         <table class="table align-middle accent-dark-b mb-0" id="beneficiaryVerificationTable">
             <thead>
@@ -44,10 +31,10 @@
                     foreach (var beneficiary in Model)
                     {
                         <tr>
+                            <td>@beneficiary.ClientName</td>
                             <td>@beneficiary.BeneficiaryName</td>
                             <td>@beneficiary.AccountNumber</td>
                             <td>@beneficiary.BankIFSC</td>
-                            <td>@beneficiary.BeneficiaryType</td>
                             <td>
                                 <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#documentModal"
                                         onclick="viewDocument('@beneficiary.DocumentPaths')">

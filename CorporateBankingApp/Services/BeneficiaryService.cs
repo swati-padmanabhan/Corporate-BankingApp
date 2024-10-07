@@ -14,9 +14,11 @@ namespace CorporateBankingApp.Services
     public class BeneficiaryService : IBeneficiaryService
     {
         private readonly IBeneficiaryRepository _beneficiaryRepository;
-        public BeneficiaryService(IBeneficiaryRepository beneficiaryRepository)
+        private readonly IClientRepository _clientRepository;
+        public BeneficiaryService(IBeneficiaryRepository beneficiaryRepository, IClientRepository clientRepository)
         {
             _beneficiaryRepository = beneficiaryRepository;
+            _clientRepository = clientRepository;
         }
 
         public List<BeneficiaryDTO> GetAllOutboundBeneficiaries(Guid clientId, UrlHelper urlHelper)
@@ -145,6 +147,39 @@ namespace CorporateBankingApp.Services
                 //existingBeneficiary.Documents = 
                 _beneficiaryRepository.UpdateBeneficiary(existingBeneficiary);
             }
+        }
+
+        public List<ClientDTO> GetAllInboundBeneficiaries(Guid clientId)
+        {
+            var beneficiaries = _beneficiaryRepository.GetAllInboundBeneficiaries(clientId);
+            var beneficiariesDto = beneficiaries.Select(b => new ClientDTO
+            {
+                Id = b.Id,
+                CompanyName = b.UserName,
+                AccountNumber = b.AccountNumber,
+                ClientIFSC = b.ClientIFSC,
+                BeneficiaryStatus = "APPROVED",
+                IsActive = b.IsActive,
+            }).ToList();
+            return beneficiariesDto;
+        }
+
+        public void AddInboundBeneficiary(Guid clientId, Guid id)
+        {
+            var client = _clientRepository.GetClientById(clientId);
+            var beneficiary = _clientRepository.GetClientById(id);
+            var inboundBeneficiary = new Beneficiary()
+            {
+                //BeneficiaryName = client.CompanyName,
+                BeneficiaryName = beneficiary.UserName,
+                AccountNumber = beneficiary.AccountNumber,
+                BankIFSC = beneficiary.ClientIFSC,
+                BeneficiaryStatus = CompanyStatus.APPROVED,
+                BeneficiaryType = BeneficiaryType.INBOUND,
+                IsActive = beneficiary.IsActive,
+                Client = client
+            };
+            _beneficiaryRepository.AddNewBeneficiary(inboundBeneficiary);
         }
 
     }

@@ -37,7 +37,7 @@ namespace CorporateBankingApp.Repositories
         {
             using (var transaction = _session.BeginTransaction())
             {
-                _session.SaveOrUpdate(client);
+                _session.Update(client);
                 transaction.Commit();
             }
         }

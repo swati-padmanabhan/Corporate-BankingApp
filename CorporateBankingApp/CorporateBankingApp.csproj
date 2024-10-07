@@ -586,6 +586,7 @@
     <Content Include="obj\Debug\CorporateBankingApp.csproj.FileListAbsolute.txt" />
     <Content Include="obj\Debug\CorporateBankingApp.dll" />
     <Content Include="obj\Debug\CorporateBankingApp.pdb" />
+    <Content Include="Scripts\beneficiaryInboundList.js" />
     <Content Include="Scripts\beneficiaryVerification.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -820,6 +821,7 @@
     <Content Include="Views\Client\GenerateReports.cshtml" />
     <Content Include="Views\Admin\ReportGeneration.cshtml" />
     <Content Include="Views\Client\InboundBeneficiaries.cshtml" />
+    <Content Include="Views\Client\ViewAllInboundBeneficiaries.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

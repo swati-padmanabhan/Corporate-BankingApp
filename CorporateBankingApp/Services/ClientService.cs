@@ -61,7 +61,7 @@ namespace CorporateBankingApp.Services
             using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HeaderValidated = null,  // Ignore header validation
-                MissingFieldFound = null, // Ignore missing fields like 'Id' and 'IsActive'
+                MissingFieldFound = null, // Ignore missing fields
                 PrepareHeaderForMatch = args => args.Header.ToLower() // Make headers case-insensitive
             }))
             {
@@ -70,6 +70,13 @@ namespace CorporateBankingApp.Services
 
                 foreach (var employeeDTO in employeeRecords)
                 {
+                    // Check if the email already exists for the client
+                    if (_clientRepository.EmailExists(employeeDTO.Email))
+                    {
+                        // Skip adding the employee if the email already exists
+                        continue; // Optionally, you could log this or add to a list of skipped records
+                    }
+
                     // Map EmployeeDTO to Employee entity
                     var employee = new Employee
                     {
@@ -89,6 +96,7 @@ namespace CorporateBankingApp.Services
                 }
             }
         }
+
 
         //*******************************************Client reupload documents*******************************************
 

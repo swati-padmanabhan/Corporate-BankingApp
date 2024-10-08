@@ -34,7 +34,7 @@
                 {
                     foreach (var disbursement in Model)
                     {
-                        <tr>
+                        <tr data-id="@disbursement.SalaryDisbursementId">
                             <td>
                                 <input type="checkbox" class="salary-checkbox" value="@disbursement.SalaryDisbursementId" />
                             </td>
@@ -72,6 +72,5 @@
         </div>
     </div>
 </div>
-
 <script src="~/Scripts/jquery-3.7.1.min.js"></script>
 <script src="~/Scripts/salaryDisbursement.js"></script>

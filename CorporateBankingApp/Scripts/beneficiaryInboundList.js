@@ -1,5 +1,6 @@
 var selectedIds = [];
 
+// Function to load inbound beneficiaries
 function loadInboundBeneficiaries() {
     $.ajax({
         url: "/Client/GetAllInboundBeneficiaries",
@@ -13,21 +14,29 @@ function loadInboundBeneficiaries() {
                 $.each(data, function (index, item) {
                     var statusBadgeClass = item.BeneficiaryStatus === 'PENDING' ? 'bg-warning' : 'bg-success';
                     var row = `<tr>
-                        <td>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input inbound-checkbox" id="check-${item.Id}" data-beneficiaryid="${item.Id}" />
-                                <label class="form-check-label" for="check-${item.Id}"></label>
-                            </div>
-                        </td>
-                        <td>${item.CompanyName}</td>
-                        <td>${item.AccountNumber}</td>
-                        <td>${item.ClientIFSC}</td>
-                        <td>
-                            <span class="badge ${statusBadgeClass} rounded-pill d-inline">${item.BeneficiaryStatus}</span>
-                        </td>
-                    </tr>`;
+        <td>
+            <div class="d-flex align-items-center">
+                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(item.CompanyName)}&background=4e4187&color=ffffff" alt="" style="width: 40px; height: 40px" class="rounded-circle" />
+                <div class="ms-3">
+                    <p class="fw-bold mb-1">${item.CompanyName}</p>
+                </div>
+            </div>
+        </td>
+        <td>${item.AccountNumber}</td>
+        <td>${item.ClientIFSC}</td>
+        <td>
+            <span class="badge ${statusBadgeClass} rounded-pill d-inline">${item.BeneficiaryStatus}</span>
+        </td>
+        <td>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input inbound-checkbox" id="check-${item.Id}" data-beneficiaryid="${item.Id}" />
+                <label class="form-check-label" for="check-${item.Id}"></label>
+            </div>
+        </td>
+    </tr>`;
                     $("#inboundBeneficiaryTblBody").append(row);
                 });
+
 
                 // Re-attach change event after populating the table
                 attachCheckboxChangeEvents();
@@ -69,7 +78,7 @@ function attachCheckboxChangeEvents() {
     });
 }
 
-// Approve selected disbursements
+// Approve selected beneficiaries
 $('#addInboundSelected').click(function () {
     console.log(selectedIds); // Display selected IDs in console
     if (selectedIds.length === 0) {
@@ -94,4 +103,9 @@ $('#addInboundSelected').click(function () {
             alert("An error occurred while adding the beneficiary: " + error);
         }
     });
+});
+
+// Initialize loading inbound beneficiaries on document ready
+$(document).ready(() => {
+    loadInboundBeneficiaries();
 });

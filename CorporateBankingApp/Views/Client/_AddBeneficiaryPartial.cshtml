@@ -12,7 +12,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.BeneficiaryName, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
                         <span class="required-asterisk">*</span>
-                        <div class="">
+                        <div>
                             @Html.EditorFor(model => model.BeneficiaryName, new { htmlAttributes = new { @class = "form-control mb-4", id = "newBeneficiaryName" } })
                             @Html.ValidationMessageFor(model => model.BeneficiaryName, "", new { @class = "text-danger" })
                         </div>
@@ -21,7 +21,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
                         <span class="required-asterisk">*</span>
-                        <div class="">
+                        <div>
                             @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control mb-4", id = "newAccountNumber" } })
                             @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
                         </div>
@@ -30,7 +30,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.BankIFSC, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
                         <span class="required-asterisk">*</span>
-                        <div class="">
+                        <div>
                             @Html.EditorFor(model => model.BankIFSC, new { htmlAttributes = new { @class = "form-control mb-4", id = "newBankIFSC" } })
                             @Html.ValidationMessageFor(model => model.BankIFSC, "", new { @class = "text-danger" })
                         </div>
@@ -39,9 +39,9 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.BeneficiaryAddressProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
                         <span class="required-asterisk">*</span>
-                        <div class="">
+                        <div>
                             <input type="file" name="uploadedDocs1" class="form-control mb-4" id="BeneficiaryAddressProof" />
-                            <div id="addressProofError" class="text-danger"></div> <!-- Error message container -->
+                            <div id="addressProofError" class="text-danger"></div>
                             @Html.ValidationMessageFor(model => model.BeneficiaryAddressProof, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -49,17 +49,16 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.BeneficiaryIdProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
                         <span class="required-asterisk">*</span>
-                        <div class="">
+                        <div>
                             <input type="file" name="uploadedDocs2" class="form-control mb-4" id="BeneficiaryIdProof" />
-                            <div id="idProofError" class="text-danger"></div> <!-- Error message container -->
+                            <div id="idProofError" class="text-danger"></div>
                             @Html.ValidationMessageFor(model => model.BeneficiaryIdProof, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-md-offset-4 ">
-                            <input type="button" value="Add Beneficiary" class="btn primary-bg text-white" onclick="addNewBeneficiary()" />
-                        </div>
+                    <div class="form-group d-flex justify-content-between mt-4">
+                        <input type="button" value="Add Beneficiary" class="btn primary-bg text-white" onclick="addNewBeneficiary()" />
+                        <input type="button" value="Go Back" class="btn btn-secondary" onclick="goBack()" />
                     </div>
                 </div>
             </div>
@@ -93,4 +92,8 @@
             });
         });
     });
+
+    function goBack() {
+        window.location.href = '@Url.Action("ManageBeneficiaries", "Client")'; // Adjust as needed
+    }
 </script>

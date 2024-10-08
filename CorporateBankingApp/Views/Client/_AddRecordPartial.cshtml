@@ -1,77 +1,99 @@
-﻿@model CorporateBankingApp.Models.Employee
+﻿@model CorporateBankingApp.DTOs.BeneficiaryDTO
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-
     <div class="container-fluid">
         <div class="card mt-5">
             <div class="card-body px-5">
                 <div class="form-horizontal">
-                    <h2 class="text-center my-4 pt-3 primar">Add New Employee</h2>
+                    <h2 class="text-center my-4 pt-3 primar">Add New Beneficiary</h2>
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        @Html.LabelFor(model => model.BeneficiaryName, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
                         <span class="required-asterisk">*</span>
-                        <div class="">
-                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control mb-4", id = "firstName" } })
-                            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                        <div>
+                            @Html.EditorFor(model => model.BeneficiaryName, new { htmlAttributes = new { @class = "form-control mb-4", id = "newBeneficiaryName" } })
+                            @Html.ValidationMessageFor(model => model.BeneficiaryName, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
                         <span class="required-asterisk">*</span>
-                        <div class="">
-                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control mb-4", id = "lastName" } })
-                            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                        <div>
+                            @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control mb-4", id = "newAccountNumber" } })
+                            @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        @Html.LabelFor(model => model.BankIFSC, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
                         <span class="required-asterisk">*</span>
-                        <div class="">
-                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control mb-4", id = "email" } })
-                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        <div>
+                            @Html.EditorFor(model => model.BankIFSC, new { htmlAttributes = new { @class = "form-control mb-4", id = "newBankIFSC" } })
+                            @Html.ValidationMessageFor(model => model.BankIFSC, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        @Html.LabelFor(model => model.BeneficiaryAddressProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
                         <span class="required-asterisk">*</span>
-                        <div class="">
-                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control mb-4", id = "phone" } })
-                            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                        <div>
+                            <input type="file" name="uploadedDocs1" class="form-control mb-4" id="BeneficiaryAddressProof" />
+                            <div id="addressProofError" class="text-danger"></div>
+                            @Html.ValidationMessageFor(model => model.BeneficiaryAddressProof, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Designation, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
+                        @Html.LabelFor(model => model.BeneficiaryIdProof, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
                         <span class="required-asterisk">*</span>
-                        <div class="">
-                            @Html.EditorFor(model => model.Designation, new { htmlAttributes = new { @class = "form-control mb-4", id = "designation" } })
-                            @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+                        <div>
+                            <input type="file" name="uploadedDocs2" class="form-control mb-4" id="BeneficiaryIdProof" />
+                            <div id="idProofError" class="text-danger"></div>
+                            @Html.ValidationMessageFor(model => model.BeneficiaryIdProof, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Salary, htmlAttributes: new { @class = "control-label mb-2 ms-2" })
-                        <span class="required-asterisk">*</span>
-                        <div class="">
-                            @Html.EditorFor(model => model.Salary, new { htmlAttributes = new { @class = "form-control mb-4", id = "salary" } })
-                            @Html.ValidationMessageFor(model => model.Salary, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-offset-2">
-                            <input type="button" value="Add Employee" class="btn primary-bg text-white" onclick="addNewEmployee()" />
-                        </div>
+                    <div class="form-group d-flex justify-content-between mt-4">
+                        <input type="button" value="Add Beneficiary" class="btn primary-bg text-white" onclick="addNewBeneficiary()" />
+                        <input type="button" value="Go Back" class="btn btn-secondary" onclick="goBack()" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
 }
+
+<script>
+    $(document).ready(function () {
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+
+        fileInputs.forEach(input => {
+            input.addEventListener('change', function () {
+                const file = this.files[0]; // Get the first selected file
+                const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+                const maxSize = 3 * 1024 * 1024; // 3 MB
+
+                const errorDivId = this.id === 'BeneficiaryIdProof' ? 'idProofError' : 'addressProofError';
+                const errorDiv = document.getElementById(errorDivId);
+                if (errorDiv) errorDiv.textContent = ''; // Clear previous error messages
+
+                if (file) {
+                    if (!validTypes.includes(file.type)) {
+                        errorDiv.textContent = "Invalid file type. Only images and PDFs are allowed.";
+                        this.value = ''; // Clear the input
+                    } else if (file.size > maxSize) {
+                        errorDiv.textContent = "File size exceeds 3MB. Please upload a smaller file.";
+                        this.value = ''; // Clear the input
+                    }
+                }
+            });
+        });
+    });
+
+    function goBack() {
+        window.location.href = '@Url.Action("ManageEmployees", "Client")'; // Adjust as needed
+    }
+</script>

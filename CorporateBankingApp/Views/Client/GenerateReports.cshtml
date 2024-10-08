@@ -3,7 +3,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <style>
     /* Styles for the Generate Reports page */
     .container {
@@ -61,8 +60,6 @@
             display: inline-block; /* Ensure button is inline-block */
         }
 
-
-
         .card .btn-primary {
             background-color: #6f42c1; /* Violet color */
             color: white; /* White text */
@@ -74,8 +71,22 @@
                 background-color: #5a3e9b; /* Darker purple on hover */
                 transform: translateY(-2px); /* Slight lift effect */
             }
+
+    .error-message {
+        color: red;
+        text-align: center;
+        margin-bottom: 20px;
+    }
 </style>
+
 <div class="container">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error-message">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
     <h2>Generate Reports</h2>
     <h3>What do you wish to do?</h3>
 

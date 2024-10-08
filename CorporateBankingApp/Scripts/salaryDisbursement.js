@@ -1,6 +1,6 @@
 var selectedIds = [];
 
-$(document).ready(function () {
+
     // Get selected checkboxes
     function getSelectedDisbursements() {
         $(".salary-checkbox:checked").each(function () {
@@ -76,4 +76,3 @@ $(document).ready(function () {
             }
         });
     });
-});

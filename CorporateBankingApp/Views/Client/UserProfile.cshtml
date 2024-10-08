@@ -9,7 +9,6 @@
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col col-lg-8 mb-4 mb-lg-0">
-                <!-- Updated width -->
                 <div class="card mb-3" style="border-radius: .5rem;">
                     <div class="row g-0">
                         <div class="col-md-4 gradient-custom text-center text-white"
@@ -64,11 +63,22 @@
                                         <p class="text-muted">@Html.DisplayFor(model => model.Balance)</p>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-start mb-4">
-                                    <button type="button" class="btn btn-custom-purple" data-bs-toggle="modal" data-bs-target="#updateBalanceModal">
-                                        Update Balance
-                                    </button>
-                                </div>
+
+                                <!-- Conditionally show the Update Balance button -->
+                                @if (Model.OnboardingStatus == CorporateBankingApp.Enums.CompanyStatus.APPROVED)
+                                {
+                                    <div class="d-flex justify-content-start mb-4">
+                                        <button type="button" class="btn btn-custom-purple" data-bs-toggle="modal" data-bs-target="#updateBalanceModal">
+                                            Update Balance
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-danger">
+                                        You cannot update your balance because your company status is not approved.
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -122,5 +132,5 @@
     }
 </style>
 
-<!-- Include Bootstrap JS (ensure you have this script in your layout or here) -->
+<!-- Include Bootstrap JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>

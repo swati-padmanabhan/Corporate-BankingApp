@@ -30,13 +30,30 @@ namespace CorporateBankingApp.Controllers
             _paymentService = paymentService;
         }
 
+        private bool IsClientApproved(Guid clientId)
+        {
+            var client = _clientService.GetClientById(clientId);
+            return client != null && client.OnBoardingStatus == CompanyStatus.APPROVED;
+        }
+
         // GET: Client
         [Route("")]
         public ActionResult Index()
         {
+            Guid clientId = (Guid)Session["UserId"];
+            bool isApproved = IsClientApproved(clientId);
+            ViewBag.IsApproved = isApproved;
+
+            if (!isApproved)
+            {
+                TempData["ErrorMessage"] = "Access denied. Your company status is not approved.";
+                return View();
+            }
+
             ViewBag.Username = User.Identity.Name;
             return View();
         }
+
 
         [Route("user-profile")]
         public ActionResult UserProfile()
@@ -59,10 +76,12 @@ namespace CorporateBankingApp.Controllers
                 AccountNumber = client.AccountNumber,
                 ClientIFSC = client.ClientIFSC,
                 Balance = client.Balance,
+                OnboardingStatus = client.OnBoardingStatus 
             };
 
             return View(clientDto);
         }
+
 
         [HttpPost]
         [Route("update-balance")]
@@ -70,12 +89,28 @@ namespace CorporateBankingApp.Controllers
         {
             Guid clientId = (Guid)Session["UserId"];
 
+            // Retrieve client information to check approval status
+            var client = _clientService.GetClientById(clientId);
+            if (client == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Check if the client is approved
+            if (client.OnBoardingStatus != CompanyStatus.APPROVED)
+            {
+                TempData["ErrorMessage"] = "You cannot update your balance because your company status is not approved.";
+                return RedirectToAction("UserProfile");
+            }
+
+            // Validate the new balance
             if (newBalance < 0)
             {
                 ModelState.AddModelError("Balance", "Balance cannot be negative.");
                 return RedirectToAction("UserProfile");
             }
 
+            // Update the balance
             _clientService.UpdateClientBalance(clientId, newBalance);
             TempData["SuccessMessage"] = "Balance updated successfully!";
             return RedirectToAction("UserProfile");
@@ -83,7 +118,19 @@ namespace CorporateBankingApp.Controllers
 
         // Manage Beneficiaries
         [Route("manage-beneficiaries")]
-        public ActionResult ManageBeneficiaries() => View();
+        public ActionResult ManageBeneficiaries()
+        {
+            Guid clientId = (Guid)Session["UserId"];
+
+            // Check if the client is approved
+            if (!IsClientApproved(clientId))
+            {
+                TempData["ErrorMessage"] = "Access denied. Your company status is not approved.";
+                return RedirectToAction("Index"); // Redirect to a safe page, like the index or user profile
+            }
+
+            return View();
+        }
 
         [Route("get-all-beneficiaries")]
         public ActionResult GetAllOutboundBeneficiaries()
@@ -99,18 +146,18 @@ namespace CorporateBankingApp.Controllers
             return Json(beneficiaries, JsonRequestBehavior.AllowGet);
         }
 
-        [Route("inbound-beneficiaries")]
-        public ActionResult InboundBeneficiaries()
-        {
-            using (var session = NHibernateHelper.CreateSession())
-            {
-                var inboundBeneficiaries = session.Query<Beneficiary>()
-                    .Where(b => b.BeneficiaryType == BeneficiaryType.INBOUND)
-                    .ToList();
+        //[Route("inbound-beneficiaries")]
+        //public ActionResult InboundBeneficiaries()
+        //{
+        //    using (var session = NHibernateHelper.CreateSession())
+        //    {
+        //        var inboundBeneficiaries = session.Query<Beneficiary>()
+        //            .Where(b => b.BeneficiaryType == BeneficiaryType.INBOUND)
+        //            .ToList();
 
-                return View(inboundBeneficiaries);
-            }
-        }
+        //        return View(inboundBeneficiaries);
+        //    }
+        //}
 
         [HttpPost]
         [Route("update-beneficiary-status/{id}/{isActive}")]
@@ -290,12 +337,23 @@ namespace CorporateBankingApp.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
+
             Guid clientId = (Guid)Session["UserId"];
             var client = _clientService.GetClientById(clientId);
-            //for checking onboarding status
+
+            // Check the onboarding status
+            if (client.OnBoardingStatus != CompanyStatus.APPROVED)
+            {
+                TempData["ErrorMessage"] = "Access Denied: The client's onboarding process is not yet completed. Please wait for approval to access this feature.";
+                return RedirectToAction("GenerateReports"); // Redirect to an appropriate action or view
+            }
+
+            // Store the client information in ViewBag for the view
             ViewBag.Client = client;
+
             return View();
         }
+
 
         public ActionResult GetAllInboundBeneficiaries()
         {
@@ -354,7 +412,19 @@ namespace CorporateBankingApp.Controllers
 
         // Manage Employees
         [Route("manage-employees")]
-        public ActionResult ManageEmployees() => View();
+        public ActionResult ManageEmployees()
+        {
+            Guid clientId = (Guid)Session["UserId"];
+
+            // Check if the client is approved
+            if (!IsClientApproved(clientId))
+            {
+                TempData["ErrorMessage"] = "Access denied. Your company status is not approved.";
+                return RedirectToAction("Index"); // Redirect to a safe page
+            }
+
+            return View();
+        }
 
         [Route("get-all-employees")]
         public ActionResult GetAllEmployees()
@@ -560,6 +630,14 @@ namespace CorporateBankingApp.Controllers
             }
 
             Guid clientId = (Guid)Session["UserId"];
+
+            // Check if the client is approved
+            if (!IsClientApproved(clientId))
+            {
+                TempData["ErrorMessage"] = "Access denied. Your company status is not approved.";
+                return RedirectToAction("Index"); // Redirect to a safe page
+            }
+
             var beneficiaryList = _clientService.GetBeneficiaryList(clientId);
 
             if (beneficiaryList == null || !beneficiaryList.Any())
@@ -601,12 +679,29 @@ namespace CorporateBankingApp.Controllers
         }
 
 
-        // Upload Documents
-        [Route("upload-documents")]
-        public ActionResult UploadDocuments() => View();
+        //// Upload Documents
+        //[Route("upload-documents")]
+        //public ActionResult UploadDocuments() => View();
 
         // Generate Reports
         [Route("generate-reports")]
-        public ActionResult GenerateReports() => View();
+        public ActionResult GenerateReports()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            Guid clientId = (Guid)Session["UserId"];
+
+            // Check if the client is approved
+            if (!IsClientApproved(clientId))
+            {
+                TempData["ErrorMessage"] = "Access denied. Your company status is not approved.";
+                return RedirectToAction("Index"); // Redirect to a safe page or home
+            }
+
+            return View();
+        }
     }
 }

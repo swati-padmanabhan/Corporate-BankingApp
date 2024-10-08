@@ -4,58 +4,53 @@
 @{
     ViewBag.Title = "ViewAllInboundBeneficiaries";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var clientOnboardingStatus = ViewBag.Client?.OnBoardingStatus;
 }
 
 <div>
-    @if (clientOnboardingStatus == CompanyStatus.APPROVED)
-    {
-        <div class="container pt-5" id="inboundBeneficiaryList">
-            <h2 class="text-center my-4 pt-3">List Of Inbound Beneficiaries</h2>
-            <!-- Add search input field for company name -->
-            <div class="form-group mb-5">
-                <input type="text" id="searchCompany" class="form-control" placeholder="Search by Beneficiary Name..." />
+    <div class="container pt-5" id="inboundBeneficiaryList">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="error-message">
+                @TempData["ErrorMessage"]
             </div>
+        }
 
-            <div class="mb-4">
-                <!-- Add margin-bottom to create space -->
-                <button id="addInboundSelected" class="btn primary-bg text-white">Add Beneficiary</button>
-            </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            <input type="checkbox" id="selectAllInbounds" />
-                            @Html.DisplayName("Select")
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CompanyName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AccountNumber)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ClientIFSC)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.BeneficiaryStatus)
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="inboundBeneficiaryTblBody">
-                    <!-- Data comes from AJAX -->
-                </tbody>
-            </table>
+        <h2 class="text-center my-4 pt-3">List Of Inbound Beneficiaries</h2>
+        <!-- Add search input field for company name -->
+        <div class="form-group mb-5">
+            <input type="text" id="searchCompany" class="form-control" placeholder="Search by Beneficiary Name..." />
         </div>
-    }
-    else
-    {
-        <div class="container my-5 pt-lg-5">
-            <div class="alert alert-warning text-center my-5">
-                The client's onboarding process is not yet completed. Please wait for approval to access our services.
-            </div>
+
+        <div class="mb-4">
+            <!-- Add margin-bottom to create space -->
+            <button id="addInboundSelected" class="btn primary-bg text-white">Add Beneficiary</button>
         </div>
-    }
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="selectAllInbounds" />
+                        @Html.DisplayName("Select")
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CompanyName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AccountNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ClientIFSC)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BeneficiaryStatus)
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="inboundBeneficiaryTblBody">
+                <!-- Data comes from AJAX -->
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script src="~/Scripts/beneficiaryInboundList.js"></script>

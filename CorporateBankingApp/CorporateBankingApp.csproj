@@ -820,7 +820,6 @@
     <Content Include="Views\Report\EmployeeReportByClient.cshtml" />
     <Content Include="Views\Client\GenerateReports.cshtml" />
     <Content Include="Views\Admin\ReportGeneration.cshtml" />
-    <Content Include="Views\Client\InboundBeneficiaries.cshtml" />
     <Content Include="Views\Client\ViewAllInboundBeneficiaries.cshtml" />
     <Content Include="Views\User\EditRegistrationSuccess.cshtml" />
     <None Include="Web.Debug.config">

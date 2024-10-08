@@ -83,7 +83,7 @@ namespace CorporateBankingApp.Services
         {
             var client = _adminRepository.GetClientById(id);
             client.IsActive = false; // Set inactive if rejected
-            client.OnBoardingStatus = CompanyStatus.PENDING;
+            client.OnBoardingStatus = CompanyStatus.REJECTED;
             _adminRepository.UpdateClientDetails(client);
         }
 
@@ -254,9 +254,6 @@ namespace CorporateBankingApp.Services
         {
             return _adminRepository.GetSalaryDisbursementsByStatus(CompanyStatus.PENDING);
         }
-
-
-
 
         public bool ApproveSalaryDisbursement(Guid salaryDisbursementId, bool isBatch = false)
         {

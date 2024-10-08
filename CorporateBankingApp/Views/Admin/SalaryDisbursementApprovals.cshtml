@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<CorporateBankingApp.DTOs.SalaryDisbursementDTO>
+@using CorporateBankingApp.Enums
 
 @{
     ViewBag.Title = "Verify Salary Disbursement";
@@ -54,15 +55,19 @@
                 }
             </tbody>
         </table>
+
         <nav aria-label="Page navigation" class="py-3 px-2">
-            <ul class="pagination">
-                @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                {
-                    <li class="@(i == ViewBag.CurrentPage ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("SalaryDisbursementApprovals", new { page = i, pageSize = 5 })">@i</a>
-                    </li>
-                }
-            </ul>
+            @if (ViewBag.TotalPages > 1)
+            {
+                <ul class="pagination">
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="@(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("SalaryDisbursementApprovals", new { page = i, pageSize = 5 })">@i</a>
+                        </li>
+                    }
+                </ul>
+            }
         </nav>
     </div>
 
@@ -72,5 +77,6 @@
         </div>
     </div>
 </div>
+
 <script src="~/Scripts/jquery-3.7.1.min.js"></script>
 <script src="~/Scripts/salaryDisbursement.js"></script>

@@ -80,11 +80,19 @@ function renderTable(page, data = beneficiariesData) {
 
     if (paginatedData.length > 0) {
         $.each(paginatedData, function (index, item) {
+            // Create links for document paths
             var documentLinks = item.DocumentPaths.map(function (url) {
                 var fileName = url.split('/').pop();
                 return `<a href="#" class="document-link" data-url="${url}">${fileName}</a>`;
             }).join("<br/> ");
 
+            // Determine the badge class for beneficiary status
+            var statusBadgeClass = item.BeneficiaryStatus === 'PENDING' ? 'bg-warning'
+                : item.BeneficiaryStatus === 'APPROVED' ? 'bg-success'
+                    : item.BeneficiaryStatus === 'REJECTED' ? 'bg-danger'
+                        : '';
+
+            // Generate the table row with the determined status and type classes
             var row = `<tr>
                     <td>
                         <div class="d-flex align-items-center">
@@ -99,7 +107,7 @@ function renderTable(page, data = beneficiariesData) {
                     </td>
                     <td>${item.BankIFSC}</td>
                     <td>
-                        <span class="badge ${item.BeneficiaryStatus === 'PENDING' ? 'bg-warning' : 'bg-success'} rounded-pill d-inline">${item.BeneficiaryStatus}</span>
+                        <span class="badge ${statusBadgeClass} rounded-pill d-inline">${item.BeneficiaryStatus}</span>
                     </td>
                     <td>
                         <span class="badge ${item.BeneficiaryType === 'INBOUND' ? 'primary-bg neutral-light-text' : 'bg-secondary'} rounded-pill d-inline">${item.BeneficiaryType}</span>

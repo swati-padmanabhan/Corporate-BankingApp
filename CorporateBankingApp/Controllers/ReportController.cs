@@ -157,13 +157,24 @@ namespace CorporateBankingApp.Controllers
 
         // Route: GET /report/beneficiary-report
         [Route("beneficiary")]
-        public ActionResult BeneficiaryReport(int page = 1, int pageSize = 5)
+        public ActionResult BeneficiaryReport(DateTime? fromDate, DateTime? toDate, int page = 1, int pageSize = 5)
         {
             using (var session = NHibernateHelper.CreateSession())
             {
                 var beneficiaries = session.Query<Beneficiary>()
                                            .FetchMany(b => b.Payments)
                                            .ToList();
+
+                // Filter by payment approval date
+                if (fromDate.HasValue)
+                {
+                    beneficiaries = beneficiaries.Where(b => b.Payments.Any(p => p.PaymentApprovalDate >= fromDate.Value)).ToList();
+                }
+
+                if (toDate.HasValue)
+                {
+                    beneficiaries = beneficiaries.Where(b => b.Payments.Any(p => p.PaymentApprovalDate <= toDate.Value)).ToList();
+                }
 
                 var viewModel = beneficiaries.SelectMany(b => b.Payments.Select(p => new BeneficiaryReportDTO
                 {
@@ -193,6 +204,8 @@ namespace CorporateBankingApp.Controllers
                 ViewBag.TotalPages = totalPages;
                 ViewBag.CurrentPage = page;
                 ViewBag.PageSize = pageSize;
+                ViewBag.FromDate = fromDate; // Add fromDate to ViewBag
+                ViewBag.ToDate = toDate; // Add toDate to ViewBag
 
                 return View(paginatedViewModel);
             }

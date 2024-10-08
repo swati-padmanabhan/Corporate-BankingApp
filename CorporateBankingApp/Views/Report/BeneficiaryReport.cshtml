@@ -7,13 +7,22 @@
 
 <h2>Beneficiary Report</h2>
 
+<form method="get" action="@Url.Action("BeneficiaryReport")">
+    <label for="fromDate">From Date:</label>
+    <input type="date" id="fromDate" name="fromDate" value="@ViewBag.FromDate?.ToString(" yyyy-MM-dd")" />
+
+    <label for="toDate">To Date:</label>
+    <input type="date" id="toDate" name="toDate" value="@ViewBag.ToDate?.ToString(" yyyy-MM-dd")" />
+
+    <input type="submit" value="Filter" />
+</form>
+
 <style>
     .container {
         margin-top: 30px;
         font-family: 'Arial', sans-serif;
     }
 
-    /* Table styling */
     table.table {
         width: 100%;
         border-collapse: collapse;
@@ -22,10 +31,9 @@
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-        background-color: #fff; /* White background for contrast */
+        background-color: #fff;
     }
 
-        /* Table header */
         table.table thead th {
             background-color: #720e9e;
             color: white;
@@ -35,20 +43,18 @@
             text-transform: uppercase;
         }
 
-        /* Table body rows */
         table.table tbody tr {
             border-bottom: 1px solid #dddddd;
         }
 
             table.table tbody tr:nth-child(even) {
-                background-color: #f3f3f3; /* Light grey for alternating rows */
+                background-color: #f3f3f3;
             }
 
             table.table tbody tr:hover {
-                background-color: #e1d9f0; /* Light purple hover effect */
+                background-color: #e1d9f0;
             }
 
-        /* Table body cells */
         table.table tbody td {
             padding: 12px 15px;
             text-align: center;
@@ -91,10 +97,25 @@
         @for (int i = 1; i <= ViewBag.TotalPages; i++)
         {
             <li class="@(i == ViewBag.CurrentPage ? "active" : "")">
-                <a class="page-link" href="@Url.Action("BeneficiaryReport", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+                <a class="page-link" href="@Url.Action("BeneficiaryReport", new { page = i, pageSize = ViewBag.PageSize, fromDate = ViewBag.FromDate, toDate = ViewBag.ToDate })">@i</a>
             </li>
         }
     </ul>
 </nav>
 
 <a href="@Url.Action("DownloadBeneficiaryReport", "Report")" class="btn primary-bg text-white">Download PDF</a>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const fromDateInput = document.getElementById("fromDate");
+        const toDateInput = document.getElementById("toDate");
+
+        fromDateInput.addEventListener("change", () => {
+            document.forms[0].submit();
+        });
+
+        toDateInput.addEventListener("change", () => {
+            document.forms[0].submit();
+        });
+    });
+</script>

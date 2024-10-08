@@ -116,6 +116,9 @@ namespace CorporateBankingApp.Controllers
             return RedirectToAction("UserProfile");
         }
 
+
+
+
         // Manage Beneficiaries
         [Route("manage-beneficiaries")]
         public ActionResult ManageBeneficiaries()
@@ -620,38 +623,39 @@ namespace CorporateBankingApp.Controllers
             }
         }
 
-        // Payments
-        [Route("make-payment-requests")]
-        public ActionResult MakePaymentRequests()
-        {
-            if (Session["UserId"] == null)
-            {
-                return RedirectToAction("Login", "User");
-            }
+     [Route("make-payment-requests")]
+public ActionResult MakePaymentRequests()
+{
+    if (Session["UserId"] == null)
+    {
+        return RedirectToAction("Login", "User");
+    }
 
-            Guid clientId = (Guid)Session["UserId"];
+    Guid clientId = (Guid)Session["UserId"];
 
-            // Check if the client is approved
-            if (!IsClientApproved(clientId))
-            {
-                TempData["ErrorMessage"] = "Access denied. Your company status is not approved.";
-                return RedirectToAction("Index"); // Redirect to a safe page
-            }
+    // Check if the client is approved
+    if (!IsClientApproved(clientId))
+    {
+        TempData["ErrorMessage"] = "Access denied. Your company status is not approved.";
+        return RedirectToAction("Index"); // Redirect to a safe page
+    }
 
-            var beneficiaryList = _clientService.GetBeneficiaryList(clientId);
+    var beneficiaryList = _clientService.GetBeneficiaryList(clientId);
 
-            if (beneficiaryList == null || !beneficiaryList.Any())
-            {
-                return Json(new { success = false, message = "No beneficiaries found" }, JsonRequestBehavior.AllowGet);
-            }
+    if (beneficiaryList == null || !beneficiaryList.Any())
+    {
+        // Pass an error message to the view when no beneficiaries are found
+        return View(new BeneficiaryPaymentDTO { Beneficiaries = new List<BeneficiaryDTO>() }); // Pass an empty list
+    }
 
-            var model = new BeneficiaryPaymentDTO
-            {
-                Amount = 0,
-                Beneficiaries = beneficiaryList
-            };
-            return View(model);
-        }
+    var model = new BeneficiaryPaymentDTO
+    {
+        Amount = 0,
+        Beneficiaries = beneficiaryList
+    };
+    return View(model);
+}
+
 
         [HttpGet]
         public ActionResult GetBeneficiaryListForPayment()

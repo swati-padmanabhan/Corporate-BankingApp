@@ -311,13 +311,14 @@ namespace CorporateBankingApp.Controllers
 
 
         // GET: SalaryDisbursementApprovals
-        
         [Route("salary-disbursement")]
         public ActionResult SalaryDisbursementApprovals(int page = 1, int pageSize = 5)
         {
             using (var session = NHibernateHelper.CreateSession())
             {
+                // First, filter only the pending salary disbursements
                 var query = from sd in session.Query<SalaryDisbursement>()
+                            where sd.SalaryStatus == CompanyStatus.PENDING
                             select new SalaryDisbursementDTO
                             {
                                 SalaryDisbursementId = sd.Id,
@@ -325,19 +326,32 @@ namespace CorporateBankingApp.Controllers
                                 EmployeeFirstName = sd.Employee.FirstName,
                                 EmployeeLastName = sd.Employee.LastName,
                                 Salary = sd.Employee.Salary,
+                                SalaryStatus = sd.SalaryStatus,
                                 DisbursementDate = sd.DisbursementDate
                             };
 
+                // Count only the "Pending" records
                 var totalRecords = query.Count();
-                var salaryDisbursements = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                // Apply pagination after filtering
+                var salaryDisbursements = query
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                // Calculate total pages based on the filtered records
                 var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
 
+                // Set pagination details in ViewBag
                 ViewBag.CurrentPage = page;
                 ViewBag.TotalPages = totalPages;
 
                 return View(salaryDisbursements);
             }
         }
+
+
+
 
 
 

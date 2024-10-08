@@ -12,7 +12,7 @@ function loadInboundBeneficiaries() {
                 window.history.back(); // Go back to the previous page
             } else {
                 $.each(data, function (index, item) {
-                    var statusBadgeClass = item.BeneficiaryStatus === 'PENDING' ? 'bg-warning' : 'bg-success';
+                    var statusBadgeClass = item.BeneficiaryStatus === 'PENDING' ? 'bg-warning' : item.BeneficiaryStatus === 'APPROVED' ? 'bg-success' : 'bg-danger';
                     var row = `<tr>
         <td>
             <div class="d-flex align-items-center">

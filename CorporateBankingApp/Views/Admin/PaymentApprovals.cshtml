@@ -8,7 +8,6 @@
 <div class="container-fluid">
     <h2 class="text-center my-4 pt-3">Payment Approval Requests</h2>
 
-    <!-- Add search input field for company name -->
     <div class="form-group mb-4">
         <input type="text" id="searchClient" class="form-control" placeholder="Search by Beneficiary Name..." />
     </div>
@@ -28,93 +27,99 @@
         </div>
     </div>
 
-        <table class="table align-middle accent-dark-b mb-0" id="paymentApprovalsTable">
-            <thead>
-                <tr>
-                    <th>Select</th>
-                    <th>Username</th>
-                    <th>Beneficiary Name</th>
-                    <th>Account Number</th>
-                    <th>Beneficiary Type</th>
-                    <th>Amount</th>
-                    <th>Payment Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
-                {
-                    foreach (var payment in Model)
-                    {
-                        <tr>
-                            <td>
-                                <input type="checkbox" class="payment-checkbox" value="@payment.PaymentId" />
-                            </td>
-                            <td>@payment.Username</td>
-                            <td>@payment.CompanyName</td>
-                            <td>@payment.AccountNumber</td>
-                            <td>@payment.BeneficiaryType</td>
-                            <td>@payment.Amount.ToString("F2")</td>
-                            <td>@payment.PaymentRequestDate.ToShortDateString()</td>
-                        </tr>
-                    }
-                }
-                else
+    <table class="table align-middle accent-dark-b mb-0" id="paymentApprovalsTable">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Username</th>
+                <th>Beneficiary Name</th>
+                <th>Account Number</th>
+                <th>Beneficiary Type</th>
+                <th>Amount</th>
+                <th>Payment Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var payment in Model)
                 {
                     <tr>
-                        <td colspan="7" class="text-center">No pending payment approvals available.</td>
+                        <td>
+                            <input type="checkbox" class="payment-checkbox" value="@payment.PaymentId" />
+                        </td>
+                        <td>@payment.Username</td>
+                        <td>@payment.CompanyName</td>
+                        <td>@payment.AccountNumber</td>
+                        <td>
+                            @{
+                                string badgeClass = payment.BeneficiaryType == CorporateBankingApp.Enums.BeneficiaryType.INBOUND ? "primary-bg neutral-light-text" :
+                                                    payment.BeneficiaryType == CorporateBankingApp.Enums.BeneficiaryType.OUTBOUND ? "bg-secondary" : "";
+                            }
+                            <span class="badge @badgeClass rounded-pill d-inline">
+                                @payment.BeneficiaryType.ToString()
+                            </span>
+                        </td>
+                        <td>@payment.Amount.ToString("F2")</td>
+                        <td>@payment.PaymentRequestDate.ToShortDateString()</td>
                     </tr>
                 }
-            </tbody>
-        </table>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center">No pending payment approvals available.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-        <nav aria-label="Page navigation" class="py-3 px-2">
-            <ul class="pagination">
-                @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                {
-                    <li class="@(i == ViewBag.CurrentPage ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("PaymentApprovals", new { page = i, pageSize = 10 })">@i</a>
-                    </li>
-                }
-            </ul>
-        </nav>
+    <nav aria-label="Page navigation" class="py-3 px-2">
+        <ul class="pagination">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="@(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("PaymentApprovals", new { page = i, pageSize = 10 })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
 
-        <div class="loader-overlay" style="display:none;" id="loader">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
+    <div class="loader-overlay" style="display:none;" id="loader">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
+    </div>
 
-        <style>
-            .loader-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 9999; /* High z-index to make sure it stays on top */
-            }
+    <style>
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
 
-            .spinner-border {
-                width: 3rem; /* Adjust size as needed */
-                height: 3rem; /* Adjust size as needed */
-                border: 0.2em solid rgba(255, 255, 255, 0.5); /* Light border for visibility */
-                border-top: 0.2em solid black; /* Black color for the spinner */
-                border-radius: 50%; /* Make it circular */
-                /* No animation applied */
-            }
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border: 0.2em solid rgba(255, 255, 255, 0.5);
+            border-top: 0.2em solid black;
+            border-radius: 50%;
+        }
 
-            /* Optional to remove page scrolling */
-            body.loader-active {
-                overflow: hidden;
-            }
-        </style>
+        body.loader-active {
+            overflow: hidden;
+        }
+    </style>
 
-        <script src="~/Scripts/jquery-3.7.1.min.js"></script>
-        <script>
+    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
+    <script>
         function getSelectedPayments() {
             var selectedIds = [];
             $(".payment-checkbox:checked").each(function () {
@@ -202,5 +207,5 @@
                 }
             });
         });
-        </script>
+    </script>
 </div>

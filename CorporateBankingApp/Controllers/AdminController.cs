@@ -212,7 +212,7 @@ namespace CorporateBankingApp.Controllers
 
         //*****************************************************payments*****************************************************
         [Route("payment-approvals")]
-        public ActionResult PaymentApprovals(int page = 1, int pageSize = 2)
+        public ActionResult PaymentApprovals(int page = 1, int pageSize = 10)
         {
             var pendingPayments = _adminService.GetPendingPaymentsByStatus(CompanyStatus.PENDING);
 

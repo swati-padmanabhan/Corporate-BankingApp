@@ -265,7 +265,8 @@ namespace CorporateBankingApp.Services
             }
             var client = _clientRepository.GetClientById(salaryDisbursement.Employee.Client.Id);
 
-            var approved = _adminRepository.ApproveSalaryDisbursement(salaryDisbursementId); if (approved)
+            var approved = _adminRepository.ApproveSalaryDisbursement(salaryDisbursementId); 
+            if (approved)
             {
                 if (isBatch)
                 {

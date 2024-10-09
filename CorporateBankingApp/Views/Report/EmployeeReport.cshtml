@@ -26,8 +26,6 @@
                 <button class="btn btn-primary w-100" onclick="applyDateFilter()">Filter by Date</button>
             </div>
         </div>
-
-
     </div>
     <div class="my-4 float-start w-75">
         <input type="text" id="searchInput" placeholder="Search users..." class="form-control" onkeyup="applySearch()" />
@@ -56,7 +54,6 @@
                 <th>Designation</th>
                 <th>Salary</th>
                 <th>Disbursement Date</th>
-                <th>Salary Status</th>
             </tr>
         </thead>
         <tbody>
@@ -76,16 +73,6 @@
                         else
                         {
                             <span>No disbursements</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.SalaryStatus.HasValue)
-                        {
-                            @item.SalaryStatus.Value.ToString()
-                        }
-                        else
-                        {
-                            <span>No status</span>
                         }
                     </td>
                 </tr>
@@ -125,12 +112,11 @@
 <td>${employee.Designation}</td>
 <td>${employee.Salary}</td>
 <td>${employee.DisbursementDate ? new Date(employee.DisbursementDate).toLocaleDateString('en-GB') : 'No disbursements'}</td>
-<td>${employee.SalaryStatus ? employee.SalaryStatus : 'No status'}</td>
 </tr>`;
                 tableBody.append(row);
             });
         } else {
-            tableBody.append(`<tr><td colspan='7' class="text-center">No employees found.</td></tr>`);
+            tableBody.append(`<tr><td colspan='6' class="text-center">No employees found.</td></tr>`);
         }
     }
 
@@ -155,35 +141,29 @@
                 employee.Email.toLowerCase().includes(searchValue) ||
                 employee.Designation.toLowerCase().includes(searchValue);
 
-            // Ensure the status comparison matches the displayed values
-            const matchesStatus = status ? employee.SalaryStatus === status : true;
-
-            return matchesSearch && matchesStatus; // Combine both filters
+            // Status filter is not needed anymore
+            return matchesSearch; // Only search matches now
         });
 
         renderTable(filteredData); // Render the filtered data
     }
-    function applyDateFilter() {
-    const fromDate = $('#fromDate').val();
-    const toDate = $('#toDate').val();
-    const searchEmail = $('#searchInput').val();
 
-    // Ensure both dates are provided if you require both
-    if (!fromDate || !toDate) {
-        alert('Please select both From and To dates.');
-        return;
+    function applyDateFilter() {
+        const fromDate = $('#fromDate').val();
+        const toDate = $('#toDate').val();
+        const searchEmail = $('#searchInput').val();
+
+        if (!fromDate || !toDate) {
+            alert('Please select both From and To dates.');
+            return;
+        }
+
+        window.location.href = `@Url.Action("EmployeeReport")?searchEmail=${searchEmail}&fromDate=${fromDate}&toDate=${toDate}`;
     }
 
-    // Redirect to the action with query string parameters for filtering
-    window.location.href = `@Url.Action("EmployeeReport")?searchEmail=${searchEmail}&fromDate=${fromDate}&toDate=${toDate}`;
-}
-
-
     $(document).ready(function () {
-        // Initial render for the full dataset
         renderTable(originalData);
 
-        // Attach event listeners
         $("#searchInput").on("keyup", applySearch);
     });
 </script>

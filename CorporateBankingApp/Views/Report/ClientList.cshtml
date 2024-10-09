@@ -21,10 +21,10 @@
             <tr>
                 <td>@client.CompanyName</td>
                 <td>
-                    <a href="@Url.Action("EmployeeReportByClient", "Report", new { clientId = client.Id })" class="btn btn-primary">View Employees</a>
+                    <a href="@Url.Action("EmployeeReportByClient", "Report", new { clientId = client.Id })" class="btn btn-primary primary-bg">View Employees</a>
                 </td>
                 <td>
-                    <a href="@Url.Action("BeneficiaryReport", "Report", new { clientId = client.Id })">View Beneficiaries</a>
+                    <a href="@Url.Action("BeneficiaryReport", "Report", new { clientId = client.Id })" class="btn btn-primary primary-bg">View Beneficiaries</a>
                 </td>
             </tr>
         }

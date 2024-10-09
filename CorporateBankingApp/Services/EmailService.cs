@@ -161,7 +161,6 @@ namespace CorporateBankingApp.Services
         Dear {payslip.EmployeeName},<br/><br/>
         We are pleased to provide you with your payslip for the month of <strong>{payslip.Month}</strong>.<br/><br/>
         <strong>Salary Amount:</strong> {payslip.Salary:C}<br/>
-        <strong>Company:</strong> {payslip.CompanyName}<br/><br/>
         Thank you,<br/>
         Corporate Banking Application Team";
 
